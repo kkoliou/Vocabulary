@@ -6,6 +6,10 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		7DA345042F216319009DD467 /* VocabularyDB in Frameworks */ = {isa = PBXBuildFile; productRef = 7DA345032F216319009DD467 /* VocabularyDB */; };
+/* End PBXBuildFile section */
+
 /* Begin PBXContainerItemProxy section */
 		7D7F31AC2F2024D7007F2307 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -52,6 +56,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				7DA345042F216319009DD467 /* VocabularyDB in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -112,6 +117,7 @@
 			);
 			name = Vocabulary;
 			packageProductDependencies = (
+				7DA345032F216319009DD467 /* VocabularyDB */,
 			);
 			productName = Vocabulary;
 			productReference = 7D7F319E2F2024D6007F2307 /* Vocabulary.app */;
@@ -195,6 +201,9 @@
 			);
 			mainGroup = 7D7F31952F2024D6007F2307;
 			minimizedProjectReferenceProxies = 1;
+			packageReferences = (
+				7DA345022F216319009DD467 /* XCLocalSwiftPackageReference "VocabularyDB" */,
+			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 7D7F319F2F2024D6007F2307 /* Products */;
 			projectDirPath = "";
@@ -615,6 +624,20 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCLocalSwiftPackageReference section */
+		7DA345022F216319009DD467 /* XCLocalSwiftPackageReference "VocabularyDB" */ = {
+			isa = XCLocalSwiftPackageReference;
+			relativePath = VocabularyDB;
+		};
+/* End XCLocalSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		7DA345032F216319009DD467 /* VocabularyDB */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = VocabularyDB;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 7D7F31962F2024D6007F2307 /* Project object */;
 }

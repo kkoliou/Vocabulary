@@ -6,12 +6,21 @@
 //
 
 import SwiftUI
+import SQLiteData
+import VocabularyDB
 
 @main
 struct VocabularyApp: App {
-    var body: some Scene {
-        WindowGroup {
-            ContentView()
-        }
+  
+  init() {
+      prepareDependencies {
+          try! $0.bootstrapDatabase()
+      }
+  }
+  
+  var body: some Scene {
+    WindowGroup {
+      ContentView()
     }
+  }
 }
