@@ -6,19 +6,30 @@
 //
 
 import SwiftUI
+import SQLiteData
+import VocabularyDB
 
 struct ContentView: View {
+  
+  @State var viewModel = ContentViewModel()
+  
   var body: some View {
-    VStack {
-      Image(systemName: "globe")
-        .imageScale(.large)
-        .foregroundStyle(.tint)
-      Text("Hello, world!")
+    List {
+      ForEach(viewModel.vocabularies, id: \.id) { vocabulary in
+        VStack(alignment: .leading) {
+          Text(vocabulary.name)
+          Text(vocabulary.createdAt.formatted())
+        }
+      }
     }
-    .padding()
   }
 }
 
 #Preview {
   ContentView()
+}
+
+@Observable @MainActor
+class ContentViewModel {
+  @ObservationIgnored @FetchAll var vocabularies: [Vocabulary]
 }

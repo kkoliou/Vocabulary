@@ -11,6 +11,7 @@ import SQLiteData
 @Table public struct Vocabulary: Identifiable, Sendable {
   public let id: UUID
   public var name: String
+  public let createdAt: Date
 }
 
 @Table public struct VocabularyEntry: Identifiable, Sendable {
@@ -37,7 +38,9 @@ func appDatabase() throws -> any DatabaseWriter {
             "id" TEXT PRIMARY KEY NOT NULL
                 ON CONFLICT REPLACE
                 DEFAULT (uuid()),
-            "name" TEXT NOT NULL DEFAULT ''
+            "name" TEXT NOT NULL DEFAULT '',
+            "createdAt" TEXT NOT NULL
+                DEFAULT (CURRENT_TIMESTAMP)
         ) STRICT
         """
     )
@@ -77,5 +80,20 @@ func appDatabase() throws -> any DatabaseWriter {
 extension DependencyValues {
   mutating public func bootstrapDatabase() throws {
     defaultDatabase = try appDatabase()
+  }
+}
+
+extension DatabaseWriter {
+  public func seed() throws {
+    let flagKey = "db_initialized"
+    let isFirstLaunch = !UserDefaults.standard.bool(forKey: flagKey)
+    guard isFirstLaunch else { return }
+    try write { db in
+      try db.seed {
+        Vocabulary(id: UUID(), name: "Vocabulary 1", createdAt: Date(timeIntervalSince1970: 1719869724))
+        Vocabulary(id: UUID(), name: "Vocabulary 2", createdAt: Date())
+      }
+    }
+    UserDefaults.standard.set(true, forKey: flagKey)
   }
 }

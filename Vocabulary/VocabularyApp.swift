@@ -13,9 +13,10 @@ import VocabularyDB
 struct VocabularyApp: App {
   
   init() {
-      prepareDependencies {
-          try! $0.bootstrapDatabase()
-      }
+    prepareDependencies {
+      try! $0.bootstrapDatabase()
+      try! $0.defaultDatabase.seed()
+    }
   }
   
   var body: some Scene {
