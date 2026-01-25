@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		7DA345042F216319009DD467 /* VocabularyDB in Frameworks */ = {isa = PBXBuildFile; productRef = 7DA345032F216319009DD467 /* VocabularyDB */; };
+		7DFAAEE12F264A6700F5584C /* VocabularyCsvParser in Frameworks */ = {isa = PBXBuildFile; productRef = 7DFAAEE02F264A6700F5584C /* VocabularyCsvParser */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -56,6 +57,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				7DFAAEE12F264A6700F5584C /* VocabularyCsvParser in Frameworks */,
 				7DA345042F216319009DD467 /* VocabularyDB in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -118,6 +120,7 @@
 			name = Vocabulary;
 			packageProductDependencies = (
 				7DA345032F216319009DD467 /* VocabularyDB */,
+				7DFAAEE02F264A6700F5584C /* VocabularyCsvParser */,
 			);
 			productName = Vocabulary;
 			productReference = 7D7F319E2F2024D6007F2307 /* Vocabulary.app */;
@@ -203,6 +206,7 @@
 			minimizedProjectReferenceProxies = 1;
 			packageReferences = (
 				7DA345022F216319009DD467 /* XCLocalSwiftPackageReference "VocabularyDB" */,
+				7DFAAEDF2F264A6700F5584C /* XCLocalSwiftPackageReference "VocabularyCsvParser" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 7D7F319F2F2024D6007F2307 /* Products */;
@@ -630,12 +634,20 @@
 			isa = XCLocalSwiftPackageReference;
 			relativePath = VocabularyDB;
 		};
+		7DFAAEDF2F264A6700F5584C /* XCLocalSwiftPackageReference "VocabularyCsvParser" */ = {
+			isa = XCLocalSwiftPackageReference;
+			relativePath = VocabularyCsvParser;
+		};
 /* End XCLocalSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
 		7DA345032F216319009DD467 /* VocabularyDB */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = VocabularyDB;
+		};
+		7DFAAEE02F264A6700F5584C /* VocabularyCsvParser */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = VocabularyCsvParser;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};
