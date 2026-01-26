@@ -8,7 +8,7 @@
 import SwiftUI
 import SQLiteData
 
-@Table public struct Vocabulary: Identifiable, Sendable {
+@Table public struct Vocabulary: Identifiable, Sendable, Hashable {
   public let id: UUID
   public var name: String
   public let createdAt: Date
@@ -98,6 +98,11 @@ extension DatabaseWriter {
   }
   
   public func seedForPreview() throws {
+    try write { db in
+      try Vocabulary
+        .delete()
+        .execute(db)
+    }
     try write { db in
       try db.seed {
         Vocabulary(id: UUID(), name: "Vocabulary 1", createdAt: Date(timeIntervalSince1970: 1719869724))
