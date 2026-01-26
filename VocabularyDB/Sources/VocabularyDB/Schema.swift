@@ -96,4 +96,13 @@ extension DatabaseWriter {
     }
     UserDefaults.standard.set(true, forKey: flagKey)
   }
+  
+  public func seedForPreview() throws {
+    try write { db in
+      try db.seed {
+        Vocabulary(id: UUID(), name: "Vocabulary 1", createdAt: Date(timeIntervalSince1970: 1719869724))
+        Vocabulary(id: UUID(), name: "Vocabulary 2", createdAt: Date())
+      }
+    }
+  }
 }

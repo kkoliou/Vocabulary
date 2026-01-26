@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		7DA345042F216319009DD467 /* VocabularyDB in Frameworks */ = {isa = PBXBuildFile; productRef = 7DA345032F216319009DD467 /* VocabularyDB */; };
+		7DCC47852F2802EB009C6F8D /* VocabulariesFeature in Frameworks */ = {isa = PBXBuildFile; productRef = 7DCC47842F2802EB009C6F8D /* VocabulariesFeature */; };
 		7DFAAEE12F264A6700F5584C /* VocabularyCsvParser in Frameworks */ = {isa = PBXBuildFile; productRef = 7DFAAEE02F264A6700F5584C /* VocabularyCsvParser */; };
 /* End PBXBuildFile section */
 
@@ -57,6 +58,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				7DCC47852F2802EB009C6F8D /* VocabulariesFeature in Frameworks */,
 				7DFAAEE12F264A6700F5584C /* VocabularyCsvParser in Frameworks */,
 				7DA345042F216319009DD467 /* VocabularyDB in Frameworks */,
 			);
@@ -121,6 +123,7 @@
 			packageProductDependencies = (
 				7DA345032F216319009DD467 /* VocabularyDB */,
 				7DFAAEE02F264A6700F5584C /* VocabularyCsvParser */,
+				7DCC47842F2802EB009C6F8D /* VocabulariesFeature */,
 			);
 			productName = Vocabulary;
 			productReference = 7D7F319E2F2024D6007F2307 /* Vocabulary.app */;
@@ -207,6 +210,7 @@
 			packageReferences = (
 				7DA345022F216319009DD467 /* XCLocalSwiftPackageReference "VocabularyDB" */,
 				7DFAAEDF2F264A6700F5584C /* XCLocalSwiftPackageReference "VocabularyCsvParser" */,
+				7DCC47832F2802EB009C6F8D /* XCLocalSwiftPackageReference "VocabulariesFeature" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 7D7F319F2F2024D6007F2307 /* Products */;
@@ -636,6 +640,10 @@
 			isa = XCLocalSwiftPackageReference;
 			relativePath = VocabularyDB;
 		};
+		7DCC47832F2802EB009C6F8D /* XCLocalSwiftPackageReference "VocabulariesFeature" */ = {
+			isa = XCLocalSwiftPackageReference;
+			relativePath = VocabulariesFeature;
+		};
 		7DFAAEDF2F264A6700F5584C /* XCLocalSwiftPackageReference "VocabularyCsvParser" */ = {
 			isa = XCLocalSwiftPackageReference;
 			relativePath = VocabularyCsvParser;
@@ -646,6 +654,10 @@
 		7DA345032F216319009DD467 /* VocabularyDB */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = VocabularyDB;
+		};
+		7DCC47842F2802EB009C6F8D /* VocabulariesFeature */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = VocabulariesFeature;
 		};
 		7DFAAEE02F264A6700F5584C /* VocabularyCsvParser */ = {
 			isa = XCSwiftPackageProductDependency;

@@ -1,15 +1,16 @@
 //
-//  ContentView.swift
-//  Vocabulary
+//  VocabulariesScreen.swift
+//  VocabulariesFeature
 //
-//  Created by Konstantinos Kolioulis on 20/1/26.
+//  Created by Konstantinos Kolioulis on 26/1/26.
 //
 
 import SwiftUI
+import Foundation
 import SQLiteData
 import VocabularyDB
 
-struct ContentView: View {
+struct VocabulariesScreen: View {
   
   @State var viewModel = ContentViewModel()
   
@@ -31,7 +32,7 @@ struct ContentView: View {
     try! $0.defaultDatabase.seedForPreview()
   }
   NavigationStack {
-    ContentView()
+    VocabulariesScreen()
   }
 }
 
