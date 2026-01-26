@@ -8,6 +8,7 @@
 import SwiftUI
 import SQLiteData
 import VocabularyDB
+import VocabulariesFeature
 
 @main
 struct VocabularyApp: App {
@@ -21,7 +22,7 @@ struct VocabularyApp: App {
   
   var body: some Scene {
     WindowGroup {
-      ContentView()
+      VocabulariesScreen()
     }
   }
 }

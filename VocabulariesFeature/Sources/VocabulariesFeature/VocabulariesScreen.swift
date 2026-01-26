@@ -10,11 +10,13 @@ import Foundation
 import SQLiteData
 import VocabularyDB
 
-struct VocabulariesScreen: View {
+public struct VocabulariesScreen: View {
   
   @State var viewModel = ContentViewModel()
   
-  var body: some View {
+  public init() {}
+  
+  public var body: some View {
     List {
       ForEach(viewModel.vocabularies, id: \.id) { vocabulary in
         VStack(alignment: .leading) {
