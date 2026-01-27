@@ -36,7 +36,7 @@ public struct VocabulariesScreen: View {
           ToolbarItem(placement: .primaryAction) {
             Button(
               action: {
-                
+                viewModel.addVocabularyTapped()
               },
               label: {
                 Image(systemName: "plus")
@@ -48,6 +48,11 @@ public struct VocabulariesScreen: View {
     }
     .task {
       await viewModel.doInit()
+    }
+    .sheet(isPresented: $viewModel.addVocabIsPresented) {
+      VocabularyCreatorView()
+        .presentationDetents([.medium])
+        .presentationDragIndicator(.visible)
     }
   }
   
@@ -94,7 +99,9 @@ public struct VocabulariesScreen: View {
 
 @Observable @MainActor
 public class VocabulariesViewModel {
+  
   @ObservationIgnored @FetchAll(Vocabulary.none) var vocabularies
+  var addVocabIsPresented = false
   
   public init() {}
   
@@ -109,6 +116,6 @@ public class VocabulariesViewModel {
   }
   
   func addVocabularyTapped() {
-    
+    addVocabIsPresented = true
   }
 }
