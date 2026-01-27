@@ -10,7 +10,7 @@ import Foundation
 import SQLiteData
 import VocabularyDB
 
-public struct VocabulariesScreen: View {
+public struct VocabulariesView: View {
   
   @State var viewModel: VocabulariesViewModel
   
@@ -93,7 +93,7 @@ public struct VocabulariesScreen: View {
     try! $0.defaultDatabase.seedForPreview()
   }
   NavigationStack {
-    VocabulariesScreen()
+    VocabulariesView()
   }
 }
 

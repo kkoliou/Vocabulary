@@ -22,7 +22,7 @@ struct VocabularyApp: App {
   
   var body: some Scene {
     WindowGroup {
-      VocabulariesScreen()
+      VocabulariesView()
     }
   }
 }
