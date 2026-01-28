@@ -9,6 +9,7 @@ import SwiftUI
 import Foundation
 import SQLiteData
 import VocabularyDB
+import Shared
 
 struct VocabularyCreatorView: View {
   
@@ -27,26 +28,32 @@ struct VocabularyCreatorView: View {
     NavigationStack {
       Form {
         Section {
-          TextField("Name", text: $vocabularyName)
-            .focused($isTextFieldFocused)
-            .autocorrectionDisabled()
+          TextField(
+            text: $vocabularyName,
+            prompt: Text(Strings.localized("Name")),
+            label: {
+              EmptyView()
+            }
+          )
+          .focused($isTextFieldFocused)
+          .autocorrectionDisabled()
         } header: {
-          Text("Vocabulary Name")
+          Text(Strings.localized("Vocabulary name"))
         } footer: {
-          Text("Choose a descriptive name to organize your learning.")
+          Text(Strings.localized("Choose a descriptive name to organize your learning."))
         }
       }
-      .navigationTitle("New Vocabulary")
+      .navigationTitle(Strings.localized("New Vocabulary"))
       .navigationBarTitleDisplayMode(.inline)
       .toolbar {
         ToolbarItem(placement: .cancellationAction) {
-          Button("Cancel") {
+          Button(Strings.localized("Cancel")) {
             dismiss()
           }
         }
         
         ToolbarItem(placement: .confirmationAction) {
-          Button("Add") {
+          Button(Strings.localized("Add")) {
             createVocabulary()
           }
           .disabled(vocabularyName.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty)
@@ -79,15 +86,11 @@ struct VocabularyCreatorView: View {
   }
 }
 
-#Preview {
-  VocabularyCreatorView()
-}
-
 @Observable @MainActor
 class VocabularyCreatorViewModel {
   
   @ObservationIgnored @Dependency(\.defaultDatabase) var database
-  @ObservationIgnored var alertTitle: String?
+  @ObservationIgnored var alertTitle: LocalizedStringResource?
   var alertIsPresented = false
   
   func addVocabularyTapped(vocabName: String) throws {
@@ -122,8 +125,8 @@ class VocabularyCreatorViewModel {
     }
   }
   
-  private func displayAlert(_ message: String) {
-    alertTitle = message
+  private func displayAlert(_ message: StaticString) {
+    alertTitle = Strings.localized(message)
     alertIsPresented = true
   }
 }
@@ -131,4 +134,14 @@ class VocabularyCreatorViewModel {
 enum AddVocabularyError: Error {
   case emptyName
   case alreadyExists
+}
+
+#Preview {
+  let _ = prepareDependencies {
+    try! $0.bootstrapDatabase()
+    try! $0.defaultDatabase.seedForPreview()
+  }
+  NavigationStack {
+    VocabularyCreatorView()
+  }
 }

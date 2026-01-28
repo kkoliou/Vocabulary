@@ -9,6 +9,7 @@ import SwiftUI
 import Foundation
 import SQLiteData
 import VocabularyDB
+import Shared
 
 public struct VocabulariesView: View {
   
@@ -27,7 +28,7 @@ public struct VocabulariesView: View {
           vocabList
         }
       }
-      .navigationTitle("Vocabularies")
+      .navigationTitle(Strings.localized("Vocabularies"))
       .navigationDestination(for: Vocabulary.self) { vocabulary in
         Text(vocabulary.name)
       }
@@ -59,13 +60,13 @@ public struct VocabulariesView: View {
   private var emptyState: some View {
     ContentUnavailableView(
       label: {
-        Label("No vocabulary yet", systemImage: "book.pages.fill")
+        Label(Strings.localized("No vocabulary yet"), systemImage: "book.pages.fill")
       },
       description: {
-        Text("Create your first word list to start studying.")
+        Text(Strings.localized("Create your first word list to start studying."))
       },
       actions: {
-        Button("Add vocabulary") {
+        Button(Strings.localized("Add vocabulary")) {
           viewModel.addVocabularyTapped()
         }
       }
@@ -84,16 +85,6 @@ public struct VocabulariesView: View {
   
   private var isEmptyState: Bool {
     !viewModel.$vocabularies.isLoading && viewModel.vocabularies.isEmpty
-  }
-}
-
-#Preview {
-  let _ = prepareDependencies {
-    try! $0.bootstrapDatabase()
-    try! $0.defaultDatabase.seedForPreview()
-  }
-  NavigationStack {
-    VocabulariesView()
   }
 }
 
@@ -117,5 +108,15 @@ public class VocabulariesViewModel {
   
   func addVocabularyTapped() {
     addVocabIsPresented = true
+  }
+}
+
+#Preview {
+  let _ = prepareDependencies {
+    try! $0.bootstrapDatabase()
+    try! $0.defaultDatabase.seedForPreview()
+  }
+  NavigationStack {
+    VocabulariesView()
   }
 }

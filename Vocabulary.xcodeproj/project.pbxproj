@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		7D24342B2F2AB4DA00634386 /* Shared in Frameworks */ = {isa = PBXBuildFile; productRef = 7D24342A2F2AB4DA00634386 /* Shared */; };
 		7DA345042F216319009DD467 /* VocabularyDB in Frameworks */ = {isa = PBXBuildFile; productRef = 7DA345032F216319009DD467 /* VocabularyDB */; };
 		7DCC47852F2802EB009C6F8D /* VocabulariesFeature in Frameworks */ = {isa = PBXBuildFile; productRef = 7DCC47842F2802EB009C6F8D /* VocabulariesFeature */; };
 		7DFAAEE12F264A6700F5584C /* VocabularyCsvParser in Frameworks */ = {isa = PBXBuildFile; productRef = 7DFAAEE02F264A6700F5584C /* VocabularyCsvParser */; };
@@ -59,6 +60,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				7DCC47852F2802EB009C6F8D /* VocabulariesFeature in Frameworks */,
+				7D24342B2F2AB4DA00634386 /* Shared in Frameworks */,
 				7DFAAEE12F264A6700F5584C /* VocabularyCsvParser in Frameworks */,
 				7DA345042F216319009DD467 /* VocabularyDB in Frameworks */,
 			);
@@ -124,6 +126,7 @@
 				7DA345032F216319009DD467 /* VocabularyDB */,
 				7DFAAEE02F264A6700F5584C /* VocabularyCsvParser */,
 				7DCC47842F2802EB009C6F8D /* VocabulariesFeature */,
+				7D24342A2F2AB4DA00634386 /* Shared */,
 			);
 			productName = Vocabulary;
 			productReference = 7D7F319E2F2024D6007F2307 /* Vocabulary.app */;
@@ -199,11 +202,12 @@
 				};
 			};
 			buildConfigurationList = 7D7F31992F2024D6007F2307 /* Build configuration list for PBXProject "Vocabulary" */;
-			developmentRegion = en;
+			developmentRegion = el;
 			hasScannedForEncodings = 0;
 			knownRegions = (
 				en,
 				Base,
+				el,
 			);
 			mainGroup = 7D7F31952F2024D6007F2307;
 			minimizedProjectReferenceProxies = 1;
@@ -211,6 +215,7 @@
 				7DA345022F216319009DD467 /* XCLocalSwiftPackageReference "VocabularyDB" */,
 				7DFAAEDF2F264A6700F5584C /* XCLocalSwiftPackageReference "VocabularyCsvParser" */,
 				7DCC47832F2802EB009C6F8D /* XCLocalSwiftPackageReference "VocabulariesFeature" */,
+				7D2434292F2AB4DA00634386 /* XCLocalSwiftPackageReference "Shared" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 7D7F319F2F2024D6007F2307 /* Products */;
@@ -344,6 +349,7 @@
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 			};
 			name = Debug;
@@ -399,6 +405,7 @@
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_EMIT_LOC_STRINGS = YES;
 			};
 			name = Release;
 		};
@@ -636,6 +643,10 @@
 /* End XCConfigurationList section */
 
 /* Begin XCLocalSwiftPackageReference section */
+		7D2434292F2AB4DA00634386 /* XCLocalSwiftPackageReference "Shared" */ = {
+			isa = XCLocalSwiftPackageReference;
+			relativePath = Shared;
+		};
 		7DA345022F216319009DD467 /* XCLocalSwiftPackageReference "VocabularyDB" */ = {
 			isa = XCLocalSwiftPackageReference;
 			relativePath = VocabularyDB;
@@ -651,6 +662,10 @@
 /* End XCLocalSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		7D24342A2F2AB4DA00634386 /* Shared */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = Shared;
+		};
 		7DA345032F216319009DD467 /* VocabularyDB */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = VocabularyDB;
