@@ -74,10 +74,17 @@ public struct VocabulariesView: View {
   }
   
   private var vocabList: some View {
-    List(viewModel.vocabularies, id: \.id) { vocabulary in
-      NavigationLink(value: vocabulary) {
-        VStack(alignment: .leading) {
-          Text(vocabulary.name)
+    List {
+      ForEach(viewModel.vocabularies, id: \.id) { vocabulary in
+        NavigationLink(value: vocabulary) {
+          VStack(alignment: .leading) {
+            Text(vocabulary.name)
+          }
+        }
+      }
+      .onDelete { indexSet in
+        Task {
+          await viewModel.deleteVocabularies(at: indexSet)
         }
       }
     }
@@ -91,6 +98,7 @@ public struct VocabulariesView: View {
 @Observable @MainActor
 public class VocabulariesViewModel {
   
+  @ObservationIgnored @Dependency(\.defaultDatabase) var database
   @ObservationIgnored @FetchAll(Vocabulary.none) var vocabularies
   var addVocabIsPresented = false
   
@@ -109,6 +117,17 @@ public class VocabulariesViewModel {
   func addVocabularyTapped() {
     addVocabIsPresented = true
   }
+  
+  func deleteVocabularies(at offsets: IndexSet) async {
+    withErrorReporting {
+      try database.write { db in
+        try Vocabulary.find(offsets.map { vocabularies[$0].id })
+          .delete()
+          .execute(db)
+      }
+    }
+  }
+  
 }
 
 #Preview {
