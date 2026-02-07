@@ -25,6 +25,16 @@ public struct VocabularyView: View {
       }
     }
     .navigationTitle(viewModel.vocabulary.name)
+    .toolbar {
+      ToolbarItemGroup(placement: .primaryAction) {
+        Button("", systemImage: "plus") {
+          viewModel.plusButtonTapped()
+        }
+      }
+    }
+    .sheet(isPresented: $viewModel.isAddEntryPresented) {
+      VocabularyEntryAddView(vocabulary: viewModel.vocabulary)
+    }
   }
 }
 
@@ -37,7 +47,7 @@ public class VocabularyViewModel {
   
   @ObservationIgnored @Dependency(\.defaultDatabase) var database
   @ObservationIgnored @FetchAll(VocabularyEntry.none) var words
-  var addVocabIsPresented = false
+  var isAddEntryPresented = false
   let vocabulary: Vocabulary
   
   public init(vocabulary: Vocabulary) {
@@ -54,4 +64,7 @@ public class VocabularyViewModel {
     }
   }
   
+  func plusButtonTapped() {
+    isAddEntryPresented = true
+  }
 }

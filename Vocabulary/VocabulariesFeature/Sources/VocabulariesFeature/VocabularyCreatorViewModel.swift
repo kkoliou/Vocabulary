@@ -19,7 +19,7 @@ class VocabularyCreatorViewModel {
   var alertIsPresented = false
   
   func addVocabularyTapped(vocabName: String) throws {
-    let trimmed = vocabName.trimmingCharacters(in: .whitespacesAndNewlines)
+    let trimmed = vocabName.trimmed()
     guard !trimmed.isEmpty else { throw AddVocabularyError.emptyName }
     try database.write { db in
       let exists = try Vocabulary

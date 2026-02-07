@@ -56,7 +56,7 @@ struct VocabularyCreatorView: View {
           Button(Strings.localized("Add")) {
             createVocabulary()
           }
-          .disabled(vocabularyName.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty)
+          .disabled(vocabularyName.trimmed().isEmpty)
           .fontWeight(.semibold)
         }
       }

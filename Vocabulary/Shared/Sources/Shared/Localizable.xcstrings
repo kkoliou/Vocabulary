@@ -12,6 +12,9 @@
         }
       }
     },
+    "Add Entry" : {
+      "extractionState" : "manual"
+    },
     "Add vocabulary" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -56,17 +59,6 @@
         }
       }
     },
-    "Name" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "el" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Όνομα"
-          }
-        }
-      }
-    },
     "New Vocabulary" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -89,6 +81,9 @@
         }
       }
     },
+    "Original" : {
+      "extractionState" : "manual"
+    },
     "Provide a vocabulary name" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -99,6 +94,9 @@
           }
         }
       }
+    },
+    "Save" : {
+      "extractionState" : "manual"
     },
     "Something went wrong" : {
       "extractionState" : "manual",
@@ -122,6 +120,9 @@
         }
       }
     },
+    "Translation" : {
+      "extractionState" : "manual"
+    },
     "Vocabularies" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -143,6 +144,20 @@
           }
         }
       }
+    },
+    "Word or phrase" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "el" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Όνομα"
+          }
+        }
+      }
+    },
+    "Your translation" : {
+      "extractionState" : "manual"
     }
   },
   "version" : "1.1"
