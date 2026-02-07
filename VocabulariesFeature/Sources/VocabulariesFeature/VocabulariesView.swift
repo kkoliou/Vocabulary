@@ -10,6 +10,7 @@ import Foundation
 import SQLiteData
 import VocabularyDB
 import Shared
+import VocabularyListFeature
 
 public struct VocabulariesView: View {
   
@@ -29,8 +30,8 @@ public struct VocabulariesView: View {
         }
       }
       .navigationTitle(Strings.localized("Vocabularies"))
-      .navigationDestination(for: Vocabulary.self) { vocabulary in
-        Text(vocabulary.name)
+      .navigationDestination(for: Vocabulary.self) {
+        VocabularyView(vocabulary: $0)
       }
       .toolbar {
         if !isEmptyState {

@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		7D24342B2F2AB4DA00634386 /* Shared in Frameworks */ = {isa = PBXBuildFile; productRef = 7D24342A2F2AB4DA00634386 /* Shared */; };
+		7D4ACEBE2F37D6D40024927D /* VocabularyListFeature in Frameworks */ = {isa = PBXBuildFile; productRef = 7D4ACEBD2F37D6D40024927D /* VocabularyListFeature */; };
 		7DA345042F216319009DD467 /* VocabularyDB in Frameworks */ = {isa = PBXBuildFile; productRef = 7DA345032F216319009DD467 /* VocabularyDB */; };
 		7DCC47852F2802EB009C6F8D /* VocabulariesFeature in Frameworks */ = {isa = PBXBuildFile; productRef = 7DCC47842F2802EB009C6F8D /* VocabulariesFeature */; };
 		7DFAAEE12F264A6700F5584C /* VocabularyCsvParser in Frameworks */ = {isa = PBXBuildFile; productRef = 7DFAAEE02F264A6700F5584C /* VocabularyCsvParser */; };
@@ -60,6 +61,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				7DCC47852F2802EB009C6F8D /* VocabulariesFeature in Frameworks */,
+				7D4ACEBE2F37D6D40024927D /* VocabularyListFeature in Frameworks */,
 				7D24342B2F2AB4DA00634386 /* Shared in Frameworks */,
 				7DFAAEE12F264A6700F5584C /* VocabularyCsvParser in Frameworks */,
 				7DA345042F216319009DD467 /* VocabularyDB in Frameworks */,
@@ -127,6 +129,7 @@
 				7DFAAEE02F264A6700F5584C /* VocabularyCsvParser */,
 				7DCC47842F2802EB009C6F8D /* VocabulariesFeature */,
 				7D24342A2F2AB4DA00634386 /* Shared */,
+				7D4ACEBD2F37D6D40024927D /* VocabularyListFeature */,
 			);
 			productName = Vocabulary;
 			productReference = 7D7F319E2F2024D6007F2307 /* Vocabulary.app */;
@@ -216,6 +219,7 @@
 				7DFAAEDF2F264A6700F5584C /* XCLocalSwiftPackageReference "VocabularyCsvParser" */,
 				7DCC47832F2802EB009C6F8D /* XCLocalSwiftPackageReference "VocabulariesFeature" */,
 				7D2434292F2AB4DA00634386 /* XCLocalSwiftPackageReference "Shared" */,
+				7D4ACEBC2F37D6D40024927D /* XCLocalSwiftPackageReference "VocabularyListFeature" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 7D7F319F2F2024D6007F2307 /* Products */;
@@ -647,6 +651,10 @@
 			isa = XCLocalSwiftPackageReference;
 			relativePath = Shared;
 		};
+		7D4ACEBC2F37D6D40024927D /* XCLocalSwiftPackageReference "VocabularyListFeature" */ = {
+			isa = XCLocalSwiftPackageReference;
+			relativePath = VocabularyListFeature;
+		};
 		7DA345022F216319009DD467 /* XCLocalSwiftPackageReference "VocabularyDB" */ = {
 			isa = XCLocalSwiftPackageReference;
 			relativePath = VocabularyDB;
@@ -665,6 +673,10 @@
 		7D24342A2F2AB4DA00634386 /* Shared */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = Shared;
+		};
+		7D4ACEBD2F37D6D40024927D /* VocabularyListFeature */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = VocabularyListFeature;
 		};
 		7DA345032F216319009DD467 /* VocabularyDB */ = {
 			isa = XCSwiftPackageProductDependency;
