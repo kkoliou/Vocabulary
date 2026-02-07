@@ -18,7 +18,7 @@ let package = Package(
     dependencies: [
       .package(path: "../VocabularyDB"),
       .package(path: "../Shared"),
-      .package(path: "../VocabularyListFeature")
+      .package(path: "../VocabularyFeature")
     ],
     targets: [
         // Targets are the basic building blocks of a package, defining a module or a test suite.
@@ -28,7 +28,7 @@ let package = Package(
             dependencies: [
               "VocabularyDB",
               "Shared",
-              "VocabularyListFeature"
+              "VocabularyFeature"
             ]
         ),
         .testTarget(

@@ -1,6 +1,6 @@
 //
 //  VocabularyView.swift
-//  VocabularyListFeature
+//  VocabularyFeature
 //
 //  Created by Konstantinos Kolioulis on 7/2/26.
 //

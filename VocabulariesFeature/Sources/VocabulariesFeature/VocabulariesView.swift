@@ -10,7 +10,7 @@ import Foundation
 import SQLiteData
 import VocabularyDB
 import Shared
-import VocabularyListFeature
+import VocabularyFeature
 
 public struct VocabulariesView: View {
   
