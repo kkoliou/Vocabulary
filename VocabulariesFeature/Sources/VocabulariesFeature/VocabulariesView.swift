@@ -52,7 +52,7 @@ public struct VocabulariesView: View {
     }
     .sheet(isPresented: $viewModel.addVocabIsPresented) {
       VocabularyCreatorView()
-        .presentationDetents([.medium])
+        .presentationDetents([.large])
         .presentationDragIndicator(.visible)
     }
   }
@@ -93,41 +93,6 @@ public struct VocabulariesView: View {
   private var isEmptyState: Bool {
     !viewModel.$vocabularies.isLoading && viewModel.vocabularies.isEmpty
   }
-}
-
-@Observable @MainActor
-public class VocabulariesViewModel {
-  
-  @ObservationIgnored @Dependency(\.defaultDatabase) var database
-  @ObservationIgnored @FetchAll(Vocabulary.none) var vocabularies
-  var addVocabIsPresented = false
-  
-  public init() {}
-  
-  func doInit() async {
-    await withErrorReporting {
-      try await $vocabularies
-        .load(
-          Vocabulary
-            .order(by: \.createdAt)
-        )
-    }
-  }
-  
-  func addVocabularyTapped() {
-    addVocabIsPresented = true
-  }
-  
-  func deleteVocabularies(at offsets: IndexSet) async {
-    withErrorReporting {
-      try database.write { db in
-        try Vocabulary.find(offsets.map { vocabularies[$0].id })
-          .delete()
-          .execute(db)
-      }
-    }
-  }
-  
 }
 
 #Preview {

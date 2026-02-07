@@ -98,16 +98,20 @@ extension DatabaseWriter {
   }
   
   public func seedForPreview() throws {
-    try write { db in
-      try Vocabulary
-        .delete()
-        .execute(db)
-    }
+    try deleteAllVocabularies()
     try write { db in
       try db.seed {
         Vocabulary(id: UUID(), name: "Vocabulary 1", createdAt: Date(timeIntervalSince1970: 1719869724))
         Vocabulary(id: UUID(), name: "Vocabulary 2", createdAt: Date())
       }
+    }
+  }
+  
+  public func deleteAllVocabularies() throws {
+    try write { db in
+      try Vocabulary
+        .delete()
+        .execute(db)
     }
   }
 }
