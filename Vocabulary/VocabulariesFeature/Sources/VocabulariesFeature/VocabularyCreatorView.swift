@@ -28,12 +28,9 @@ struct VocabularyCreatorView: View {
     NavigationStack {
       Form {
         Section {
-          TextField(
+          VTextField(
             text: $vocabularyName,
-            prompt: Text(Strings.localized("Name")),
-            label: {
-              EmptyView()
-            }
+            promptKey: "Name"
           )
           .focused($isTextFieldFocused)
           .autocorrectionDisabled()

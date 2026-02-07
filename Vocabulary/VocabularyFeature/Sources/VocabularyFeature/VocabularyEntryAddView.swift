@@ -32,12 +32,9 @@ struct VocabularyEntryAddView: View {
     NavigationStack {
       Form {
         Section(Strings.localized("Original")) {
-          TextField(
+          VTextField(
             text: $viewModel.source,
-            prompt: Text(Strings.localized("Word or phrase")),
-            label: {
-              EmptyView()
-            }
+            promptKey: "Word or phrase"
           )
           .focused($focusedField, equals: .source)
           .autocorrectionDisabled()
@@ -48,12 +45,9 @@ struct VocabularyEntryAddView: View {
         }
         
         Section(Strings.localized("Translation")) {
-          TextField(
+          VTextField(
             text: $viewModel.translation,
-            prompt: Text(Strings.localized("Your translation")),
-            label: {
-              EmptyView()
-            }
+            promptKey: "Your translation"
           )
           .focused($focusedField, equals: .translation)
           .autocorrectionDisabled()
