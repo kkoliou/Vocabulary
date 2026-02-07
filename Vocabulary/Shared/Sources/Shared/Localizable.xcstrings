@@ -1,0 +1,149 @@
+{
+  "sourceLanguage" : "en",
+  "strings" : {
+    "Add" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "el" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Προσθήκη"
+          }
+        }
+      }
+    },
+    "Add vocabulary" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "el" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Προσθήκη λεξιλογίου"
+          }
+        }
+      }
+    },
+    "Cancel" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "el" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Άκυρο"
+          }
+        }
+      }
+    },
+    "Choose a descriptive name to organize your learning." : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "el" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Επίλεξε ένα περιγραφικό όνομα για να οργανώσεις τη μάθησή σου."
+          }
+        }
+      }
+    },
+    "Create your first word list to start studying." : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "el" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Δημιούργησε την πρώτη σου λίστα λέξεων για να ξεκινήσεις τη μελέτη."
+          }
+        }
+      }
+    },
+    "Name" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "el" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Όνομα"
+          }
+        }
+      }
+    },
+    "New Vocabulary" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "el" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Νέο Λεξιλόγιο"
+          }
+        }
+      }
+    },
+    "No vocabulary yet" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "el" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Δεν υπάρχει ακόμη λεξιλόγιο"
+          }
+        }
+      }
+    },
+    "Provide a vocabulary name" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "el" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Δώσε ένα όνομα στο λεξιλόγιο"
+          }
+        }
+      }
+    },
+    "Something went wrong" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "el" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Κάτι πήγε στραβά"
+          }
+        }
+      }
+    },
+    "The vocabulary already exists" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "el" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Το λεξιλόγιο υπάρχει ήδη"
+          }
+        }
+      }
+    },
+    "Vocabularies" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "el" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Λεξιλόγιο"
+          }
+        }
+      }
+    },
+    "Vocabulary name" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "el" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Όνομα λεξιλογίου"
+          }
+        }
+      }
+    }
+  },
+  "version" : "1.1"
+}

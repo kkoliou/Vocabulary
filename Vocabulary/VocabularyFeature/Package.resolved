@@ -1,5 +1,5 @@
 {
-  "originHash" : "393a3a5af394c73a66f5e150685e849408f91bfaef77d2f873d9abec9fea82b4",
+  "originHash" : "7c184add4cbe8ab236a1cae77d7c9a0f6d96b6ad4ed4903ec2ba1febf4ce01d8",
   "pins" : [
     {
       "identity" : "combine-schedulers",
@@ -24,8 +24,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/pointfreeco/sqlite-data",
       "state" : {
-        "revision" : "57274d587b564a0b420bd4fa2bec479aac5323a2",
-        "version" : "1.5.0"
+        "revision" : "05704b563ecb7f0bd7e49b6f360a6383a3e53e7d",
+        "version" : "1.5.1"
       }
     },
     {
@@ -60,8 +60,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/pointfreeco/swift-custom-dump",
       "state" : {
-        "revision" : "93a8aa4937030b606de42f44b17870249f49af0b",
-        "version" : "1.3.4"
+        "revision" : "2a2a938798236b8fa0bc57c453ee9de9f9ec3ab0",
+        "version" : "1.4.1"
       }
     },
     {
@@ -69,8 +69,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/pointfreeco/swift-dependencies",
       "state" : {
-        "revision" : "411297072220a96f1501211afebd3715316907d2",
-        "version" : "1.10.1"
+        "revision" : "c79f72b3e67a1eb64f66f76704c22ed6a5c1ed84",
+        "version" : "1.11.0"
       }
     },
     {
@@ -105,8 +105,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/pointfreeco/swift-snapshot-testing",
       "state" : {
-        "revision" : "a8b7c5e0ed33d8ab8887d1654d9b59f2cbad529b",
-        "version" : "1.18.7"
+        "revision" : "bf8d8c27f0f0c6d5e77bff0db76ab68f2050d15d",
+        "version" : "1.18.9"
       }
     },
     {
@@ -114,8 +114,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/pointfreeco/swift-structured-queries",
       "state" : {
-        "revision" : "4a740db139e256bc92f075a247efe52232b4116b",
-        "version" : "0.28.0"
+        "revision" : "d8163b3a98f3c8434c4361e85126db449d84bc66",
+        "version" : "0.30.0"
       }
     },
     {
