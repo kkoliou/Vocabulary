@@ -51,10 +51,9 @@ public struct VocabulariesView: View {
     .task {
       await viewModel.doInit()
     }
-    .sheet(isPresented: $viewModel.addVocabIsPresented) {
+    .vSheet(isPresented: $viewModel.addVocabIsPresented) {
       VocabularyCreatorView()
         .presentationDetents([.large])
-        .presentationDragIndicator(.visible)
     }
   }
   

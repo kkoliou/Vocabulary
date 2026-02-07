@@ -32,7 +32,7 @@ public struct VocabularyView: View {
         }
       }
     }
-    .sheet(isPresented: $viewModel.isAddEntryPresented) {
+    .vSheet(isPresented: $viewModel.isAddEntryPresented) {
       VocabularyEntryAddView(vocabulary: viewModel.vocabulary)
     }
   }
