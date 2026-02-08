@@ -139,16 +139,16 @@ class VocabularyEntriesAddViewModel {
   }
   
   func saveButtonTapped() {
-    let sourceIsEmpty = source.trimmed().isEmpty
-    let translationIsEmpty = translation.trimmed().isEmpty
-    if sourceIsEmpty || translationIsEmpty {
+    let sourceTrimmed = source.trimmed()
+    let translationTrimmed = translation.trimmed()
+    if sourceTrimmed.isEmpty || translationTrimmed.isEmpty {
       handleError(AddVocabularyEntryError.emptyName)
       return
     }
     do {
       try database.write { db in
         let exists = try VocabularyEntry
-          .where { $0.sourceWord == source && $0.vocabularyID == vocabulary.id }
+          .where { $0.sourceWord == sourceTrimmed && $0.vocabularyID == vocabulary.id }
           .fetchCount(db) > 0
 
         if exists {
@@ -158,8 +158,8 @@ class VocabularyEntriesAddViewModel {
         try VocabularyEntry.insert {
           VocabularyEntry.Draft(
             vocabularyID: vocabulary.id,
-            sourceWord: source,
-            translatedWord: translation
+            sourceWord: sourceTrimmed,
+            translatedWord: translationTrimmed
           )
         }
         .execute(db)
