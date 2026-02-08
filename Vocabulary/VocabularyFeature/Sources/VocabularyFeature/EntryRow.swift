@@ -7,6 +7,7 @@
 
 import SwiftUI
 import VocabularyDB
+import SQLiteData
 
 struct EntryRow: View {
   let entry: VocabularyEntry
@@ -35,7 +36,7 @@ struct EntryRow: View {
     .swipeActions(edge: .trailing, allowsFullSwipe: false) {
       if entry.isHighlighted {
         Button(
-          role: .destructive,
+          role: .cancel,
           action: onRemoveFromHighlights,
           label: {
             Label("Remove Highlight", systemImage: "bookmark.slash")
@@ -44,8 +45,8 @@ struct EntryRow: View {
         .tint(.red)
       } else {
         Button(
-          role: .destructive,
-          action: onRemoveFromHighlights,
+          role: .cancel,
+          action: onAddToHighlights,
           label: {
             Label("Highlight", systemImage: "bookmark.fill")
           }
@@ -54,4 +55,30 @@ struct EntryRow: View {
       }
     }
   }
+}
+
+#Preview {
+  let entry = prepareDependencies {
+    try! $0.bootstrapDatabase()
+    try! $0.defaultDatabase.write { db in
+      try! db.seed {
+        let vocabId = UUID()
+        Vocabulary.Draft(
+          id: vocabId,
+          name: "Vocabulary 1",
+          createdAt: Date(timeIntervalSince1970: 1719869724)
+        )
+        VocabularyEntry.Draft(
+          vocabularyID: vocabId,
+          sourceWord: "source",
+          translatedWord: "translation",
+          isHighlighted: false
+        )
+      }
+    }
+    return try! $0.defaultDatabase.read { db in
+      try VocabularyEntry.fetchOne(db)!
+    }
+  }
+  EntryRow(entry: entry, onRemoveFromHighlights: {}, onAddToHighlights: {})
 }

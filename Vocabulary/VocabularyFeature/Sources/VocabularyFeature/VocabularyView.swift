@@ -20,14 +20,14 @@ public struct VocabularyView: View {
   
   public var body: some View {
     List {
-      ForEach(viewModel.words, id: \.id) {
+      ForEach(viewModel.entries, id: \.id) { entry in
         EntryRow(
-          entry: $0,
+          entry: entry,
           onRemoveFromHighlights: {
-            // TODO: remove from highlights
+            viewModel.removeFromHighlightsTapped(for: entry)
           },
           onAddToHighlights: {
-            // TODO: add to highlights
+            viewModel.addToHighlightsTapped(for: entry)
           }
         )
       }

@@ -13,7 +13,7 @@ import Observation
 public class VocabularyViewModel {
   
   @ObservationIgnored @Dependency(\.defaultDatabase) var database
-  @ObservationIgnored @FetchAll(VocabularyEntry.none) var words
+  @ObservationIgnored @FetchAll(VocabularyEntry.none) var entries
   var isAddEntryPresented = false
   let vocabulary: Vocabulary
   
@@ -23,15 +23,35 @@ public class VocabularyViewModel {
   
   func doInit() async {
     _ = await withErrorReporting {
-      try await $words
+      try await $entries
         .load(
           VocabularyEntry
-            .where { $0.vocabularyID.eq(vocabulary.id) }
+            .where { $0.vocabularyID.eq(vocabulary.id) },
+          animation: .default
         )
     }
   }
   
   func plusButtonTapped() {
     isAddEntryPresented = true
+  }
+  
+  func removeFromHighlightsTapped(for entry: VocabularyEntry) {
+    changeHighlighted(to: false, for: entry)
+  }
+  
+  func addToHighlightsTapped(for entry: VocabularyEntry) {
+    changeHighlighted(to: true, for: entry)
+  }
+  
+  private func changeHighlighted(to value: Bool, for entry: VocabularyEntry) {
+    withErrorReporting {
+      try database.write { db in
+        try VocabularyEntry
+          .find(entry.id)
+          .update(set: { $0.isHighlighted = value })
+          .execute(db)
+      }
+    }
   }
 }
