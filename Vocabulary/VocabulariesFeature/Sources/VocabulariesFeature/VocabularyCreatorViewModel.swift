@@ -17,27 +17,38 @@ class VocabularyCreatorViewModel {
   @ObservationIgnored @Dependency(\.defaultDatabase) var database
   @ObservationIgnored var alertTitle: LocalizedStringResource?
   var alertIsPresented = false
+  var triggerSuccess = false
+  var dismiss = false
   
-  func addVocabularyTapped(vocabName: String) throws {
+  func addVocabularyTapped(vocabName: String) {
     let trimmed = vocabName.trimmed()
-    guard !trimmed.isEmpty else { throw AddVocabularyError.emptyName }
-    try database.write { db in
-      let exists = try Vocabulary
-        .where { $0.name == trimmed }
-        .fetchCount(db) > 0
-      
-      if exists {
-        throw AddVocabularyError.alreadyExists
+    guard !trimmed.isEmpty else {
+      handleError(AddVocabularyError.emptyName)
+      return
+    }
+    do {
+      try database.write { db in
+        let exists = try Vocabulary
+          .where { $0.name == trimmed }
+          .fetchCount(db) > 0
+        
+        if exists {
+          throw AddVocabularyError.alreadyExists
+        }
+        
+        try Vocabulary.insert {
+          Vocabulary.Draft(name: trimmed, createdAt: Date())
+        }
+        .execute(db)
       }
-      
-      try Vocabulary.insert {
-        Vocabulary.Draft(name: trimmed, createdAt: Date())
-      }
-      .execute(db)
+      triggerSuccess = true
+      dismiss = true
+    } catch {
+      handleError(error)
     }
   }
   
-  func handleError(_ error: Error) {
+  private func handleError(_ error: Error) {
     guard let error = error as? AddVocabularyError else {
       displayAlert("Something went wrong")
       return

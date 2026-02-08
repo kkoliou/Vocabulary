@@ -62,7 +62,7 @@ struct VocabularyEntryAddView: View {
       .toolbar {
         ToolbarItem(placement: .cancellationAction) {
           Button(Strings.localized("Cancel")) {
-            dismiss()
+            viewModel.cancelButtonTapped()
           }
         }
         ToolbarItem(placement: .confirmationAction) {
@@ -72,19 +72,45 @@ struct VocabularyEntryAddView: View {
           .disabled(viewModel.saveButtonDisabled)
         }
       }
+      .alert(viewModel.alertTitle ?? Strings.localized("Error"), isPresented: $viewModel.isAlertPresented) {
+        Button(Strings.localized("OK"), role: .cancel) {}
+      }
       .onAppear {
         focusedField = .source
+      }
+      .onChange(of: viewModel.dismiss) { _, newValue in
+        if newValue {
+          dismiss()
+        }
+      }
+      .onChange(of: viewModel.triggerSuccess) { _, newValue in
+        if newValue {
+          let generator = UIImpactFeedbackGenerator(style: .light)
+          generator.impactOccurred()
+        }
       }
     }
   }
 }
 
-//#Preview {
-//  VocabularyEntryAddView(vocabulary: ))
-//}
+#Preview {
+  let vocab = prepareDependencies {
+    try! $0.bootstrapDatabase()
+    try! $0.defaultDatabase.seedForPreview()
+    return try! $0.defaultDatabase.read { db in
+      try Vocabulary.fetchOne(db)!
+    }
+  }
+  
+  NavigationStack {
+    VocabularyEntryAddView(vocabulary: vocab)
+  }
+}
 
 @Observable @MainActor
 class VocabularyEntriesAddViewModel {
+  
+  @ObservationIgnored @Dependency(\.defaultDatabase) var database
   let vocabulary: Vocabulary
   var source: String = "" {
     didSet {
@@ -97,6 +123,10 @@ class VocabularyEntriesAddViewModel {
     }
   }
   var saveButtonDisabled: Bool = true
+  var dismiss = false
+  var triggerSuccess = false
+  var alertTitle: LocalizedStringResource?
+  var isAlertPresented = false
   
   init(vocabulary: Vocabulary) {
     self.vocabulary = vocabulary
@@ -109,13 +139,62 @@ class VocabularyEntriesAddViewModel {
   }
   
   func saveButtonTapped() {
-    //    let english = englishText.trimmed()
-    //    let greek = greekText.trimmed()
-    //
-    //    guard !english.isEmpty && !greek.isEmpty else {
-    //      return
-    //    }
-    //
-    //    dismiss()
+    let sourceIsEmpty = source.trimmed().isEmpty
+    let translationIsEmpty = translation.trimmed().isEmpty
+    if sourceIsEmpty || translationIsEmpty {
+      handleError(AddVocabularyEntryError.emptyName)
+      return
+    }
+    do {
+      try database.write { db in
+        let exists = try VocabularyEntry
+          .where { $0.sourceWord == source && $0.vocabularyID == vocabulary.id }
+          .fetchCount(db) > 0
+
+        if exists {
+          throw AddVocabularyEntryError.alreadyExists
+        }
+
+        try VocabularyEntry.insert {
+          VocabularyEntry.Draft(
+            vocabularyID: vocabulary.id,
+            sourceWord: source,
+            translatedWord: translation
+          )
+        }
+        .execute(db)
+      }
+      triggerSuccess = true
+      dismiss = true
+    } catch {
+      handleError(error)
+    }
   }
+  
+  func cancelButtonTapped() {
+    dismiss = true
+  }
+  
+  func handleError(_ error: Error) {
+    guard let error = error as? AddVocabularyEntryError else {
+      displayAlert("Something went wrong")
+      return
+    }
+    switch error {
+    case .emptyName:
+      displayAlert("Provide both original and translation")
+    case .alreadyExists:
+      displayAlert("An entry with this original word already exists in this vocabulary")
+    }
+  }
+  
+  private func displayAlert(_ message: StaticString) {
+    alertTitle = Strings.localized(message)
+    isAlertPresented = true
+  }
+}
+
+enum AddVocabularyEntryError: Error {
+  case emptyName
+  case alreadyExists
 }

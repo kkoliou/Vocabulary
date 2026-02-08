@@ -32,15 +32,28 @@ public struct VocabularyView: View {
         }
       }
     }
+    .task {
+      await viewModel.doInit()
+    }
     .vSheet(isPresented: $viewModel.isAddEntryPresented) {
       VocabularyEntryAddView(vocabulary: viewModel.vocabulary)
     }
   }
 }
 
-//#Preview {
-//  VocabularyView(vocabulary: Vocabulary()
-//}
+#Preview {
+  let vocab = prepareDependencies {
+    try! $0.bootstrapDatabase()
+    try! $0.defaultDatabase.seedForPreview()
+    return try! $0.defaultDatabase.read { db in
+      try Vocabulary.fetchOne(db)!
+    }
+  }
+  
+  NavigationStack {
+    VocabularyView(vocabulary: vocab)
+  }
+}
 
 @Observable @MainActor
 public class VocabularyViewModel {

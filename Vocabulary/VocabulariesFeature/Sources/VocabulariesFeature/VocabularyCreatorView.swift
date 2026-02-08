@@ -51,7 +51,7 @@ struct VocabularyCreatorView: View {
         
         ToolbarItem(placement: .confirmationAction) {
           Button(Strings.localized("Add")) {
-            createVocabulary()
+            viewModel.addVocabularyTapped(vocabName: vocabularyName)
           }
           .disabled(vocabularyName.trimmed().isEmpty)
           .fontWeight(.semibold)
@@ -65,21 +65,18 @@ struct VocabularyCreatorView: View {
         isPresented: $viewModel.alertIsPresented,
         actions: {}
       )
+      .onChange(of: viewModel.triggerSuccess) { _, newValue in
+        if newValue {
+          let generator = UIImpactFeedbackGenerator(style: .light)
+          generator.impactOccurred()
+        }
+      }
+      .onChange(of: viewModel.dismiss) { _, newValue in
+        if newValue {
+          dismiss()
+        }
+      }
     }
-  }
-  
-  private func createVocabulary() {
-    do {
-      try viewModel.addVocabularyTapped(vocabName: vocabularyName)
-    } catch let error {
-      viewModel.handleError(error)
-      return
-    }
-    
-    let generator = UIImpactFeedbackGenerator(style: .light)
-    generator.impactOccurred()
-    
-    dismiss()
   }
 }
 
