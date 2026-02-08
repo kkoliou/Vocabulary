@@ -21,7 +21,15 @@ public struct VocabularyView: View {
   public var body: some View {
     List {
       ForEach(viewModel.words, id: \.id) {
-        Text($0.sourceWord)
+        EntryRow(
+          entry: $0,
+          onRemoveFromHighlights: {
+            // TODO: remove from highlights
+          },
+          onAddToHighlights: {
+            // TODO: add to highlights
+          }
+        )
       }
     }
     .navigationTitle(viewModel.vocabulary.name)
@@ -52,32 +60,5 @@ public struct VocabularyView: View {
   
   NavigationStack {
     VocabularyView(vocabulary: vocab)
-  }
-}
-
-@Observable @MainActor
-public class VocabularyViewModel {
-  
-  @ObservationIgnored @Dependency(\.defaultDatabase) var database
-  @ObservationIgnored @FetchAll(VocabularyEntry.none) var words
-  var isAddEntryPresented = false
-  let vocabulary: Vocabulary
-  
-  public init(vocabulary: Vocabulary) {
-    self.vocabulary = vocabulary
-  }
-  
-  func doInit() async {
-    _ = await withErrorReporting {
-      try await $words
-        .load(
-          VocabularyEntry
-            .where { $0.vocabularyID.eq(vocabulary.id) }
-        )
-    }
-  }
-  
-  func plusButtonTapped() {
-    isAddEntryPresented = true
   }
 }

@@ -21,6 +21,7 @@ import SQLiteData
   public var translatedWord: String
   public var sourceLanguageCode: String?
   public var targetLanguageCode: String?
+  public var isHighlighted: Bool
 }
 
 func appDatabase() throws -> any DatabaseWriter {
@@ -58,7 +59,8 @@ func appDatabase() throws -> any DatabaseWriter {
             "sourceWord" TEXT NOT NULL DEFAULT '',
             "translatedWord" TEXT NOT NULL DEFAULT '',
             "sourceLanguageCode" TEXT,
-            "targetLanguageCode" TEXT
+            "targetLanguageCode" TEXT,
+            "isHighlighted" INTEGER NOT NULL DEFAULT 0
         ) STRICT
         """
     )

@@ -159,7 +159,8 @@ class VocabularyEntriesAddViewModel {
           VocabularyEntry.Draft(
             vocabularyID: vocabulary.id,
             sourceWord: sourceTrimmed,
-            translatedWord: translationTrimmed
+            translatedWord: translationTrimmed,
+            isHighlighted: false
           )
         }
         .execute(db)
