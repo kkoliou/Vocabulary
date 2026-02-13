@@ -35,8 +35,15 @@ public struct VocabularyView: View {
     .navigationTitle(viewModel.vocabulary.name)
     .toolbar {
       ToolbarItemGroup(placement: .primaryAction) {
-        Button("", systemImage: "plus") {
-          viewModel.plusButtonTapped()
+        Menu {
+          Button("Add Entry", systemImage: "plus") {
+            viewModel.addEntryTapped()
+          }
+          Button("Import File", systemImage: "tray.and.arrow.down") {
+            viewModel.addFileTapped()
+          }
+        } label: {
+          Label("Add", systemImage: "plus")
         }
       }
     }
@@ -45,6 +52,9 @@ public struct VocabularyView: View {
     }
     .vSheet(isPresented: $viewModel.isAddEntryPresented) {
       VocabularyEntryAddView(vocabulary: viewModel.vocabulary)
+    }
+    .vSheet(isPresented: $viewModel.isAddFilePresented) {
+      VocabularyEntriesAddView(vocabulary: viewModel.vocabulary)
     }
   }
 }

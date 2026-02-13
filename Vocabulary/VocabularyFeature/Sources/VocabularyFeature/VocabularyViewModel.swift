@@ -15,6 +15,7 @@ public class VocabularyViewModel {
   @ObservationIgnored @Dependency(\.defaultDatabase) var database
   @ObservationIgnored @FetchAll(VocabularyEntry.none) var entries
   var isAddEntryPresented = false
+  var isAddFilePresented = false
   let vocabulary: Vocabulary
   
   public init(vocabulary: Vocabulary) {
@@ -32,8 +33,12 @@ public class VocabularyViewModel {
     }
   }
   
-  func plusButtonTapped() {
+  func addEntryTapped() {
     isAddEntryPresented = true
+  }
+  
+  func addFileTapped() {
+    isAddFilePresented = true
   }
   
   func removeFromHighlightsTapped(for entry: VocabularyEntry) {

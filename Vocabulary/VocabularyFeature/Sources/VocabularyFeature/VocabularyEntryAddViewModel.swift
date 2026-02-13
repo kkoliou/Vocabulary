@@ -1,5 +1,5 @@
 //
-//  VocabularyEntriesAddViewModel.swift
+//  VocabularyEntryAddViewModel.swift
 //  VocabularyFeature
 //
 //  Created by Konstantinos Kolioulis on 8/2/26.
@@ -12,7 +12,7 @@ import Shared
 import Foundation
 
 @Observable @MainActor
-class VocabularyEntriesAddViewModel {
+class VocabularyEntryAddViewModel {
   
   @ObservationIgnored @Dependency(\.defaultDatabase) var database
   let vocabulary: Vocabulary

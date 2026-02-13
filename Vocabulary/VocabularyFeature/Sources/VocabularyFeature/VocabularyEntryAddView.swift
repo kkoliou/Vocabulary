@@ -13,7 +13,7 @@ import Shared
 struct VocabularyEntryAddView: View {
   
   @Environment(\.dismiss) private var dismiss
-  @State var viewModel: VocabularyEntriesAddViewModel
+  @State var viewModel: VocabularyEntryAddViewModel
   @FocusState private var focusedField: Field?
   
   enum Field {
@@ -22,7 +22,7 @@ struct VocabularyEntryAddView: View {
   
   public init(vocabulary: Vocabulary) {
     _viewModel = State(
-      wrappedValue: VocabularyEntriesAddViewModel(
+      wrappedValue: VocabularyEntryAddViewModel(
         vocabulary: vocabulary
       )
     )
