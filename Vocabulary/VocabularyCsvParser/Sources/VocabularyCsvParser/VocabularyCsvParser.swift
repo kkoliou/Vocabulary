@@ -3,7 +3,7 @@
 
 import Foundation
 
-public struct VocabularyWord: Identifiable, Codable {
+public struct VocabularyWord: Identifiable, Codable, Sendable {
   public let id = UUID()
   public var source: String
   public var translated: String
@@ -21,9 +21,9 @@ public class VocabularyCsvParser {
   }
   
   /// Parse CSV file from a file path
-  /// Expected CSV format: english,translation,example (header row optional)
-  public static func parse(filePath: String) throws -> [VocabularyWord] {
-    guard let data = try? String(contentsOfFile: filePath, encoding: .utf8) else {
+  /// Expected CSV format: english,translation (header row optional)
+  public static func parse(fileUrl: URL) throws -> [VocabularyWord] {
+    guard let data = try? String(contentsOf: fileUrl, encoding: .utf8) else {
       throw ParseError.fileNotFound
     }
     return try parse(csvString: data)

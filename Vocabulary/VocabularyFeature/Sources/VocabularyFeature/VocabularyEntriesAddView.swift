@@ -9,6 +9,7 @@ import SwiftUI
 import UniformTypeIdentifiers
 import VocabularyDB
 import SQLiteData
+import VocabularyCsvParser
 
 struct VocabularyEntriesAddView: View {
   @Environment(\.dismiss) private var dismiss
@@ -144,7 +145,9 @@ struct VocabularyEntriesAddView: View {
     ToolbarItem(placement: .confirmationAction) {
       Button(
         action: {
-          importFile()
+          Task { @MainActor in
+            await importFile()
+          }
         },
         label: {
           Image(systemName: "checkmark")
@@ -154,13 +157,13 @@ struct VocabularyEntriesAddView: View {
     }
   }
   
-  private func importFile() {
+  private func importFile() async {
     guard viewModel.hasSelectedFile else { return }
     
     UIImpactFeedbackGenerator(style: .light)
       .impactOccurred()
     
-    viewModel.importEntries()
+    await viewModel.importEntries()
     dismiss()
   }
 }
@@ -181,17 +184,19 @@ struct VocabularyEntriesAddView: View {
 
 @Observable @MainActor
 class VocabularyEntriesAddViewModel {
+  
+  @ObservationIgnored @Dependency(\.defaultDatabase) var database
   let vocabulary: Vocabulary
   var isPickerPresented = false
-  var selectedFileURL: URL?
   var fileName: String?
+  var fileContent: String?
   
   init(vocabulary: Vocabulary) {
     self.vocabulary = vocabulary
   }
   
   var hasSelectedFile: Bool {
-    selectedFileURL != nil
+    fileContent != nil
   }
   
   func selectFile() {
@@ -213,17 +218,52 @@ class VocabularyEntriesAddViewModel {
   }
   
   func setFile(url: URL, fileName: String) {
-    self.selectedFileURL = url
+    let access = url.startAccessingSecurityScopedResource()
+    defer {
+      if access {
+        url.stopAccessingSecurityScopedResource()
+      }
+    }
+    
+    self.fileContent = try? String(contentsOf: url, encoding: .utf8)
     self.fileName = fileName
   }
   
   func clearFile() {
-    selectedFileURL = nil
+    fileContent = nil
     fileName = nil
   }
   
-  func importEntries() {
-    guard let url = selectedFileURL else { return }
-    // TODO
+  func importEntries() async {
+    guard let fileContent else { return }
+    do {
+      let entries = try await parseFileContent(fileContent)
+      try await storeEntries(entries)
+    } catch {
+      print(error)
+    }
+  }
+  
+  @concurrent
+  private func parseFileContent(
+    _ fileContent: String
+  ) async throws -> [VocabularyWord] {
+    return try VocabularyCsvParser.parse(csvString: fileContent)
+  }
+  
+  @concurrent
+  private func storeEntries(_ entries: [VocabularyWord]) async throws {
+    try await database.write { db in
+        try db.seed {
+          for entry in entries {
+          VocabularyEntry.Draft(
+            vocabularyID: vocabulary.id,
+            sourceWord: entry.source,
+            translatedWord: entry.translated,
+            isHighlighted: false
+          )
+        }
+      }
+    }
   }
 }
