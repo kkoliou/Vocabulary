@@ -8,6 +8,7 @@
 import SQLiteData
 import VocabularyDB
 import Observation
+import Shared
 
 @Observable @MainActor
 public class VocabularyViewModel {
@@ -17,6 +18,11 @@ public class VocabularyViewModel {
   var isAddEntryPresented = false
   var isAddFilePresented = false
   let vocabulary: Vocabulary
+  var sortOption: SortOption = .defaultSort {
+    didSet {
+      Task { await reloadData() }
+    }
+  }
   
   public init(vocabulary: Vocabulary) {
     self.vocabulary = vocabulary
@@ -27,7 +33,17 @@ public class VocabularyViewModel {
       try await $entries
         .load(
           VocabularyEntry
-            .where { $0.vocabularyID.eq(vocabulary.id) },
+            .where { $0.vocabularyID.eq(vocabulary.id) }
+            .order {
+              switch sortOption {
+              case .defaultSort:
+                $0.rowid
+              case .highlights:
+                $0.isHighlighted.desc()
+              case .alphabetical:
+                $0.sourceWord
+              }
+            },
           animation: .default
         )
     }
@@ -58,5 +74,9 @@ public class VocabularyViewModel {
           .execute(db)
       }
     }
+  }
+  
+  private func reloadData() async {
+    await doInit()
   }
 }

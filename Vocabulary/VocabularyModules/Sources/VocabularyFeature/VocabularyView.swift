@@ -42,14 +42,26 @@ public struct VocabularyView: View {
     .toolbar {
       ToolbarItemGroup(placement: .primaryAction) {
         Menu {
-          Button("Add Entry", systemImage: "plus") {
+          Picker(Strings.localized("Sort By"), selection: $viewModel.sortOption) {
+            ForEach([SortOption.defaultSort, .highlights, .alphabetical], id: \.self) { option in
+              Label(option.title, systemImage: option.icon)
+                .tag(option)
+            }
+          }
+          .pickerStyle(.inline)
+        } label: {
+          Label(Strings.localized("Sort"), systemImage: "arrow.up.arrow.down")
+        }
+        
+        Menu {
+          Button(Strings.localized("Add Entry"), systemImage: "plus") {
             viewModel.addEntryTapped()
           }
-          Button("Import File", systemImage: "tray.and.arrow.down") {
+          Button(Strings.localized("Import File"), systemImage: "tray.and.arrow.down") {
             viewModel.addFileTapped()
           }
         } label: {
-          Label("Add", systemImage: "plus")
+          Label(Strings.localized("Add"), systemImage: "plus")
         }
       }
     }
@@ -66,6 +78,35 @@ public struct VocabularyView: View {
     }
   }
 }
+
+enum SortOption {
+  case defaultSort
+  case highlights
+  case alphabetical
+  
+  var title: LocalizedStringResource {
+    switch self {
+    case .defaultSort:
+      return Strings.localized("Default")
+    case .highlights:
+      return Strings.localized("Highlights")
+    case .alphabetical:
+      return Strings.localized("Alphabetical")
+    }
+  }
+  
+  var icon: String {
+    switch self {
+    case .defaultSort:
+      return "list.bullet"
+    case .highlights:
+      return "star.fill"
+    case .alphabetical:
+      return "textformat"
+    }
+  }
+}
+
 
 #Preview {
   let vocab = prepareDependencies {

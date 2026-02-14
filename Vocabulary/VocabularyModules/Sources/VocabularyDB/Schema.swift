@@ -103,8 +103,10 @@ extension DatabaseWriter {
     try deleteAllVocabularies()
     try write { db in
       try db.seed {
-        Vocabulary(id: UUID(), name: "Vocabulary 1", createdAt: Date(timeIntervalSince1970: 1719869724))
+        let vocab1Id = UUID()
+        Vocabulary(id: vocab1Id, name: "Vocabulary 1", createdAt: Date(timeIntervalSince1970: 1719869724))
         Vocabulary(id: UUID(), name: "Vocabulary 2", createdAt: Date())
+        VocabularyEntry(id: UUID(), vocabularyID: vocab1Id, sourceWord: "test", translatedWord: "τεστ", isHighlighted: false)
       }
     }
   }
