@@ -52,9 +52,11 @@ public struct VocabularyView: View {
     }
     .vSheet(isPresented: $viewModel.isAddEntryPresented) {
       VocabularyEntryAddView(vocabulary: viewModel.vocabulary)
+        .largePresentationDetents()
     }
     .vSheet(isPresented: $viewModel.isAddFilePresented) {
       VocabularyEntriesAddView(vocabulary: viewModel.vocabulary)
+        .defaultPresentationDetents()
     }
   }
 }

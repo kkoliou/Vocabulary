@@ -24,8 +24,8 @@ public struct VSheet<SheetContent: View>: ViewModifier {
     content
       .sheet(isPresented: $isPresented) {
         sheetContent()
+          .presentationDragIndicator(.visible)
       }
-      .presentationDragIndicator(.visible)
   }
 }
 
@@ -40,5 +40,15 @@ public extension View {
         sheetContent: content
       )
     )
+  }
+}
+
+public extension View {
+  func defaultPresentationDetents() -> some View {
+    self.presentationDetents([.fraction(0.7)])
+  }
+  
+  func largePresentationDetents() -> some View {
+    self.presentationDetents([.large])
   }
 }

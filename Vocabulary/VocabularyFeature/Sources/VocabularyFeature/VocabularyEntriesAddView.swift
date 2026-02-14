@@ -31,7 +31,6 @@ struct VocabularyEntriesAddView: View {
       .navigationTitle("Import from File")
       .navigationBarTitleDisplayMode(.inline)
       .toolbar {
-        cancelToolbarItem
         importToolbarItem
       }
       .fileImporter(
@@ -141,21 +140,17 @@ struct VocabularyEntriesAddView: View {
     }
   }
   
-  private var cancelToolbarItem: some ToolbarContent {
-    ToolbarItem(placement: .cancellationAction) {
-      Button("Cancel") {
-        dismiss()
-      }
-    }
-  }
-  
   private var importToolbarItem: some ToolbarContent {
     ToolbarItem(placement: .confirmationAction) {
-      Button("Import") {
-        importFile()
-      }
+      Button(
+        action: {
+          importFile()
+        },
+        label: {
+          Image(systemName: "checkmark")
+        }
+      )
       .disabled(!viewModel.hasSelectedFile)
-      .fontWeight(.semibold)
     }
   }
   

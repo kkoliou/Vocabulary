@@ -53,7 +53,7 @@ public struct VocabulariesView: View {
     }
     .vSheet(isPresented: $viewModel.addVocabIsPresented) {
       VocabularyCreatorView()
-        .presentationDetents([.large])
+        .largePresentationDetents()
     }
   }
   

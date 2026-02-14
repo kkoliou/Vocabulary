@@ -76,10 +76,6 @@ class VocabularyEntryAddViewModel {
     }
   }
   
-  func cancelButtonTapped() {
-    dismiss = true
-  }
-  
   func handleError(_ error: Error) {
     guard let error = error as? AddVocabularyEntryError else {
       displayAlert("Something went wrong")

@@ -43,18 +43,16 @@ struct VocabularyCreatorView: View {
       .navigationTitle(Strings.localized("New Vocabulary"))
       .navigationBarTitleDisplayMode(.inline)
       .toolbar {
-        ToolbarItem(placement: .cancellationAction) {
-          Button(Strings.localized("Cancel")) {
-            dismiss()
-          }
-        }
-        
         ToolbarItem(placement: .confirmationAction) {
-          Button(Strings.localized("Add")) {
-            viewModel.addVocabularyTapped(vocabName: vocabularyName)
-          }
+          Button(
+            action: {
+              viewModel.addVocabularyTapped(vocabName: vocabularyName)
+            },
+            label: {
+              Image(systemName: "checkmark")
+            }
+          )
           .disabled(vocabularyName.trimmed().isEmpty)
-          .fontWeight(.semibold)
         }
       }
       .onAppear {

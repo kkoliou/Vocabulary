@@ -60,14 +60,9 @@ struct VocabularyEntryAddView: View {
       .navigationTitle(Strings.localized("Add Entry"))
       .navigationBarTitleDisplayMode(.inline)
       .toolbar {
-        ToolbarItem(placement: .cancellationAction) {
-          Button(Strings.localized("Cancel")) {
-            viewModel.cancelButtonTapped()
-          }
-        }
         ToolbarItem(placement: .confirmationAction) {
-          Button(Strings.localized("Save")) {
-            viewModel.saveButtonTapped()
+          Button(action: { viewModel.saveButtonTapped() }) {
+            Image(systemName: "checkmark")
           }
           .disabled(viewModel.saveButtonDisabled)
         }
