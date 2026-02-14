@@ -22,8 +22,6 @@ extension BaseSuite {
         try db.seed {
           Vocabulary.Draft(id: UUID(-1), name: "Spanish", createdAt: Date())
           Vocabulary.Draft(id: UUID(-2), name: "French", createdAt: Date())
-          
-          // Add some existing entries for one vocabulary
           VocabularyEntry.Draft(
             id: UUID(-10),
             vocabularyID: UUID(-1),
