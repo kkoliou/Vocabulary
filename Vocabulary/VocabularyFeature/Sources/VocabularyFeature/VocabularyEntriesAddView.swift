@@ -10,6 +10,7 @@ import UniformTypeIdentifiers
 import VocabularyDB
 import SQLiteData
 import VocabularyCsvParser
+import Shared
 
 struct VocabularyEntriesAddView: View {
   @Environment(\.dismiss) private var dismiss
@@ -29,17 +30,28 @@ struct VocabularyEntriesAddView: View {
         howItWorksSection
         fileSelectionSection
       }
-      .navigationTitle("Import from File")
+      .navigationTitle(Strings.localized("Import from File"))
       .navigationBarTitleDisplayMode(.inline)
       .toolbar {
         importToolbarItem
       }
       .fileImporter(
         isPresented: $viewModel.isPickerPresented,
-        allowedContentTypes: [.commaSeparatedText, .plainText],
+        allowedContentTypes: [.csv],
         allowsMultipleSelection: false,
         onCompletion: viewModel.handleFileSelection
       )
+      .onChange(of: viewModel.dismiss) { _, newValue in
+        if newValue {
+          dismiss()
+        }
+      }
+      .onChange(of: viewModel.triggerSuccess) { _, newValue in
+        if newValue {
+          let generator = UIImpactFeedbackGenerator(style: .light)
+          generator.impactOccurred()
+        }
+      }
     }
   }
   
@@ -48,7 +60,7 @@ struct VocabularyEntriesAddView: View {
       howItWorksContent
         .padding(.vertical, 4)
     } header: {
-      Text("How It Works")
+      Text(Strings.localized("How It Works"))
     }
   }
   
@@ -60,10 +72,14 @@ struct VocabularyEntriesAddView: View {
         chooseFileButton
       }
     } header: {
-      Text("File")
+      Text(Strings.localized("File"))
     } footer: {
       if !viewModel.hasSelectedFile {
-        Text("Select a CSV file from your device")
+        Text(Strings.localized("Select a CSV file from your device"))
+      } else if let errorMessage = viewModel.errorMessage {
+        Text(errorMessage)
+          .font(.footnote)
+          .foregroundColor(.red)
       }
     }
   }
@@ -71,18 +87,18 @@ struct VocabularyEntriesAddView: View {
   private var howItWorksContent: some View {
     VStack(alignment: .leading, spacing: 24) {
       VStack(alignment: .leading, spacing: 12) {
-        Label("CSV Format", systemImage: "doc.text")
+        Label(Strings.localized("CSV Format"), systemImage: "doc.text")
           .font(.headline)
         
-        Text("Your CSV file should have two columns:")
+        Text(Strings.localized("Your CSV file should have two columns:"))
           .font(.subheadline)
           .foregroundColor(.secondary)
         
         csvColumnsDescription
         
-        Text("Tip: You can use your AI agent to help generate a properly formatted CSV file for import, with the languages you want.")
+        Text(Strings.localized("Tip: You can use your AI agent to help generate a properly formatted CSV file."))
           .font(.subheadline)
-          .foregroundColor(.accentColor)
+          .foregroundColor(.secondary)
           .padding(.top, 4)
       }
     }
@@ -96,12 +112,11 @@ struct VocabularyEntriesAddView: View {
     .padding(.leading, 4)
   }
   
-  private func csvBullet(_ text: String) -> some View {
+  private func csvBullet(_ textKey: StaticString) -> some View {
     HStack(spacing: 12) {
       Circle()
-        .fill(Color.blue)
         .frame(width: 8, height: 8)
-      Text(text)
+      Text(Strings.localized(textKey))
         .font(.subheadline)
     }
   }
@@ -109,7 +124,7 @@ struct VocabularyEntriesAddView: View {
   private func selectedFileRow(fileName: String) -> some View {
     HStack {
       Image(systemName: "doc.fill")
-        .foregroundColor(.blue)
+        .foregroundColor(.accentColor)
       
       Text(fileName)
         .lineLimit(1)
@@ -132,7 +147,7 @@ struct VocabularyEntriesAddView: View {
     } label: {
       HStack {
         Image(systemName: "doc.badge.plus")
-        Text("Choose CSV File")
+        Text(Strings.localized("Choose CSV File"))
         Spacer()
         Image(systemName: "chevron.right")
           .font(.caption)
@@ -168,7 +183,12 @@ struct VocabularyEntriesAddView: View {
       .impactOccurred()
     
     await viewModel.importEntries()
-    dismiss()
+  }
+}
+
+extension UTType {
+  static var csv: UTType {
+    UTType(filenameExtension: "csv") ?? .commaSeparatedText
   }
 }
 
@@ -195,6 +215,9 @@ class VocabularyEntriesAddViewModel {
   var isImporting = false
   var fileName: String?
   var fileContent: String?
+  var errorMessage: LocalizedStringResource?
+  var dismiss = false
+  var triggerSuccess = false
   
   init(vocabulary: Vocabulary) {
     self.vocabulary = vocabulary
@@ -235,6 +258,7 @@ class VocabularyEntriesAddViewModel {
   }
   
   func clearFile() {
+    errorMessage = nil
     fileContent = nil
     fileName = nil
   }
@@ -245,9 +269,27 @@ class VocabularyEntriesAddViewModel {
       isImporting = true
       let entries = try await parseFileContent(fileContent)
       try await storeEntries(entries)
+      triggerSuccess = true
+      dismiss = true
       isImporting = false
     } catch {
-      print(error)
+      isImporting = false
+      handleImportingError(error)
+    }
+  }
+  
+  private func handleImportingError(_ error: Error) {
+    if let error = error as? VocabularyCsvParser.ParseError {
+      switch error {
+      case .fileNotFound:
+        errorMessage = Strings.localized("Could not read the selected file. Please try again.")
+      case .invalidFormat:
+        errorMessage = Strings.localized("The file format is invalid. Please ensure your CSV uses commas to separate values.")
+      case .missingRequiredFields:
+        errorMessage = Strings.localized("One or more rows are missing required fields (original or translation). Please check your CSV.")
+      }
+    } else {
+      errorMessage = Strings.localized("Something went wrong.")
     }
   }
   

@@ -14,7 +14,7 @@ public struct VocabularyWord: Identifiable, Codable, Sendable {
 }
 
 public class VocabularyCsvParser {
-  enum ParseError: Error {
+  public enum ParseError: Error {
     case fileNotFound
     case invalidFormat
     case missingRequiredFields
