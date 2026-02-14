@@ -162,6 +162,20 @@ struct VocabularyCsvParserTests {
     #expect(words[0].translated == "hola")
   }
   
+  @Test func parseWithEmptyFields() throws {
+    let csv = """
+    hello,hola
+    incomplete,
+    ,adiós
+    """
+    
+    let words = try VocabularyCsvParser.parse(csvString: csv)
+    
+    #expect(words.count == 1)
+    #expect(words[0].source == "hello")
+    #expect(words[0].translated == "hola")
+  }
+  
   // MARK: - Error Cases Tests
   
   @Test func throwErrorForMissingFields() throws {

@@ -56,6 +56,9 @@ public class VocabularyCsvParser {
       let source = fields[0].trimmingCharacters(in: .whitespaces)
       let translated = fields[1].trimmingCharacters(in: .whitespaces)
       
+      if source.isEmpty || translated.isEmpty {
+        continue
+      }
       let word = VocabularyWord(
         source: source,
         translated: translated,

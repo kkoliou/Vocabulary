@@ -65,7 +65,10 @@ package.targets.append(contentsOf: [
   ),
   .testTarget(
     name: "VocabularyFeatureTests",
-    dependencies: ["VocabularyFeature"]
+    dependencies: [
+      "VocabularyFeature",
+      .product(name: "DependenciesTestSupport", package: "swift-dependencies")
+    ]
   ),
   .target(
     name: "VocabulariesFeature",
