@@ -51,6 +51,9 @@
         }
       }
     },
+    "Choose CSV File" : {
+      "extractionState" : "manual"
+    },
     "Create your first word list to start studying." : {
       "extractionState" : "manual",
       "localizations" : {
@@ -61,6 +64,18 @@
           }
         }
       }
+    },
+    "CSV Format" : {
+      "extractionState" : "manual"
+    },
+    "First column: Original word or phrase" : {
+      "extractionState" : "manual"
+    },
+    "How It Works" : {
+      "extractionState" : "manual"
+    },
+    "Import from File" : {
+      "extractionState" : "manual"
     },
     "New Vocabulary" : {
       "extractionState" : "manual",
@@ -104,6 +119,12 @@
     "Save" : {
       "extractionState" : "manual"
     },
+    "Second column: Translation" : {
+      "extractionState" : "manual"
+    },
+    "Select a CSV file from your device" : {
+      "extractionState" : "manual"
+    },
     "Something went wrong" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -125,6 +146,9 @@
           }
         }
       }
+    },
+    "Tip: You can use your AI agent to help generate a properly formatted CSV file." : {
+      "extractionState" : "manual"
     },
     "Translation" : {
       "extractionState" : "manual"
@@ -161,6 +185,9 @@
           }
         }
       }
+    },
+    "Your CSV file should have two columns:" : {
+      "extractionState" : "manual"
     },
     "Your translation" : {
       "extractionState" : "manual"

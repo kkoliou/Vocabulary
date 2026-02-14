@@ -241,7 +241,7 @@ class VocabularyEntriesAddViewModel {
       )
       
     case .failure(let error):
-      print("File selection error: \(error.localizedDescription)")
+      reportIssue("File selection error: \(error.localizedDescription)")
     }
   }
   
