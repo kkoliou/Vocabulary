@@ -50,9 +50,6 @@ public struct VocabulariesView: View {
         }
       }
     }
-    .task {
-      await viewModel.doInit()
-    }
     .vSheet(isPresented: $viewModel.addVocabIsPresented) {
       VocabularyCreatorView()
         .largePresentationDetents()

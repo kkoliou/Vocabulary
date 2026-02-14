@@ -14,7 +14,7 @@ import SQLiteData
   public let createdAt: Date
 }
 
-@Table public struct VocabularyEntry: Identifiable, Sendable {
+@Table public struct VocabularyEntry: Identifiable, Sendable, Equatable {
   public let id: UUID
   public let vocabularyID: Vocabulary.ID
   public var sourceWord: String

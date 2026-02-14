@@ -37,7 +37,6 @@ extension BaseSuite {
 
     init() async throws {
       model = VocabulariesViewModel()
-      await model.doInit()
     }
 
     @Test func vocabulariesAreOrderedByCreatedAt() async throws {
@@ -151,7 +150,6 @@ extension BaseSuite {
       }
       
       let emptyModel = VocabulariesViewModel()
-      await emptyModel.doInit()
       
       #expect(emptyModel.vocabularies.isEmpty)
     }
@@ -190,7 +188,7 @@ extension BaseSuite {
     @Test func initialStateBeforeInit() async throws {
       let uninitializedModel = VocabulariesViewModel()
       
-      #expect(uninitializedModel.vocabularies.isEmpty)
+      #expect(uninitializedModel.vocabularies.isEmpty == false)
       #expect(uninitializedModel.addVocabIsPresented == false)
     }
 

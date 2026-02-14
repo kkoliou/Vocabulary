@@ -15,21 +15,13 @@ import Shared
 public class VocabulariesViewModel {
   
   @ObservationIgnored @Dependency(\.defaultDatabase) var database
-  @ObservationIgnored @FetchAll(Vocabulary.none) var vocabularies
+  @ObservationIgnored @FetchAll(
+    Vocabulary.order(by: \.createdAt),
+    animation: .default
+  ) var vocabularies
   var addVocabIsPresented = false
   
   public init() {}
-  
-  func doInit() async {
-    _ = await withErrorReporting {
-      try await $vocabularies
-        .load(
-          Vocabulary
-            .order(by: \.createdAt),
-          animation: .default
-        )
-    }
-  }
   
   func addVocabularyTapped() {
     addVocabIsPresented = true
