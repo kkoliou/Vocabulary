@@ -150,7 +150,11 @@ struct VocabularyEntriesAddView: View {
           }
         },
         label: {
-          Image(systemName: "checkmark")
+          if viewModel.isImporting {
+            ProgressView()
+          } else {
+            Image(systemName: "checkmark")
+          }
         }
       )
       .disabled(!viewModel.hasSelectedFile)
@@ -188,6 +192,7 @@ class VocabularyEntriesAddViewModel {
   @ObservationIgnored @Dependency(\.defaultDatabase) var database
   let vocabulary: Vocabulary
   var isPickerPresented = false
+  var isImporting = false
   var fileName: String?
   var fileContent: String?
   
@@ -217,7 +222,7 @@ class VocabularyEntriesAddViewModel {
     }
   }
   
-  func setFile(url: URL, fileName: String) {
+  private func setFile(url: URL, fileName: String) {
     let access = url.startAccessingSecurityScopedResource()
     defer {
       if access {
@@ -237,8 +242,10 @@ class VocabularyEntriesAddViewModel {
   func importEntries() async {
     guard let fileContent else { return }
     do {
+      isImporting = true
       let entries = try await parseFileContent(fileContent)
       try await storeEntries(entries)
+      isImporting = false
     } catch {
       print(error)
     }
