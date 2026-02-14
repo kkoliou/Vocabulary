@@ -7,11 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		7D24342B2F2AB4DA00634386 /* Shared in Frameworks */ = {isa = PBXBuildFile; productRef = 7D24342A2F2AB4DA00634386 /* Shared */; };
-		7D4ACEF52F37DF360024927D /* VocabularyFeature in Frameworks */ = {isa = PBXBuildFile; productRef = 7D4ACEF42F37DF360024927D /* VocabularyFeature */; };
-		7DA345042F216319009DD467 /* VocabularyDB in Frameworks */ = {isa = PBXBuildFile; productRef = 7DA345032F216319009DD467 /* VocabularyDB */; };
-		7DCC47852F2802EB009C6F8D /* VocabulariesFeature in Frameworks */ = {isa = PBXBuildFile; productRef = 7DCC47842F2802EB009C6F8D /* VocabulariesFeature */; };
-		7DFAAEE12F264A6700F5584C /* VocabularyCsvParser in Frameworks */ = {isa = PBXBuildFile; productRef = 7DFAAEE02F264A6700F5584C /* VocabularyCsvParser */; };
+		7DB838A12F40F917006540B8 /* VocabulariesFeature in Frameworks */ = {isa = PBXBuildFile; productRef = 7DB838A02F40F917006540B8 /* VocabulariesFeature */; };
+		7DB838A72F40F917006540B8 /* VocabularyFeature in Frameworks */ = {isa = PBXBuildFile; productRef = 7DB838A62F40F917006540B8 /* VocabularyFeature */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -37,26 +34,9 @@
 		7D7F31B52F2024D7007F2307 /* VocabularyUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = VocabularyUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
-/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
-		7D6B8E412F37E47E009816BA /* Exceptions for "Vocabulary" folder in "Vocabulary" target */ = {
-			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
-			membershipExceptions = (
-				Shared,
-				VocabulariesFeature,
-				VocabularyCsvParser,
-				VocabularyDB,
-				VocabularyFeature,
-			);
-			target = 7D7F319D2F2024D6007F2307 /* Vocabulary */;
-		};
-/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
-
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		7D7F31A02F2024D6007F2307 /* Vocabulary */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
-			exceptions = (
-				7D6B8E412F37E47E009816BA /* Exceptions for "Vocabulary" folder in "Vocabulary" target */,
-			);
 			path = Vocabulary;
 			sourceTree = "<group>";
 		};
@@ -77,11 +57,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				7DCC47852F2802EB009C6F8D /* VocabulariesFeature in Frameworks */,
-				7D24342B2F2AB4DA00634386 /* Shared in Frameworks */,
-				7DFAAEE12F264A6700F5584C /* VocabularyCsvParser in Frameworks */,
-				7DA345042F216319009DD467 /* VocabularyDB in Frameworks */,
-				7D4ACEF52F37DF360024927D /* VocabularyFeature in Frameworks */,
+				7DB838A72F40F917006540B8 /* VocabularyFeature in Frameworks */,
+				7DB838A12F40F917006540B8 /* VocabulariesFeature in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -108,6 +85,7 @@
 				7D7F31A02F2024D6007F2307 /* Vocabulary */,
 				7D7F31AE2F2024D7007F2307 /* VocabularyTests */,
 				7D7F31B82F2024D7007F2307 /* VocabularyUITests */,
+				7DB8389D2F40F917006540B8 /* Frameworks */,
 				7D7F319F2F2024D6007F2307 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -120,6 +98,13 @@
 				7D7F31B52F2024D7007F2307 /* VocabularyUITests.xctest */,
 			);
 			name = Products;
+			sourceTree = "<group>";
+		};
+		7DB8389D2F40F917006540B8 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Frameworks;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -142,11 +127,8 @@
 			);
 			name = Vocabulary;
 			packageProductDependencies = (
-				7DA345032F216319009DD467 /* VocabularyDB */,
-				7DFAAEE02F264A6700F5584C /* VocabularyCsvParser */,
-				7DCC47842F2802EB009C6F8D /* VocabulariesFeature */,
-				7D24342A2F2AB4DA00634386 /* Shared */,
-				7D4ACEF42F37DF360024927D /* VocabularyFeature */,
+				7DB838A02F40F917006540B8 /* VocabulariesFeature */,
+				7DB838A62F40F917006540B8 /* VocabularyFeature */,
 			);
 			productName = Vocabulary;
 			productReference = 7D7F319E2F2024D6007F2307 /* Vocabulary.app */;
@@ -659,25 +641,13 @@
 /* End XCConfigurationList section */
 
 /* Begin XCSwiftPackageProductDependency section */
-		7D24342A2F2AB4DA00634386 /* Shared */ = {
-			isa = XCSwiftPackageProductDependency;
-			productName = Shared;
-		};
-		7D4ACEF42F37DF360024927D /* VocabularyFeature */ = {
-			isa = XCSwiftPackageProductDependency;
-			productName = VocabularyFeature;
-		};
-		7DA345032F216319009DD467 /* VocabularyDB */ = {
-			isa = XCSwiftPackageProductDependency;
-			productName = VocabularyDB;
-		};
-		7DCC47842F2802EB009C6F8D /* VocabulariesFeature */ = {
+		7DB838A02F40F917006540B8 /* VocabulariesFeature */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = VocabulariesFeature;
 		};
-		7DFAAEE02F264A6700F5584C /* VocabularyCsvParser */ = {
+		7DB838A62F40F917006540B8 /* VocabularyFeature */ = {
 			isa = XCSwiftPackageProductDependency;
-			productName = VocabularyCsvParser;
+			productName = VocabularyFeature;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};
