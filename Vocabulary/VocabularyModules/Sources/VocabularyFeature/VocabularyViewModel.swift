@@ -20,9 +20,11 @@ public class VocabularyViewModel {
   let vocabulary: Vocabulary
   var sortOption: SortOption = .defaultSort {
     didSet {
-      Task { await reloadData() }
+      reloadTask?.cancel()
+      reloadTask = Task { await reloadData() }
     }
   }
+  var reloadTask: Task<Void, Never>?
   
   public init(vocabulary: Vocabulary) {
     self.vocabulary = vocabulary

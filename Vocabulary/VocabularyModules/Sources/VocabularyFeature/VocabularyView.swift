@@ -107,7 +107,6 @@ enum SortOption {
   }
 }
 
-
 #Preview {
   let vocab = prepareDependencies {
     try! $0.bootstrapDatabase()

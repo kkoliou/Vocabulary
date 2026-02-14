@@ -408,7 +408,7 @@ extension BaseSuite {
       model.sortOption = .highlights
       
       // Wait for reload triggered by didSet
-      try await Task.sleep(for: .milliseconds(100))
+      await model.reloadTask?.value
       
       // Highlighted entries should come first
       let highlighted = model.entries.prefix(2)
@@ -428,7 +428,7 @@ extension BaseSuite {
       model.sortOption = .alphabetical
       
       // Wait for reload triggered by didSet
-      try await Task.sleep(for: .milliseconds(100))
+      await model.reloadTask?.value
       
       let sourceWords = model.entries.map(\.sourceWord)
       
@@ -443,13 +443,13 @@ extension BaseSuite {
       #expect(initialOrder == ["hello", "goodbye", "thank you", "please"])
       
       model.sortOption = .alphabetical
-      try await Task.sleep(for: .milliseconds(100))
+      await model.reloadTask?.value
       
       let alphabeticalOrder = model.entries.map(\.sourceWord)
       #expect(alphabeticalOrder == ["goodbye", "hello", "please", "thank you"])
       
       model.sortOption = .highlights
-      try await Task.sleep(for: .milliseconds(100))
+      await model.reloadTask?.value
       
       // First two should be highlighted
       #expect(model.entries[0].isHighlighted == true)
@@ -459,12 +459,12 @@ extension BaseSuite {
     @Test func sortBackToDefaultAfterChanging() async throws {
       // Change to alphabetical
       model.sortOption = .alphabetical
-      try await Task.sleep(for: .milliseconds(100))
+      await model.reloadTask?.value
       #expect(model.entries.map(\.sourceWord) == ["goodbye", "hello", "please", "thank you"])
       
       // Change back to default
       model.sortOption = .defaultSort
-      try await Task.sleep(for: .milliseconds(100))
+      await model.reloadTask?.value
       #expect(model.entries.map(\.sourceWord) == ["hello", "goodbye", "thank you", "please"])
     }
     
@@ -476,7 +476,7 @@ extension BaseSuite {
       try await model.$entries.load()
       
       model.sortOption = .highlights
-      try await Task.sleep(for: .milliseconds(100))
+      await model.reloadTask?.value
       
       // All should be highlighted
       #expect(model.entries.allSatisfy { $0.isHighlighted })
@@ -490,7 +490,7 @@ extension BaseSuite {
       try await model.$entries.load()
       
       model.sortOption = .highlights
-      try await Task.sleep(for: .milliseconds(100))
+      await model.reloadTask?.value
       
       // None should be highlighted
       #expect(model.entries.allSatisfy { !$0.isHighlighted })
@@ -518,7 +518,7 @@ extension BaseSuite {
       }
       
       model.sortOption = .alphabetical
-      try await Task.sleep(for: .milliseconds(100))
+      await model.reloadTask?.value
       
       let sourceWords = model.entries.map(\.sourceWord)
       
@@ -549,7 +549,7 @@ extension BaseSuite {
       }
       
       model.sortOption = .alphabetical
-      try await Task.sleep(for: .milliseconds(100))
+      await model.reloadTask?.value
       
       // Capital letters typically come before lowercase in ASCII sorting
       let appleIndex = model.entries.firstIndex { $0.sourceWord == "Apple" }
@@ -561,7 +561,7 @@ extension BaseSuite {
     
     @Test func highlightChangeMaintainsSortOrder() async throws {
       model.sortOption = .highlights
-      try await Task.sleep(for: .milliseconds(100))
+      await model.reloadTask?.value
       
       let initialHighlightedCount = model.entries.filter { $0.isHighlighted }.count
       #expect(initialHighlightedCount == 2)
@@ -584,7 +584,7 @@ extension BaseSuite {
     
     @Test func sortOptionPersistsAcrossOperations() async throws {
       model.sortOption = .alphabetical
-      try await Task.sleep(for: .milliseconds(100))
+      await model.reloadTask?.value
       
       // Perform operations
       model.addEntryTapped()
@@ -600,7 +600,7 @@ extension BaseSuite {
       model.sortOption = .highlights
       model.sortOption = .defaultSort
       
-      try await Task.sleep(for: .milliseconds(200))
+      await model.reloadTask?.value
       
       // Should end up with default sort
       #expect(model.sortOption == .defaultSort)
@@ -625,11 +625,11 @@ extension BaseSuite {
       
       // Change sort options on empty vocabulary
       emptyModel.sortOption = .alphabetical
-      try await Task.sleep(for: .milliseconds(100))
+      await model.reloadTask?.value
       #expect(emptyModel.entries.isEmpty)
       
       emptyModel.sortOption = .highlights
-      try await Task.sleep(for: .milliseconds(100))
+      await model.reloadTask?.value
       #expect(emptyModel.entries.isEmpty)
     }
     
@@ -647,7 +647,7 @@ extension BaseSuite {
       
       // Change Spanish model sort
       model.sortOption = .alphabetical
-      try await Task.sleep(for: .milliseconds(100))
+      await model.reloadTask?.value
       
       // French model should be unaffected
       #expect(frenchModel.entries.map(\.sourceWord) == frenchInitialOrder)
