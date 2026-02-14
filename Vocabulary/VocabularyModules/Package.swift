@@ -16,7 +16,8 @@ var package = Package(
     .library(name: "VocabularyCsvParser", targets: ["VocabularyCsvParser"]),
   ],
   dependencies: [
-    .package(url: "https://github.com/pointfreeco/sqlite-data", from: "1.4.2")
+    .package(url: "https://github.com/pointfreeco/sqlite-data", from: "1.4.2"),
+    .package(url: "https://github.com/pointfreeco/swift-dependencies", from: "1.11.0")
   ],
   targets: [
     // MARK: - Shared/Core targets
@@ -76,6 +77,9 @@ package.targets.append(contentsOf: [
   ),
   .testTarget(
     name: "VocabulariesFeatureTests",
-    dependencies: ["VocabulariesFeature"]
+    dependencies: [
+      "VocabulariesFeature",
+      .product(name: "DependenciesTestSupport", package: "swift-dependencies")
+    ]
   ),
 ])
