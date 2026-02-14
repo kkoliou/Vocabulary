@@ -25,7 +25,8 @@ public class VocabulariesViewModel {
       try await $vocabularies
         .load(
           Vocabulary
-            .order(by: \.createdAt)
+            .order(by: \.createdAt),
+          animation: .default
         )
     }
   }

@@ -23,7 +23,9 @@ public struct VocabulariesView: View {
   public var body: some View {
     NavigationStack {
       Group {
-        if isEmptyState {
+        if viewModel.$vocabularies.isLoading {
+          ProgressView()
+        } else if isEmptyState {
           emptyState
         } else {
           vocabList

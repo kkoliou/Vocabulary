@@ -19,17 +19,23 @@ public struct VocabularyView: View {
   }
   
   public var body: some View {
-    List {
-      ForEach(viewModel.entries, id: \.id) { entry in
-        EntryRow(
-          entry: entry,
-          onRemoveFromHighlights: {
-            viewModel.removeFromHighlightsTapped(for: entry)
-          },
-          onAddToHighlights: {
-            viewModel.addToHighlightsTapped(for: entry)
+    Group {
+      if viewModel.$entries.isLoading {
+        ProgressView()
+      } else {
+        List {
+          ForEach(viewModel.entries, id: \.id) { entry in
+            EntryRow(
+              entry: entry,
+              onRemoveFromHighlights: {
+                viewModel.removeFromHighlightsTapped(for: entry)
+              },
+              onAddToHighlights: {
+                viewModel.addToHighlightsTapped(for: entry)
+              }
+            )
           }
-        )
+        }
       }
     }
     .navigationTitle(viewModel.vocabulary.name)
