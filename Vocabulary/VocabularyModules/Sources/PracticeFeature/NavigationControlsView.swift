@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import Shared
 
 struct NavigationControlsView: View {
   let canGoPrevious: Bool
@@ -66,7 +67,7 @@ private struct NavigationButton: View {
           .frame(width: 56, height: 56)
         
         Image(systemName: direction.systemImage)
-          .font(.title3.weight(.semibold))
+          .font(AppTypography.title3.weight(.semibold))
           .foregroundColor(isEnabled ? .primary : .secondary)
       }
     }
@@ -74,3 +75,4 @@ private struct NavigationButton: View {
     .opacity(isEnabled ? 1.0 : 0.5)
   }
 }
+

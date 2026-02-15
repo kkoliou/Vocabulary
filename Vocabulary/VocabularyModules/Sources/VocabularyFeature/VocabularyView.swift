@@ -39,6 +39,7 @@ public struct VocabularyView: View {
                 viewModel.addToHighlightsTapped(for: entry)
               }
             )
+            .font(AppTypography.body)
           }
         }
       }
@@ -50,6 +51,7 @@ public struct VocabularyView: View {
           Picker(Strings.localized("Sort By"), selection: $viewModel.sortOption) {
             ForEach([SortOption.defaultSort, .highlights, .alphabetical], id: \.self) { option in
               Label(option.title, systemImage: option.icon)
+                .font(AppTypography.body)
                 .tag(option)
             }
           }

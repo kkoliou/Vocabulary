@@ -66,6 +66,7 @@ public struct VocabulariesView: View {
       },
       description: {
         Text(Strings.localized("Create your first word list to start studying."))
+          .font(AppTypography.subheadline)
       },
       actions: {
         Button(Strings.localized("Add vocabulary")) {
@@ -81,6 +82,7 @@ public struct VocabulariesView: View {
         NavigationLink(value: vocabulary) {
           VStack(alignment: .leading) {
             Text(vocabulary.name)
+              .font(AppTypography.body)
           }
         }
       }

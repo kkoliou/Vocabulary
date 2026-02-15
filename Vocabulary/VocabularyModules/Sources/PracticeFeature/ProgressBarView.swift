@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import Shared
 
 struct ProgressBarView: View {
   let progressText: String
@@ -16,13 +17,13 @@ struct ProgressBarView: View {
     VStack(spacing: 12) {
       HStack {
         Text(progressText)
-          .font(.subheadline.weight(.semibold))
+          .font(AppTypography.subheadline.weight(.semibold))
           .foregroundStyle(.secondary)
         
         Spacer()
         
         Text(vocabularyName)
-          .font(.subheadline.weight(.medium))
+          .font(AppTypography.subheadline.weight(.medium))
           .foregroundStyle(.secondary)
       }
       

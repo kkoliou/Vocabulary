@@ -24,6 +24,7 @@ public struct VTextField: View {
         EmptyView()
       }
     )
+    .font(AppTypography.body)
   }
 }
 

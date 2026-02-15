@@ -8,6 +8,8 @@
 import SwiftUI
 import VocabularyDB
 import SQLiteData
+import Shared
+import Foundation
 
 struct VocabularyCardView: View {
   let entry: VocabularyEntry
@@ -60,7 +62,7 @@ private struct SourceWordSection: View {
   
   var body: some View {
     Text(sourceWord)
-      .font(.system(size: 38, weight: .bold, design: .rounded))
+      .font(AppTypography.rounded(size: 38, weight: .bold))
       .multilineTextAlignment(.center)
       .foregroundColor(.primary)
       .padding(.horizontal, 32)
@@ -77,7 +79,7 @@ private struct CardDivider: View {
         .frame(height: 1)
       
       Image(systemName: "arrow.down")
-        .font(.caption2)
+        .font(AppTypography.caption2)
         .foregroundStyle(.tertiary)
       
       Rectangle()
@@ -98,7 +100,7 @@ private struct TranslationSection: View {
     VStack(spacing: 16) {
       if isRevealed {
         Text(translatedWord)
-          .font(.system(size: 32, weight: .semibold, design: .rounded))
+          .font(AppTypography.rounded(size: 32, weight: .semibold))
           .multilineTextAlignment(.center)
           .foregroundStyle(.blue)
           .padding(.horizontal, 32)
@@ -123,9 +125,9 @@ private struct RevealButton: View {
     Button(action: onReveal) {
       HStack(spacing: 10) {
         Image(systemName: "eye.fill")
-          .font(.callout)
+          .font(AppTypography.callout)
         Text("Reveal Translation")
-          .font(.callout.weight(.semibold))
+          .font(AppTypography.callout.weight(.semibold))
       }
       .padding(.horizontal, 12)
       .padding(.vertical, 12)

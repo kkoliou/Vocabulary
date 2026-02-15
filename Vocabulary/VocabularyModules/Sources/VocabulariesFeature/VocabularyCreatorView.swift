@@ -36,8 +36,10 @@ struct VocabularyCreatorView: View {
           .autocorrectionDisabled()
         } header: {
           Text(Strings.localized("Vocabulary name"))
+            .font(AppTypography.headline)
         } footer: {
           Text(Strings.localized("Choose a descriptive name to organize your learning."))
+            .font(AppTypography.subheadline)
         }
       }
       .navigationTitle(Strings.localized("New Vocabulary"))

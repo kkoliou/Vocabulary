@@ -60,6 +60,7 @@ struct VocabularyEntriesAddView: View {
         .padding(.vertical, 4)
     } header: {
       Text(Strings.localized("How It Works"))
+        .font(AppTypography.headline)
     }
   }
   
@@ -72,12 +73,14 @@ struct VocabularyEntriesAddView: View {
       }
     } header: {
       Text(Strings.localized("File"))
+        .font(AppTypography.headline)
     } footer: {
       if !viewModel.hasSelectedFile {
         Text(Strings.localized("Select a CSV file from your device"))
+          .font(AppTypography.footnote)
       } else if let errorMessage = viewModel.errorMessage {
         Text(errorMessage)
-          .font(.footnote)
+          .font(AppTypography.footnote)
           .foregroundColor(.red)
       }
     }
@@ -87,16 +90,16 @@ struct VocabularyEntriesAddView: View {
     VStack(alignment: .leading, spacing: 24) {
       VStack(alignment: .leading, spacing: 12) {
         Label(Strings.localized("CSV Format"), systemImage: "doc.text")
-          .font(.headline)
+          .font(AppTypography.headline)
         
         Text(Strings.localized("Your CSV file should have two columns:"))
-          .font(.subheadline)
+          .font(AppTypography.subheadline)
           .foregroundColor(.secondary)
         
         csvColumnsDescription
         
         Text(Strings.localized("Tip: You can use your AI agent to help generate a properly formatted CSV file."))
-          .font(.subheadline)
+          .font(AppTypography.subheadline)
           .foregroundColor(.secondary)
           .padding(.top, 4)
       }
@@ -116,7 +119,7 @@ struct VocabularyEntriesAddView: View {
       Circle()
         .frame(width: 8, height: 8)
       Text(Strings.localized(textKey))
-        .font(.subheadline)
+        .font(AppTypography.subheadline)
     }
   }
   
@@ -126,6 +129,7 @@ struct VocabularyEntriesAddView: View {
         .foregroundColor(.accentColor)
       
       Text(fileName)
+        .font(AppTypography.body)
         .lineLimit(1)
       
       Spacer()
@@ -147,9 +151,10 @@ struct VocabularyEntriesAddView: View {
       HStack {
         Image(systemName: "doc.badge.plus")
         Text(Strings.localized("Choose CSV File"))
+          .font(AppTypography.body)
         Spacer()
         Image(systemName: "chevron.right")
-          .font(.caption)
+          .font(AppTypography.caption)
           .foregroundColor(.secondary)
       }
     }

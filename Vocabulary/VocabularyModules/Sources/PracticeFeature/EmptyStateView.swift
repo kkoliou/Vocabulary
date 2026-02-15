@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import Shared
 
 struct EmptyStateView: View {
   var body: some View {
@@ -13,14 +14,14 @@ struct EmptyStateView: View {
       Spacer()
       
       Image(systemName: "book.closed")
-        .font(.system(size: 60))
+        .font(AppTypography.rounded(size: 60))
         .foregroundStyle(.tertiary)
       
       Text("No Entries")
-        .font(.title2.weight(.semibold))
+        .font(AppTypography.title.weight(.semibold))
       
       Text("Add some vocabulary entries to practice")
-        .font(.subheadline)
+        .font(AppTypography.subheadline)
         .foregroundStyle(.secondary)
         .multilineTextAlignment(.center)
       

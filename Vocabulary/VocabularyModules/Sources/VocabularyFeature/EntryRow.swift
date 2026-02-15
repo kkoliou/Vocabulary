@@ -8,6 +8,7 @@
 import SwiftUI
 import VocabularyDB
 import SQLiteData
+import Shared
 
 struct EntryRow: View {
   let entry: VocabularyEntry
@@ -18,17 +19,17 @@ struct EntryRow: View {
     VStack(alignment: .leading, spacing: 4) {
       HStack {
         Text(entry.sourceWord)
-          .font(.headline)
+          .font(AppTypography.headline.weight(.semibold))
           .foregroundColor(.primary)
         Spacer()
         if entry.isHighlighted {
           Image(systemName: "bookmark.fill")
             .foregroundColor(.yellow)
-            .font(.caption)
+            .font(AppTypography.caption)
         }
       }
       Text(entry.translatedWord)
-        .font(.subheadline)
+        .font(AppTypography.subheadline)
         .foregroundColor(.secondary)
     }
     .padding(.vertical, 4)
