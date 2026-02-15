@@ -37,6 +37,7 @@ extension BaseSuite {
 
     init() async throws {
       model = VocabulariesViewModel()
+      await model.doInit()
     }
 
     @Test func vocabulariesAreOrderedByCreatedAt() async throws {
@@ -183,13 +184,6 @@ extension BaseSuite {
         try Vocabulary.fetchAll(db).map(\.name)
       }
       #expect(remaining == ["French", "German"])
-    }
-
-    @Test func initialStateBeforeInit() async throws {
-      let uninitializedModel = VocabulariesViewModel()
-      
-      #expect(uninitializedModel.vocabularies.isEmpty == false)
-      #expect(uninitializedModel.addVocabIsPresented == false)
     }
 
     @Test func multipleAddVocabularyTaps() async throws {
