@@ -102,7 +102,7 @@ private struct TranslationSection: View {
         Text(translatedWord)
           .font(AppTypography.rounded(size: 32, weight: .semibold))
           .multilineTextAlignment(.center)
-          .foregroundStyle(.blue)
+          .foregroundStyle(AppColors.accent)
           .padding(.horizontal, 32)
           .minimumScaleFactor(0.5)
           .lineLimit(3)
@@ -132,7 +132,7 @@ private struct RevealButton: View {
       .padding(.horizontal, 12)
       .padding(.vertical, 12)
       .clipShape(.capsule)
-      .shadow(color: .accentColor.opacity(0.4), radius: 8, x: 0, y: 4)
+      .shadow(color: .black.opacity(0.12), radius: 8, x: 0, y: 4)
     }
     .buttonStyle(.bordered)
     .transition(.scale(scale: 0.9).combined(with: .opacity))

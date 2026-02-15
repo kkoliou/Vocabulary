@@ -36,16 +36,7 @@ struct ProgressBarView: View {
           
           // Progress fill
           RoundedRectangle(cornerRadius: 8)
-            .fill(
-              LinearGradient(
-                colors: [
-                  Color(UIColor(red: 170/255, green: 36/255, blue: 39/255, alpha: 1)),
-                  Color(UIColor(red: 236/255, green: 192/255, blue: 193/255, alpha: 1))
-                ],
-                startPoint: .leading,
-                endPoint: .trailing
-              )
-            )
+            .fill(AppColors.accent)
             .frame(width: geometry.size.width * progress, height: 8)
             .animation(.spring(response: 0.5, dampingFraction: 0.7), value: progress)
         }

@@ -24,7 +24,7 @@ struct EntryRow: View {
         Spacer()
         if entry.isHighlighted {
           Image(systemName: "bookmark.fill")
-            .foregroundColor(.yellow)
+            .foregroundColor(AppColors.accent)
             .font(AppTypography.caption)
         }
       }
@@ -33,7 +33,7 @@ struct EntryRow: View {
         .foregroundColor(.secondary)
     }
     .padding(.vertical, 4)
-    .listRowBackground(entry.isHighlighted ? Color.yellow.opacity(0.1) : nil)
+    .listRowBackground(entry.isHighlighted ? AppColors.accentLight.opacity(0.25) : nil)
     .swipeActions(edge: .trailing, allowsFullSwipe: false) {
       if entry.isHighlighted {
         Button(
@@ -52,7 +52,7 @@ struct EntryRow: View {
             Label("Highlight", systemImage: "bookmark.fill")
           }
         )
-        .tint(.yellow)
+        .tint(AppColors.accent)
       }
     }
   }
