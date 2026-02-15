@@ -52,6 +52,7 @@ var package = Package(
 package.products.append(contentsOf: [
   .library(name: "VocabularyFeature", targets: ["VocabularyFeature"]),
   .library(name: "VocabulariesFeature", targets: ["VocabulariesFeature"]),
+  .library(name: "PracticeFeature", targets: ["PracticeFeature"]),
 ])
 
 package.targets.append(contentsOf: [
@@ -60,7 +61,8 @@ package.targets.append(contentsOf: [
     dependencies: [
       "VocabularyDB",
       "Shared",
-      "VocabularyCsvParser"
+      "VocabularyCsvParser",
+      "PracticeFeature"
     ]
   ),
   .testTarget(
@@ -82,6 +84,20 @@ package.targets.append(contentsOf: [
     name: "VocabulariesFeatureTests",
     dependencies: [
       "VocabulariesFeature",
+      .product(name: "DependenciesTestSupport", package: "swift-dependencies")
+    ]
+  ),
+  .target(
+    name: "PracticeFeature",
+    dependencies: [
+      "VocabularyDB",
+      "Shared"
+    ]
+  ),
+  .testTarget(
+    name: "PracticeFeatureTests",
+    dependencies: [
+      "PracticeFeature",
       .product(name: "DependenciesTestSupport", package: "swift-dependencies")
     ]
   ),

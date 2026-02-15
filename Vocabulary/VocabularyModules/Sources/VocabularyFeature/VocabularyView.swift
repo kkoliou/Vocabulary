@@ -9,6 +9,7 @@ import SwiftUI
 import SQLiteData
 import VocabularyDB
 import Shared
+import PracticeFeature
 
 public struct VocabularyView: View {
   
@@ -63,6 +64,16 @@ public struct VocabularyView: View {
         } label: {
           Label(Strings.localized("Add"), systemImage: "plus")
         }
+        
+        Button(
+          action: {
+            viewModel.practiceTapped()
+          },
+          label: {
+            Image(systemName: "flag.pattern.checkered")
+          }
+        )
+        
       }
     }
     .task {
@@ -76,6 +87,15 @@ public struct VocabularyView: View {
       VocabularyEntriesAddView(vocabulary: viewModel.vocabulary)
         .defaultPresentationDetents()
     }
+    .navigationDestination(
+      isPresented: $viewModel.isPracticePresented,
+      destination: {
+        PracticeView(
+          vocabulary: viewModel.vocabulary,
+          entries: viewModel.entries
+        )
+      }
+    )
   }
 }
 

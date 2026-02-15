@@ -17,6 +17,7 @@ public class VocabularyViewModel {
   @ObservationIgnored @FetchAll(VocabularyEntry.none) var entries
   var isAddEntryPresented = false
   var isAddFilePresented = false
+  var isPracticePresented = false
   let vocabulary: Vocabulary
   var sortOption: SortOption = .defaultSort {
     didSet {
@@ -65,6 +66,10 @@ public class VocabularyViewModel {
   
   func addToHighlightsTapped(for entry: VocabularyEntry) {
     changeHighlighted(to: true, for: entry)
+  }
+  
+  func practiceTapped() {
+    isPracticePresented = true
   }
   
   private func changeHighlighted(to value: Bool, for entry: VocabularyEntry) {
