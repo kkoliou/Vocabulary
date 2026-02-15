@@ -23,7 +23,11 @@ public class VocabularyViewModel {
   var sortOption: SortOption = .defaultSort {
     didSet {
       reloadTask?.cancel()
-      reloadTask = Task { await reloadData() }
+      reloadTask = Task {
+        try? await Task.sleep(for: .milliseconds(100))
+        if Task.isCancelled { return }
+        await reloadData()
+      }
     }
   }
   var reloadTask: Task<Void, Never>?
