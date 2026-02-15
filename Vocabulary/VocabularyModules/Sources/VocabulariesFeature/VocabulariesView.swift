@@ -23,7 +23,7 @@ public struct VocabulariesView: View {
   public var body: some View {
     NavigationStack {
       Group {
-        if viewModel.$vocabularies.isLoading {
+        if viewModel.$vocabularies.isLoading && !viewModel.firstInitExecuted {
           ProgressView()
         } else if isEmptyState {
           emptyState
@@ -49,6 +49,9 @@ public struct VocabulariesView: View {
           }
         }
       }
+    }
+    .task {
+      await viewModel.doInit()
     }
     .vSheet(isPresented: $viewModel.addVocabIsPresented) {
       VocabularyCreatorView()
