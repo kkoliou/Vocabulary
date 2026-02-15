@@ -24,7 +24,7 @@ struct EntryRow: View {
         Spacer()
         if entry.isHighlighted {
           Image(systemName: "bookmark.fill")
-            .foregroundColor(AppColors.accent)
+            .foregroundColor(Color.accentColor)
             .font(AppTypography.caption)
         }
       }
@@ -43,7 +43,7 @@ struct EntryRow: View {
             Label("Remove Highlight", systemImage: "bookmark.slash")
           }
         )
-        .tint(.red)
+        .tint(AppColors.accent)
       } else {
         Button(
           role: .cancel,

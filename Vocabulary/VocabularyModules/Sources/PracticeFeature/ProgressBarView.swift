@@ -36,7 +36,7 @@ struct ProgressBarView: View {
           
           // Progress fill
           RoundedRectangle(cornerRadius: 8)
-            .fill(AppColors.accent)
+            .fill(Color.accentColor)
             .frame(width: geometry.size.width * progress, height: 8)
             .animation(.spring(response: 0.5, dampingFraction: 0.7), value: progress)
         }

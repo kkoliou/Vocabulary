@@ -102,7 +102,7 @@ private struct TranslationSection: View {
         Text(translatedWord)
           .font(AppTypography.rounded(size: 32, weight: .semibold))
           .multilineTextAlignment(.center)
-          .foregroundStyle(AppColors.accent)
+          .foregroundStyle(Color.accentColor)
           .padding(.horizontal, 32)
           .minimumScaleFactor(0.5)
           .lineLimit(3)
