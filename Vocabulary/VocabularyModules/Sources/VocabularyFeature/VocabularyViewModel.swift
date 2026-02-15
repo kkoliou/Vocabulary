@@ -15,6 +15,7 @@ public class VocabularyViewModel {
   
   @ObservationIgnored @Dependency(\.defaultDatabase) var database
   @ObservationIgnored @FetchAll(VocabularyEntry.none) var entries
+  @ObservationIgnored var firstInitExecuted = false
   var isAddEntryPresented = false
   var isAddFilePresented = false
   var isPracticePresented = false
@@ -50,6 +51,7 @@ public class VocabularyViewModel {
           animation: .default
         )
     }
+    firstInitExecuted = true
   }
   
   func addEntryTapped() {

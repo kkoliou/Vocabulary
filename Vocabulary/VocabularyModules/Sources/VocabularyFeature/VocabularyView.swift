@@ -21,8 +21,12 @@ public struct VocabularyView: View {
   
   public var body: some View {
     Form {
-      if viewModel.$entries.isLoading {
-        ProgressView()
+      if viewModel.$entries.isLoading && !viewModel.firstInitExecuted {
+        HStack() {
+          Spacer()
+          ProgressView()
+          Spacer()
+        }
       } else {
         List {
           ForEach(viewModel.entries, id: \.id) { entry in
