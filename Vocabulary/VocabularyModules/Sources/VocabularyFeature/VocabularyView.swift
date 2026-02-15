@@ -19,7 +19,7 @@ public struct VocabularyView: View {
   }
   
   public var body: some View {
-    Group {
+    Form {
       if viewModel.$entries.isLoading {
         ProgressView()
       } else {
@@ -100,7 +100,7 @@ enum SortOption {
     case .defaultSort:
       return "list.bullet"
     case .highlights:
-      return "star.fill"
+      return "bookmark"
     case .alphabetical:
       return "textformat"
     }
