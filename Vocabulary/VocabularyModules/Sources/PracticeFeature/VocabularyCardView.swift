@@ -12,7 +12,7 @@ import Shared
 import Foundation
 
 struct VocabularyCardView: View {
-  let entry: VocabularyEntry
+  let practiceEntry: PracticeEntry
   let isTranslationRevealed: Bool
   let onRevealTranslation: () -> Void
   
@@ -30,7 +30,7 @@ struct VocabularyCardView: View {
           VStack(spacing: 0) {
             Spacer()
             
-            SourceWordSection(sourceWord: entry.sourceWord)
+            SourceWordSection(sourceWord: practiceEntry.visibleWord)
             
             Spacer()
 
@@ -39,7 +39,7 @@ struct VocabularyCardView: View {
             Spacer()
             
             TranslationSection(
-              translatedWord: entry.translatedWord,
+              translatedWord: practiceEntry.hiddenWordText,
               isRevealed: isTranslationRevealed,
               onReveal: onRevealTranslation
             )
@@ -111,7 +111,7 @@ private struct TranslationSection: View {
             removal: .scale(scale: 0.9).combined(with: .opacity)
           ))
       } else {
-        RevealButton(onReveal: onReveal)
+        RevealButton(title: "Reveal", onReveal: onReveal)
       }
     }
     .frame(minHeight: 100)
@@ -119,6 +119,7 @@ private struct TranslationSection: View {
 }
 
 private struct RevealButton: View {
+  let title: String
   let onReveal: () -> Void
   
   var body: some View {
@@ -126,7 +127,7 @@ private struct RevealButton: View {
       HStack(spacing: 10) {
         Image(systemName: "eye.fill")
           .font(AppTypography.callout)
-        Text("Reveal Translation")
+        Text(title)
           .font(AppTypography.callout.weight(.semibold))
       }
       .padding(.horizontal, 12)
@@ -140,5 +141,5 @@ private struct RevealButton: View {
 }
 
 #Preview {
-  RevealButton(onReveal: {})
+  RevealButton(title: "Reveal Translation", onReveal: {})
 }

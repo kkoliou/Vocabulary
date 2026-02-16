@@ -33,7 +33,7 @@ public struct PracticeView: View {
       
       if let entry = viewModel.currentEntry {
         VocabularyCardView(
-          entry: entry,
+          practiceEntry: entry,
           isTranslationRevealed: viewModel.isTranslationRevealed,
           onRevealTranslation: {
             withAnimation(.spring(response: 0.4, dampingFraction: 0.8)) {
@@ -84,13 +84,33 @@ public struct PracticeView: View {
 }
 
 
+enum HiddenWord {
+  case original
+  case translated
+}
+
+struct PracticeEntry {
+  let entry: VocabularyEntry
+  let hiddenWord: HiddenWord
+  
+  var visibleWord: String {
+    hiddenWord == .original ? entry.translatedWord : entry.sourceWord
+  }
+  
+  var hiddenWordText: String {
+    hiddenWord == .original ? entry.sourceWord : entry.translatedWord
+  }
+}
+
 @Observable @MainActor
 class PracticeViewModel {
   
   let vocabulary: Vocabulary
   let entries: [VocabularyEntry]
+  var practiceEntries = [PracticeEntry]()
   var currentIndex: Int = 0
   var isTranslationRevealed: Bool = false
+  var isLoading = false
   
   public init(vocabulary: Vocabulary, entries: [VocabularyEntry]) {
     self.vocabulary = vocabulary
@@ -98,29 +118,35 @@ class PracticeViewModel {
   }
   
   func doInit() async {
-//    _ = await withErrorReporting {
-//      try await $entries
-//        .load(
-//          VocabularyEntry
-//            .where { $0.vocabularyID.eq(vocabulary.id) },
-//          animation: .default
-//        )
-//    }
+    isLoading = true
+    practiceEntries = await setupData()
+    isLoading = false
   }
   
-  var currentEntry: VocabularyEntry? {
-    guard !entries.isEmpty, currentIndex < entries.count else { return nil }
-    return entries[currentIndex]
+  @concurrent
+  private func setupData() async -> [PracticeEntry]{
+    entries.shuffled().map { entry in
+      PracticeEntry(
+        entry: entry,
+        hiddenWord: Bool.random() ? .original : .translated
+      )
+    }
+  }
+  
+  var currentEntry: PracticeEntry? {
+    guard !practiceEntries.isEmpty, currentIndex < practiceEntries.count
+    else { return nil }
+    return practiceEntries[currentIndex]
   }
   
   var progress: Double {
-    guard !entries.isEmpty else { return 0 }
-    return Double(currentIndex + 1) / Double(entries.count)
+    guard !practiceEntries.isEmpty else { return 0 }
+    return Double(currentIndex + 1) / Double(practiceEntries.count)
   }
   
   var progressText: String {
-    guard !entries.isEmpty else { return "0 / 0" }
-    return "\(currentIndex + 1) / \(entries.count)"
+    guard !practiceEntries.isEmpty else { return "0 / 0" }
+    return "\(currentIndex + 1) / \(practiceEntries.count)"
   }
   
   var canGoPrevious: Bool {
@@ -128,13 +154,8 @@ class PracticeViewModel {
   }
   
   var canGoNext: Bool {
-    currentIndex < entries.count - 1
+    currentIndex < practiceEntries.count - 1
   }
-  
-  //  init(vocabulary: Vocabulary, entries: [VocabularyEntry]) {
-  //    self.vocabulary = vocabulary
-  //    self.entries = entries.shuffled()
-  //  }
   
   func revealTranslation() {
     isTranslationRevealed = true
