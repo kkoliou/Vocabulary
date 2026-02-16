@@ -80,8 +80,7 @@ struct VocabularyEntryAddView: View {
       }
       .onChange(of: viewModel.triggerSuccess) { _, newValue in
         if newValue {
-          let generator = UIImpactFeedbackGenerator(style: .light)
-          generator.impactOccurred()
+          Utilities.triggerLightHaptic()
         }
       }
     }

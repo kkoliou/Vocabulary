@@ -38,6 +38,7 @@ public struct PracticeView: View {
           practiceEntry: entry,
           isTranslationRevealed: viewModel.isTranslationRevealed,
           onRevealTranslation: {
+            Utilities.triggerLightHaptic()
             withAnimation(.spring(response: 0.4, dampingFraction: 0.8)) {
               viewModel.revealTranslation()
             }
