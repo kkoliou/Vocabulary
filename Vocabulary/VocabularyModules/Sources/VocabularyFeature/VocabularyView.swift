@@ -76,7 +76,7 @@ public struct VocabularyView: View {
             viewModel.practiceTapped()
           },
           label: {
-            Image(systemName: "flag.pattern.checkered")
+            Image(systemName: "brain.head.profile")
           }
         )
         
