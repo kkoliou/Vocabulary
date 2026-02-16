@@ -8,11 +8,13 @@
 import SwiftUI
 import VocabularyDB
 import SQLiteData
+import Shared
 
 public struct PracticeView: View {
   
   @Environment(\.dismiss) private var dismiss
   @State var viewModel: PracticeViewModel
+  @State private var isRandomnessSettingsPresented = false
   
   public init(vocabulary: Vocabulary, entries: [VocabularyEntry]) {
     _viewModel = State(
@@ -58,13 +60,89 @@ public struct PracticeView: View {
     .navigationBarTitleDisplayMode(.inline)
     .toolbar {
       ToolbarItem(placement: .primaryAction) {
-        Button("Done") {
-          dismiss()
+        Button {
+          viewModel.settingsButtonTapped()
+        } label: {
+          Image(systemName: "gear")
         }
       }
     }
+    .vSheet(isPresented: $viewModel.isRandomnessSettingsPresented) {
+      RandomnessSettingsView(
+        probability: viewModel.hiddenWordProbability,
+        onApply: { newProbability in
+          Task {
+            await viewModel.applyHiddenWordProbability(newProbability)
+          }
+        }
+      )
+      .presentationDetents([.medium])
+    }
     .task {
       await viewModel.doInit()
+    }
+  }
+}
+
+struct RandomnessSettingsView: View {
+  @Environment(\.dismiss) private var dismiss
+  @State private var probability: Double
+  let onApply: (Double) -> Void
+  
+  init(
+    probability: Double,
+    onApply: @escaping (Double) -> Void
+  ) {
+    _probability = State(initialValue: probability)
+    self.onApply = onApply
+  }
+  
+  var body: some View {
+    NavigationStack {
+      Form {
+        Section {
+          VStack(alignment: .leading, spacing: 8) {
+            Slider(value: $probability, in: 0...1, step: 0.1)
+            Text(probabilityLabel)
+              .font(AppTypography.subheadline)
+              .foregroundStyle(.secondary)
+          }
+          .padding(.vertical, 8)
+        } header: {
+          Text("Hidden Word Randomness")
+        } footer: {
+          Text("Adjust the probability that the original word (vs translation) will be hidden. 50% means equal chance for each.")
+        }
+      }
+      .navigationTitle("Settings")
+      .navigationBarTitleDisplayMode(.inline)
+      .toolbar {
+        ToolbarItem(placement: .confirmationAction) {
+          Button(
+            action: {
+              onApply(probability)
+              let generator = UIImpactFeedbackGenerator(style: .light)
+              generator.impactOccurred()
+              dismiss()
+            },
+            label: {
+              Image(systemName: "checkmark")
+            }
+          )
+        }
+      }
+    }
+  }
+  
+  private var probabilityLabel: String {
+    let percent = Int(probability * 100)
+    switch percent {
+    case 0:
+      return "Always hide translation"
+    case 100:
+      return "Always hide original"
+    default:
+      return "\(percent)% chance to hide original"
     }
   }
 }
@@ -77,7 +155,7 @@ public struct PracticeView: View {
       try Vocabulary.fetchOne(db)!
     }
   }
-
+  
   NavigationStack {
     PracticeView(vocabulary: vocab, entries: [])
   }
@@ -104,13 +182,14 @@ struct PracticeEntry {
 
 @Observable @MainActor
 class PracticeViewModel {
-  
   let vocabulary: Vocabulary
   let entries: [VocabularyEntry]
   var practiceEntries = [PracticeEntry]()
   var currentIndex: Int = 0
   var isTranslationRevealed: Bool = false
   var isLoading = false
+  var hiddenWordProbability: Double = 0.5
+  var isRandomnessSettingsPresented = false
   
   public init(vocabulary: Vocabulary, entries: [VocabularyEntry]) {
     self.vocabulary = vocabulary
@@ -119,16 +198,33 @@ class PracticeViewModel {
   
   func doInit() async {
     isLoading = true
-    practiceEntries = await setupData()
+    practiceEntries = await setupData(probability: hiddenWordProbability)
     isLoading = false
   }
   
   @concurrent
-  private func setupData() async -> [PracticeEntry]{
+  private func setupData(probability: Double) async -> [PracticeEntry] {
     entries.shuffled().map { entry in
       PracticeEntry(
         entry: entry,
-        hiddenWord: Bool.random() ? .original : .translated
+        hiddenWord: Double.random(in: 0..<1) < probability ? .original : .translated
+      )
+    }
+  }
+  
+  func applyHiddenWordProbability(_ probability: Double) async {
+    hiddenWordProbability = probability
+    practiceEntries = await setupEntriesWithHiddenWordProbability(probability)
+  }
+  
+  @concurrent
+  private func setupEntriesWithHiddenWordProbability(
+    _ probability: Double
+  ) async -> [PracticeEntry] {
+    await practiceEntries.map { practiceEntry in
+      PracticeEntry(
+        entry: practiceEntry.entry,
+        hiddenWord: Double.random(in: 0..<1) < probability ? .original : .translated
       )
     }
   }
@@ -171,5 +267,9 @@ class PracticeViewModel {
     guard canGoPrevious else { return }
     currentIndex -= 1
     isTranslationRevealed = false
+  }
+  
+  func settingsButtonTapped() {
+    isRandomnessSettingsPresented = true
   }
 }
