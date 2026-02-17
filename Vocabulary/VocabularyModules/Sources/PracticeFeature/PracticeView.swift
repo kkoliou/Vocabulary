@@ -35,7 +35,7 @@ public struct PracticeView: View {
       
       if let entry = viewModel.currentEntry {
         VocabularyCardView(
-          practiceEntry: entry,
+          practiceData: entry,
           isTranslationRevealed: viewModel.isTranslationRevealed,
           onRevealTranslation: {
             Utilities.triggerLightHaptic()

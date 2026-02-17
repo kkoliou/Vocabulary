@@ -24,6 +24,20 @@ import SQLiteData
   public var isHighlighted: Bool
 }
 
+@Table public struct Practice: Identifiable, Sendable, Equatable {
+  public let id: UUID
+  public let vocabularyID: Vocabulary.ID
+  public var hiddenWordProbability: Double
+}
+
+@Table public struct PracticeEntry: Identifiable, Sendable, Equatable {
+  public let id: UUID
+  public let practiceID: Practice.ID
+  public let vocabularyEntryID: VocabularyEntry.ID
+  public var position: Int
+  public var isOriginalHidden: Bool
+}
+
 func appDatabase() throws -> any DatabaseWriter {
   let database = try SQLiteData.defaultDatabase()
   var migrator = DatabaseMigrator()
@@ -70,6 +84,58 @@ func appDatabase() throws -> any DatabaseWriter {
         """
         CREATE INDEX idx_vocabularyEntries_vocabularyID
         ON vocabularyEntries(vocabularyID)
+        """
+    )
+    .execute(db)
+  }
+  
+  migrator.registerMigration("Create practices and practiceEntries") { db in
+    try #sql(
+        """
+        CREATE TABLE "practices" (
+            "id" TEXT PRIMARY KEY NOT NULL
+                ON CONFLICT REPLACE
+                DEFAULT (uuid()),
+            "vocabularyID" TEXT NOT NULL
+                REFERENCES "vocabularies"("id")
+                ON DELETE CASCADE,
+            "hiddenWordProbability" REAL NOT NULL DEFAULT 0
+        ) STRICT
+        """
+    )
+    .execute(db)
+    
+    try #sql(
+        """
+        CREATE TABLE "practiceEntries" (
+            "id" TEXT PRIMARY KEY NOT NULL
+                ON CONFLICT REPLACE
+                DEFAULT (uuid()),
+            "practiceID" TEXT NOT NULL
+                REFERENCES "practices"("id")
+                ON DELETE CASCADE,
+            "vocabularyEntryID" TEXT NOT NULL
+                REFERENCES "vocabularyEntries"("id")
+                ON DELETE CASCADE,
+            "position" INTEGER NOT NULL,
+            "isOriginalHidden" INTEGER NOT NULL DEFAULT 0
+        ) STRICT
+        """
+    )
+    .execute(db)
+    
+    try #sql(
+        """
+        CREATE INDEX idx_practices_vocabularyID
+        ON practices(vocabularyID)
+        """
+    )
+    .execute(db)
+    
+    try #sql(
+        """
+        CREATE INDEX idx_practiceEntries_practiceID_position
+        ON practiceEntries(practiceID, position)
         """
     )
     .execute(db)

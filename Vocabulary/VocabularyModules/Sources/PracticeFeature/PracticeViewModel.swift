@@ -14,7 +14,7 @@ import Observation
 class PracticeViewModel {
   let vocabulary: Vocabulary
   let entries: [VocabularyEntry]
-  var practiceEntries = [PracticeEntry]()
+  var practiceEntries = [PracticeData]()
   var currentIndex: Int = 0
   var isTranslationRevealed: Bool = false
   var isLoading = false
@@ -33,9 +33,9 @@ class PracticeViewModel {
   }
   
   @concurrent
-  private func setupData(probability: Double) async -> [PracticeEntry] {
+  private func setupData(probability: Double) async -> [PracticeData] {
     entries.shuffled().map { entry in
-      PracticeEntry(
+      PracticeData(
         entry: entry,
         hiddenWord: Double.random(in: 0..<1) < probability ? .original : .translated
       )
@@ -50,16 +50,16 @@ class PracticeViewModel {
   @concurrent
   private func setupEntriesWithHiddenWordProbability(
     _ probability: Double
-  ) async -> [PracticeEntry] {
+  ) async -> [PracticeData] {
     await practiceEntries.map { practiceEntry in
-      PracticeEntry(
+      PracticeData(
         entry: practiceEntry.entry,
         hiddenWord: Double.random(in: 0..<1) < probability ? .original : .translated
       )
     }
   }
   
-  var currentEntry: PracticeEntry? {
+  var currentEntry: PracticeData? {
     guard !practiceEntries.isEmpty, currentIndex < practiceEntries.count
     else { return nil }
     return practiceEntries[currentIndex]
@@ -109,7 +109,7 @@ enum HiddenWord {
   case translated
 }
 
-struct PracticeEntry {
+struct PracticeData {
   let entry: VocabularyEntry
   let hiddenWord: HiddenWord
   
