@@ -28,6 +28,8 @@ import SQLiteData
   public let id: UUID
   public let vocabularyID: Vocabulary.ID
   public var hiddenWordProbability: Double
+  public var lastStoppedVocabularyEntryID: VocabularyEntry.ID?
+  public var lastStoppedPosition: Int?
 }
 
 @Table public struct PracticeEntry: Identifiable, Sendable, Equatable {
@@ -99,7 +101,11 @@ func appDatabase() throws -> any DatabaseWriter {
             "vocabularyID" TEXT NOT NULL
                 REFERENCES "vocabularies"("id")
                 ON DELETE CASCADE,
-            "hiddenWordProbability" REAL NOT NULL DEFAULT 0
+            "hiddenWordProbability" REAL NOT NULL DEFAULT 0,
+            "lastStoppedVocabularyEntryID" TEXT
+                REFERENCES "vocabularyEntries"("id")
+                ON DELETE SET NULL,
+            "lastStoppedPosition" INTEGER
         ) STRICT
         """
     )
@@ -185,3 +191,4 @@ extension DatabaseWriter {
     }
   }
 }
+
