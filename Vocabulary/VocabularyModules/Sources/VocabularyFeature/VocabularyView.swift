@@ -29,7 +29,7 @@ public struct VocabularyView: View {
         }
       } else {
         List {
-          if !viewModel.pendingPractices.isEmpty {
+          if !viewModel.pendingPracticesRows.isEmpty {
             practicesSectionView
           }
           if !viewModel.entries.isEmpty {
@@ -100,28 +100,28 @@ public struct VocabularyView: View {
   }
   
   private var practicesSectionView: some View {
-    Section(header: Text(Strings.localized("Pending practices"))) {
-      ForEach(viewModel.pendingPractices, id: \.id) { practice in
+    Section(header: Text(pendingPracticesSectionTitle)) {
+      ForEach(viewModel.pendingPracticesRows, id: \.practice.id) { practiceRow in
         NavigationLink(
           destination: {
             PracticeView(
               vocabulary: viewModel.vocabulary,
               entries: viewModel.entries,
-              practice: practice
+              practice: practiceRow.practice
             )
           },
           label: {
-            PendingPracticeRow(
-              title: practice.createdAt.formatted(),
-              lastStoppedPosition: (practice.lastStoppedPosition ?? 0) + 1,
-              totalEntries: viewModel.practiceEntryCounts[practice.id] ?? 0
+            PendingPracticeRowView(
+              title: practiceRow.practice.createdAt.formatted(),
+              lastStoppedPosition: (practiceRow.practice.lastStoppedPosition ?? 0) + 1,
+              totalEntries: practiceRow.entriesCount
             )
           }
         )
       }
       .onDelete { indexSet in
         indexSet.forEach { index in
-          viewModel.deletePractice(viewModel.pendingPractices[index])
+          viewModel.deletePractice(viewModel.pendingPracticesRows[index])
         }
       }
     }
@@ -130,7 +130,7 @@ public struct VocabularyView: View {
   private var vocabularySectionView: some View {
     Section(header: Text(Strings.localized("Vocabulary"))) {
       ForEach(viewModel.entries, id: \.id) { entry in
-        EntryRow(
+        EntryRowView(
           entry: entry,
           onRemoveFromHighlights: {
             viewModel.removeFromHighlightsTapped(for: entry)
@@ -142,6 +142,12 @@ public struct VocabularyView: View {
         .font(AppTypography.body)
       }
     }
+  }
+  
+  var pendingPracticesSectionTitle: LocalizedStringResource {
+    viewModel.pendingPracticesRows.count == 1
+    ? Strings.localized("Pending practice")
+    : Strings.localized("Pending practices")
   }
 }
 

@@ -1,5 +1,5 @@
 //
-//  EntryRow.swift
+//  EntryRowView.swift
 //  VocabularyFeature
 //
 //  Created by Konstantinos Kolioulis on 8/2/26.
@@ -10,7 +10,7 @@ import VocabularyDB
 import SQLiteData
 import Shared
 
-struct EntryRow: View {
+struct EntryRowView: View {
   let entry: VocabularyEntry
   let onRemoveFromHighlights: () -> Void
   let onAddToHighlights: () -> Void
@@ -81,5 +81,5 @@ struct EntryRow: View {
       try VocabularyEntry.fetchOne(db)!
     }
   }
-  EntryRow(entry: entry, onRemoveFromHighlights: {}, onAddToHighlights: {})
+  EntryRowView(entry: entry, onRemoveFromHighlights: {}, onAddToHighlights: {})
 }

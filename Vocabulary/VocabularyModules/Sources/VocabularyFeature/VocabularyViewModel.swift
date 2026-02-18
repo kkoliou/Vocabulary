@@ -13,9 +13,14 @@ import Shared
 @Observable @MainActor
 public class VocabularyViewModel {
   
+  @Selection struct PendingPracticeRow {
+    var practice: Practice
+    var entriesCount: Int
+  }
+  
   @ObservationIgnored @Dependency(\.defaultDatabase) var database
   @ObservationIgnored @FetchAll(VocabularyEntry.none) var entries
-  @ObservationIgnored @FetchAll(Practice.none) var pendingPractices
+  @ObservationIgnored @FetchAll(PendingPracticeRow.none) var pendingPracticesRows
   var practiceEntryCounts: [Practice.ID: Int] = [:]
   @ObservationIgnored var firstInitExecuted = false
   var isAddEntryPresented = false
@@ -61,25 +66,14 @@ public class VocabularyViewModel {
     }
     
     _ = await withErrorReporting {
-      try await $pendingPractices.load(
-        Practice.where { $0.vocabularyID.eq(vocabulary.id) },
+      try await $pendingPracticesRows.load(
+        Practice
+          .where { $0.vocabularyID.eq(vocabulary.id) }
+          .group(by: \.id)
+          .leftJoin(PracticeEntry.all) { $0.id.eq($1.practiceID) }
+          .select { PendingPracticeRow.Columns(practice: $0, entriesCount: $1.count()) },
         animation: .default
       )
-    }
-    
-    _ = await withErrorReporting {
-      let practiceIDs = pendingPractices.map(\.id)
-      let counts = try await database.read { db in
-        var dict: [Practice.ID: Int] = [:]
-        for id in practiceIDs {
-          let count = try PracticeEntry
-            .where { $0.practiceID == id }
-            .fetchCount(db)
-          dict[id] = count
-        }
-        return dict
-      }
-      self.practiceEntryCounts = counts
     }
     
     showLoadingOnFirstInit(false)
@@ -111,10 +105,10 @@ public class VocabularyViewModel {
     isPracticePresented = true
   }
   
-  func deletePractice(_ practice: Practice) {
+  func deletePractice(_ practiceRow: PendingPracticeRow) {
     withErrorReporting {
       try database.write { db in
-        try Practice.find(practice.id).delete().execute(db)
+        try Practice.find(practiceRow.practice.id).delete().execute(db)
       }
     }
   }

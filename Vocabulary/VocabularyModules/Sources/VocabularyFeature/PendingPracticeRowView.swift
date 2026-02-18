@@ -1,5 +1,5 @@
 //
-//  PendingPracticeRow.swift
+//  PendingPracticeRowView.swift
 //  VocabularyModules
 //
 //  Created by Konstantinos Kolioulis on 18/2/26.
@@ -8,7 +8,7 @@
 import SwiftUI
 import Shared
 
-struct PendingPracticeRow: View {
+struct PendingPracticeRowView: View {
   let title: String
   let lastStoppedPosition: Int
   let totalEntries: Int
@@ -30,5 +30,5 @@ struct PendingPracticeRow: View {
 }
 
 #Preview {
-  PendingPracticeRow(title: "18/2/26", lastStoppedPosition: 10, totalEntries: 100)
+  PendingPracticeRowView(title: "18/2/26", lastStoppedPosition: 10, totalEntries: 100)
 }
