@@ -71,6 +71,8 @@ class PracticeViewModel {
     withErrorReporting {
       let practiceId = UUID()
       try database.write { db in
+        try Practice.where { $0.vocabularyID == vocabulary.id }.delete().execute(db)
+
         try Practice.insert {
           Practice.Draft(
             id: practiceId,
