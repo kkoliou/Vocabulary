@@ -28,6 +28,7 @@ import SQLiteData
   public let id: UUID
   public let vocabularyID: Vocabulary.ID
   public var hiddenWordProbability: Double
+  public let createdAt: Date
   public var lastStoppedVocabularyEntryID: VocabularyEntry.ID?
   public var lastStoppedPosition: Int?
 }
@@ -102,6 +103,8 @@ func appDatabase() throws -> any DatabaseWriter {
                 REFERENCES "vocabularies"("id")
                 ON DELETE CASCADE,
             "hiddenWordProbability" REAL NOT NULL DEFAULT 0,
+            "createdAt" TEXT NOT NULL
+                DEFAULT (CURRENT_TIMESTAMP),
             "lastStoppedVocabularyEntryID" TEXT
                 REFERENCES "vocabularyEntries"("id")
                 ON DELETE SET NULL,

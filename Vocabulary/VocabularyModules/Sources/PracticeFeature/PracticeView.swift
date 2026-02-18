@@ -16,11 +16,12 @@ public struct PracticeView: View {
   @State var viewModel: PracticeViewModel
   @State private var isRandomnessSettingsPresented = false
   
-  public init(vocabulary: Vocabulary, entries: [VocabularyEntry]) {
+  public init(vocabulary: Vocabulary, entries: [VocabularyEntry], practice: Practice? = nil) {
     _viewModel = State(
       wrappedValue: PracticeViewModel(
         vocabulary: vocabulary,
-        entries: entries
+        entries: entries,
+        practice: practice
       )
     )
   }
@@ -52,12 +53,12 @@ public struct PracticeView: View {
         canGoPrevious: viewModel.canGoPrevious,
         canGoNext: viewModel.canGoNext,
         currentIndex: viewModel.currentIndex,
-        totalCount: viewModel.entries.count,
+        totalCount: viewModel.practiceEntries.count,
         onPrevious: { viewModel.previousEntry() },
         onNext: { viewModel.nextEntry() }
       )
     }
-    .navigationTitle("Practice")
+    .navigationTitle(Strings.localized("Practice"))
     .navigationBarTitleDisplayMode(.inline)
     .toolbar {
       ToolbarItem(placement: .primaryAction) {
@@ -98,3 +99,4 @@ public struct PracticeView: View {
     PracticeView(vocabulary: vocab, entries: [])
   }
 }
+

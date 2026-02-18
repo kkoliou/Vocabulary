@@ -21,7 +21,7 @@ public struct VocabularyView: View {
   
   public var body: some View {
     Form {
-      if viewModel.$entries.isLoading && !viewModel.firstInitExecuted {
+      if viewModel.isLoading {
         HStack() {
           Spacer()
           ProgressView()
@@ -29,17 +29,11 @@ public struct VocabularyView: View {
         }
       } else {
         List {
-          ForEach(viewModel.entries, id: \.id) { entry in
-            EntryRow(
-              entry: entry,
-              onRemoveFromHighlights: {
-                viewModel.removeFromHighlightsTapped(for: entry)
-              },
-              onAddToHighlights: {
-                viewModel.addToHighlightsTapped(for: entry)
-              }
-            )
-            .font(AppTypography.body)
+          if !viewModel.pendingPractices.isEmpty {
+            practicesSectionView
+          }
+          if !viewModel.entries.isEmpty {
+            vocabularySectionView
           }
         }
       }
@@ -98,10 +92,56 @@ public struct VocabularyView: View {
       destination: {
         PracticeView(
           vocabulary: viewModel.vocabulary,
-          entries: viewModel.entries
+          entries: viewModel.entries,
+          practice: nil
         )
       }
     )
+  }
+  
+  private var practicesSectionView: some View {
+    Section(header: Text(Strings.localized("Pending practices"))) {
+      ForEach(viewModel.pendingPractices, id: \.id) { practice in
+        NavigationLink(
+          destination: {
+            PracticeView(
+              vocabulary: viewModel.vocabulary,
+              entries: viewModel.entries,
+              practice: practice
+            )
+          },
+          label: {
+            PendingPracticeRow(
+              title: practice.createdAt.formatted(),
+              lastStoppedPosition: (practice.lastStoppedPosition ?? 0) + 1,
+              totalEntries: viewModel.practiceEntryCounts[practice.id] ?? 0
+            )
+          }
+        )
+      }
+      .onDelete { indexSet in
+        indexSet.forEach { index in
+          viewModel.deletePractice(viewModel.pendingPractices[index])
+        }
+      }
+    }
+  }
+  
+  private var vocabularySectionView: some View {
+    Section(header: Text(Strings.localized("Vocabulary"))) {
+      ForEach(viewModel.entries, id: \.id) { entry in
+        EntryRow(
+          entry: entry,
+          onRemoveFromHighlights: {
+            viewModel.removeFromHighlightsTapped(for: entry)
+          },
+          onAddToHighlights: {
+            viewModel.addToHighlightsTapped(for: entry)
+          }
+        )
+        .font(AppTypography.body)
+      }
+    }
   }
 }
 
@@ -146,3 +186,4 @@ enum SortOption {
     VocabularyView(vocabulary: vocab)
   }
 }
+

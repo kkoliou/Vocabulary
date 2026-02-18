@@ -15,10 +15,13 @@ public class VocabularyViewModel {
   
   @ObservationIgnored @Dependency(\.defaultDatabase) var database
   @ObservationIgnored @FetchAll(VocabularyEntry.none) var entries
+  @ObservationIgnored @FetchAll(Practice.none) var pendingPractices
+  var practiceEntryCounts: [Practice.ID: Int] = [:]
   @ObservationIgnored var firstInitExecuted = false
   var isAddEntryPresented = false
   var isAddFilePresented = false
   var isPracticePresented = false
+  var isLoading = false
   let vocabulary: Vocabulary
   var sortOption: SortOption = .defaultSort {
     didSet {
@@ -37,6 +40,7 @@ public class VocabularyViewModel {
   }
   
   func doInit() async {
+    showLoadingOnFirstInit(true)
     _ = await withErrorReporting {
       try await $entries
         .load(
@@ -55,7 +59,36 @@ public class VocabularyViewModel {
           animation: .default
         )
     }
+    
+    _ = await withErrorReporting {
+      try await $pendingPractices.load(
+        Practice.where { $0.vocabularyID.eq(vocabulary.id) },
+        animation: .default
+      )
+    }
+    
+    _ = await withErrorReporting {
+      let practiceIDs = pendingPractices.map(\.id)
+      let counts = try await database.read { db in
+        var dict: [Practice.ID: Int] = [:]
+        for id in practiceIDs {
+          let count = try PracticeEntry
+            .where { $0.practiceID == id }
+            .fetchCount(db)
+          dict[id] = count
+        }
+        return dict
+      }
+      self.practiceEntryCounts = counts
+    }
+    
+    showLoadingOnFirstInit(false)
     firstInitExecuted = true
+  }
+  
+  private func showLoadingOnFirstInit(_ loading: Bool) {
+    if firstInitExecuted { return }
+    isLoading = loading
   }
   
   func addEntryTapped() {
@@ -78,6 +111,14 @@ public class VocabularyViewModel {
     isPracticePresented = true
   }
   
+  func deletePractice(_ practice: Practice) {
+    withErrorReporting {
+      try database.write { db in
+        try Practice.find(practice.id).delete().execute(db)
+      }
+    }
+  }
+  
   private func changeHighlighted(to value: Bool, for entry: VocabularyEntry) {
     withErrorReporting {
       try database.write { db in
@@ -93,3 +134,4 @@ public class VocabularyViewModel {
     await doInit()
   }
 }
+
