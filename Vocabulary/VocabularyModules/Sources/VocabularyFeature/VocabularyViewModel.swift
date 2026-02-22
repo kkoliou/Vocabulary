@@ -21,7 +21,6 @@ public class VocabularyViewModel {
   @ObservationIgnored @Dependency(\.defaultDatabase) var database
   @ObservationIgnored @FetchAll(VocabularyEntry.none) var entries
   @ObservationIgnored @FetchAll(PendingPracticeRow.none) var pendingPracticesRows
-  var practiceEntryCounts: [Practice.ID: Int] = [:]
   @ObservationIgnored var firstInitExecuted = false
   var isAddEntryPresented = false
   var isAddFilePresented = false
@@ -63,9 +62,7 @@ public class VocabularyViewModel {
             },
           animation: .default
         )
-    }
-    
-    _ = await withErrorReporting {
+      
       try await $pendingPracticesRows.load(
         Practice
           .where { $0.vocabularyID.eq(vocabulary.id) }
@@ -74,6 +71,35 @@ public class VocabularyViewModel {
           .select { PendingPracticeRow.Columns(practice: $0, entriesCount: $1.count()) },
         animation: .default
       )
+      
+      // Remove completed practices (those that have reached the end)
+      let completedPracticeRows = pendingPracticesRows.filter { row in
+        let total = row.entriesCount
+        guard total > 0 else { return true } // If a practice has no entries, consider it completed
+        let last = row.practice.lastStoppedPosition ?? -1
+        return last >= total - 1
+      }
+
+      if !completedPracticeRows.isEmpty {
+        // Delete completed practices from the database
+        try await database.write { db in
+          for row in completedPracticeRows {
+            try Practice.find(row.practice.id)
+              .delete()
+              .execute(db)
+          }
+        }
+
+        // Reload pending practices to reflect deletions
+        try await $pendingPracticesRows.load(
+          Practice
+            .where { $0.vocabularyID.eq(vocabulary.id) }
+            .group(by: \.id)
+            .leftJoin(PracticeEntry.all) { $0.id.eq($1.practiceID) }
+            .select { PendingPracticeRow.Columns(practice: $0, entriesCount: $1.count()) },
+          animation: .default
+        )
+      }
     }
     
     showLoadingOnFirstInit(false)
