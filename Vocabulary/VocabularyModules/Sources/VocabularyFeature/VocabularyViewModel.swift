@@ -46,64 +46,62 @@ public class VocabularyViewModel {
   func doInit() async {
     showLoadingOnFirstInit(true)
     _ = await withErrorReporting {
-      try await $entries
-        .load(
-          VocabularyEntry
-            .where { $0.vocabularyID.eq(vocabulary.id) }
-            .order {
-              switch sortOption {
-              case .defaultSort:
-                $0.rowid
-              case .highlights:
-                $0.isHighlighted.desc()
-              case .alphabetical:
-                $0.sourceWord
-              }
-            },
-          animation: .default
-        )
-      
-      try await $pendingPracticesRows.load(
-        Practice
-          .where { $0.vocabularyID.eq(vocabulary.id) }
-          .group(by: \.id)
-          .leftJoin(PracticeEntry.all) { $0.id.eq($1.practiceID) }
-          .select { PendingPracticeRow.Columns(practice: $0, entriesCount: $1.count()) },
-        animation: .default
-      )
-      
-      // Remove completed practices (those that have reached the end)
-      let completedPracticeRows = pendingPracticesRows.filter { row in
-        let total = row.entriesCount
-        guard total > 0 else { return true } // If a practice has no entries, consider it completed
-        let last = row.practice.lastStoppedPosition ?? -1
-        return last >= total - 1
-      }
-
-      if !completedPracticeRows.isEmpty {
-        // Delete completed practices from the database
-        try await database.write { db in
-          for row in completedPracticeRows {
-            try Practice.find(row.practice.id)
-              .delete()
-              .execute(db)
+      try await loadEntries()
+      try await loadPendingPractices()
+      try await removeCompletedPractices()
+    }
+    showLoadingOnFirstInit(false)
+    firstInitExecuted = true
+  }
+  
+  private func loadEntries() async throws {
+    try await $entries.load(
+      VocabularyEntry
+        .where { $0.vocabularyID.eq(vocabulary.id) }
+        .order {
+          switch sortOption {
+          case .defaultSort:
+            $0.rowid
+          case .highlights:
+            $0.isHighlighted.desc()
+          case .alphabetical:
+            $0.sourceWord
           }
-        }
-
-        // Reload pending practices to reflect deletions
-        try await $pendingPracticesRows.load(
-          Practice
-            .where { $0.vocabularyID.eq(vocabulary.id) }
-            .group(by: \.id)
-            .leftJoin(PracticeEntry.all) { $0.id.eq($1.practiceID) }
-            .select { PendingPracticeRow.Columns(practice: $0, entriesCount: $1.count()) },
-          animation: .default
-        )
+        },
+      animation: .default
+    )
+  }
+  
+  private func loadPendingPractices() async throws {
+    try await $pendingPracticesRows.load(
+      Practice
+        .where { $0.vocabularyID.eq(vocabulary.id) }
+        .group(by: \.id)
+        .leftJoin(PracticeEntry.all) { $0.id.eq($1.practiceID) }
+        .select { PendingPracticeRow.Columns(practice: $0, entriesCount: $1.count()) },
+      animation: .default
+    )
+  }
+  
+  private func removeCompletedPractices() async throws {
+    let completedPracticeRows = pendingPracticesRows.filter { row in
+      let total = row.entriesCount
+      guard total > 0 else { return true }
+      let last = row.practice.lastStoppedPosition ?? -1
+      return last >= total - 1
+    }
+    
+    guard !completedPracticeRows.isEmpty else { return }
+    
+    try await database.write { db in
+      for row in completedPracticeRows {
+        try Practice.find(row.practice.id)
+          .delete()
+          .execute(db)
       }
     }
     
-    showLoadingOnFirstInit(false)
-    firstInitExecuted = true
+    try await loadPendingPractices()
   }
   
   private func showLoadingOnFirstInit(_ loading: Bool) {
