@@ -54,6 +54,7 @@ class PracticeViewModel {
           try PracticeEntry
             .where { $0.practiceID.eq(practice.id) }
             .join(VocabularyEntry.all) { $0.vocabularyEntryID.eq($1.id) }
+            .order(by: \.position)
             .select { PracticeRow.Columns(practiceEntry: $0, vocabularyEntry: $1) }
             .fetchAll(db)
         }
@@ -74,6 +75,8 @@ class PracticeViewModel {
           .where { $0.vocabularyID.eq(vocabulary.id) }
           .fetchAll(db)
       }
+      
+      let shuffledEntries = entries.shuffled()
       
       let practiceId = UUID()
       try await database.write { db in
@@ -96,7 +99,7 @@ class PracticeViewModel {
         .execute(db)
         
         try db.seed {
-          for (index, entry) in entries.enumerated() {
+          for (index, entry) in shuffledEntries.enumerated() {
             PracticeEntry.Draft(
               practiceID: practiceId,
               vocabularyEntryID: entry.id,
