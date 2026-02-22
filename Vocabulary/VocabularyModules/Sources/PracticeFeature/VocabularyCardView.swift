@@ -12,7 +12,7 @@ import Shared
 import Foundation
 
 struct VocabularyCardView: View {
-  let practiceData: PracticeData
+  let practiceData: PracticeRow
   let isTranslationRevealed: Bool
   let onRevealTranslation: () -> Void
   
@@ -39,7 +39,7 @@ struct VocabularyCardView: View {
             Spacer()
             
             TranslationSection(
-              translatedWord: practiceData.hiddenWordText,
+              translatedWord: practiceData.hiddenWord,
               isRevealed: isTranslationRevealed,
               onReveal: onRevealTranslation
             )

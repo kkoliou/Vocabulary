@@ -14,13 +14,11 @@ public struct PracticeView: View {
   
   @Environment(\.dismiss) private var dismiss
   @State var viewModel: PracticeViewModel
-  @State private var isRandomnessSettingsPresented = false
   
-  public init(vocabulary: Vocabulary, entries: [VocabularyEntry], practice: Practice? = nil) {
+  public init(vocabulary: Vocabulary, practice: Practice? = nil) {
     _viewModel = State(
       wrappedValue: PracticeViewModel(
         vocabulary: vocabulary,
-        entries: entries,
         practice: practice
       )
     )
@@ -28,13 +26,14 @@ public struct PracticeView: View {
   
   public var body: some View {
     VStack(spacing: 0) {
-      ProgressBarView(
-        progressText: viewModel.progressText,
-        vocabularyName: viewModel.vocabulary.name,
-        progress: viewModel.progress
-      )
-      
-      if let entry = viewModel.currentEntry {
+      if viewModel.isInitialLoading {
+        ProgressView()
+      } else if let entry = viewModel.currentEntry {
+        ProgressBarView(
+          progressText: viewModel.progressText,
+          vocabularyName: viewModel.vocabulary.name,
+          progress: viewModel.progress
+        )
         VocabularyCardView(
           practiceData: entry,
           isTranslationRevealed: viewModel.isTranslationRevealed,
@@ -45,18 +44,25 @@ public struct PracticeView: View {
             }
           }
         )
+        NavigationControlsView(
+          canGoPrevious: viewModel.canGoPrevious,
+          canGoNext: viewModel.canGoNext,
+          currentIndex: viewModel.currentIndex,
+          totalCount: viewModel.rows.count,
+          onPrevious: {
+            Task {
+              await viewModel.previousEntry()
+            }
+          },
+          onNext: {
+            Task {
+              await viewModel.nextEntry()
+            }
+          }
+        )
       } else {
         EmptyStateView()
       }
-      
-      NavigationControlsView(
-        canGoPrevious: viewModel.canGoPrevious,
-        canGoNext: viewModel.canGoNext,
-        currentIndex: viewModel.currentIndex,
-        totalCount: viewModel.practiceEntries.count,
-        onPrevious: { viewModel.previousEntry() },
-        onNext: { viewModel.nextEntry() }
-      )
     }
     .navigationTitle(Strings.localized("Practice"))
     .navigationBarTitleDisplayMode(.inline)
@@ -70,7 +76,7 @@ public struct PracticeView: View {
       }
     }
     .vSheet(isPresented: $viewModel.isRandomnessSettingsPresented) {
-      RandomnessSettingsView(
+      PracticeSettingsView(
         probability: viewModel.hiddenWordProbability,
         onApply: { newProbability in
           Task {
@@ -96,7 +102,6 @@ public struct PracticeView: View {
   }
   
   NavigationStack {
-    PracticeView(vocabulary: vocab, entries: [])
+    PracticeView(vocabulary: vocab)
   }
 }
-

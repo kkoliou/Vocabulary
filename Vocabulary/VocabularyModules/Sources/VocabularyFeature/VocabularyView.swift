@@ -92,7 +92,6 @@ public struct VocabularyView: View {
       destination: {
         PracticeView(
           vocabulary: viewModel.vocabulary,
-          entries: viewModel.entries,
           practice: nil
         )
       }
@@ -106,7 +105,6 @@ public struct VocabularyView: View {
           destination: {
             PracticeView(
               vocabulary: viewModel.vocabulary,
-              entries: viewModel.entries,
               practice: practiceRow.practice
             )
           },

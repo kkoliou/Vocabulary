@@ -1,5 +1,5 @@
 //
-//  RandomnessSettingsView.swift
+//  PracticeSettingsView.swift
 //  VocabularyModules
 //
 //  Created by Konstantinos Kolioulis on 16/2/26.
@@ -10,10 +10,11 @@ import VocabularyDB
 import SQLiteData
 import Shared
 
-struct RandomnessSettingsView: View {
+struct PracticeSettingsView: View {
   @Environment(\.dismiss) private var dismiss
   @State private var probability: Double
-  let onApply: (Double) -> Void
+  let onApply: (Double) async -> Void
+  @State private var isLoading = false
   
   init(
     probability: Double,
@@ -46,13 +47,21 @@ struct RandomnessSettingsView: View {
         ToolbarItem(placement: .confirmationAction) {
           Button(
             action: {
-              onApply(probability)
-              let generator = UIImpactFeedbackGenerator(style: .light)
-              generator.impactOccurred()
-              dismiss()
+              Task {
+                isLoading = true
+                await onApply(probability)
+                isLoading = false
+                let generator = UIImpactFeedbackGenerator(style: .light)
+                generator.impactOccurred()
+                dismiss()
+              }
             },
             label: {
-              Image(systemName: "checkmark")
+              if isLoading {
+                ProgressView()
+              } else {
+                Image(systemName: "checkmark")
+              }
             }
           )
         }

@@ -1,5 +1,5 @@
 //
-//  File.swift
+//  PracticeViewModel.swift
 //  VocabularyModules
 //
 //  Created by Konstantinos Kolioulis on 16/2/26.
@@ -13,20 +13,23 @@ import Foundation
 
 @Observable @MainActor
 class PracticeViewModel {
+  
   @ObservationIgnored @Dependency(\.defaultDatabase) var database
+  var rows = [PracticeRow]()
   let vocabulary: Vocabulary
-  let entries: [VocabularyEntry]
-  let practice: Practice?
-  var practiceEntries = [PracticeData]()
+  var practice: Practice?
   var currentIndex: Int = 0
   var isTranslationRevealed: Bool = false
-  var isLoading = false
+  var isInitialLoading = false
   var hiddenWordProbability: Double = 0.5
   var isRandomnessSettingsPresented = false
+  private var saveTask: Task<Void, Never>?
   
-  public init(vocabulary: Vocabulary, entries: [VocabularyEntry], practice: Practice? = nil) {
+  public init(
+    vocabulary: Vocabulary,
+    practice: Practice?
+  ) {
     self.vocabulary = vocabulary
-    self.entries = entries
     self.practice = practice
     if let practice = practice {
       self.hiddenWordProbability = practice.hiddenWordProbability
@@ -34,68 +37,80 @@ class PracticeViewModel {
   }
   
   func doInit() async {
-    isLoading = true
+    isInitialLoading = true
+    if practice != nil {
+      await initPracticeData()
+    } else {
+      await createNewPractice()
+      await initPracticeData()
+    }
+    isInitialLoading = false
+  }
+  
+  private func initPracticeData() async {
     if let practice = practice {
-      // Load existing practice from persisted PracticeEntry snapshot
       _ = await withErrorReporting {
-        let loaded: [PracticeData] = try database.read { db in
-          let rows = try PracticeEntry
-            .where { $0.practiceID == practice.id }
-            .order(by: \.position)
+        let rows = try await database.read { db in
+          try PracticeEntry
+            .where { $0.practiceID.eq(practice.id) }
+            .join(VocabularyEntry.all) { $0.vocabularyEntryID.eq($1.id) }
+            .select { PracticeRow.Columns(practiceEntry: $0, vocabularyEntry: $1) }
             .fetchAll(db)
-          return try rows.compactMap { pe in
-            let entry = try VocabularyEntry.find(pe.vocabularyEntryID).fetchOne(db)
-            guard let entry else { return nil }
-            return PracticeData(
-              entry: entry,
-              hiddenWord: pe.isOriginalHidden ? .original : .translated
-            )
-          }
         }
-        self.practiceEntries = loaded
+        self.rows = rows
       }
-      // Restore position to last stopped position if available
       if let lastStoppedPosition = practice.lastStoppedPosition,
-         lastStoppedPosition < practiceEntries.count {
+         lastStoppedPosition < rows.count {
         currentIndex = lastStoppedPosition
       }
-    } else {
-      // New practice, create it in database
-      practiceEntries = await setupData(probability: hiddenWordProbability)
-      await createNewPractice()
     }
-    isLoading = false
   }
   
   private func createNewPractice() async {
-    withErrorReporting {
+    let probability = hiddenWordProbability
+    await withErrorReporting {
+      let entries = try await database.read { db in
+        try VocabularyEntry
+          .where { $0.vocabularyID.eq(vocabulary.id) }
+          .fetchAll(db)
+      }
+      
       let practiceId = UUID()
-      try database.write { db in
-        try Practice.where { $0.vocabularyID == vocabulary.id }.delete().execute(db)
-
+      try await database.write { db in
+        
+        // Override any other practice of this vocab
+        try Practice.where { $0.vocabularyID == vocabulary.id }
+          .delete()
+          .execute(db)
+        
         try Practice.insert {
           Practice.Draft(
             id: practiceId,
             vocabularyID: vocabulary.id,
-            hiddenWordProbability: hiddenWordProbability,
+            hiddenWordProbability: probability,
             createdAt: .now,
             lastStoppedVocabularyEntryID: nil,
             lastStoppedPosition: 0
           )
         }
         .execute(db)
-
-        for (index, practiceEntry) in practiceEntries.enumerated() {
-          try PracticeEntry.insert {
+        
+        try db.seed {
+          for (index, entry) in entries.enumerated() {
             PracticeEntry.Draft(
               practiceID: practiceId,
-              vocabularyEntryID: practiceEntry.entry.id,
+              vocabularyEntryID: entry.id,
               position: index,
-              isOriginalHidden: practiceEntry.hiddenWord == .original
+              isOriginalHidden: Double.random(in: 0..<1) < probability
             )
           }
-          .execute(db)
         }
+      }
+      
+      practice = try await database.read { db in
+        try Practice
+          .where { $0.vocabularyID.eq(vocabulary.id) }
+          .fetchOne(db)
       }
     }
   }
@@ -104,8 +119,8 @@ class PracticeViewModel {
     guard let practice = practice else { return }
     
     let currentVocabularyEntryID: VocabularyEntry.ID?
-    if let currentEntry = currentEntry {
-      currentVocabularyEntryID = currentEntry.entry.id
+    if let currentRow = currentEntry {
+      currentVocabularyEntryID = currentRow.vocabularyEntry.id
     } else {
       currentVocabularyEntryID = nil
     }
@@ -126,48 +141,45 @@ class PracticeViewModel {
     }
   }
   
-  @concurrent
-  private func setupData(probability: Double) async -> [PracticeData] {
-    entries.shuffled().map { entry in
-      PracticeData(
-        entry: entry,
-        hiddenWord: Double.random(in: 0..<1) < probability ? .original : .translated
-      )
-    }
-  }
-  
   func applyHiddenWordProbability(_ probability: Double) async {
     hiddenWordProbability = probability
-    practiceEntries = await setupEntriesWithHiddenWordProbability(probability)
+    await updateEntriesWithHiddenWordProbability(probability)
     await savePractice()
+    await initPracticeData()
   }
   
-  @concurrent
-  private func setupEntriesWithHiddenWordProbability(
+  private func updateEntriesWithHiddenWordProbability(
     _ probability: Double
-  ) async -> [PracticeData] {
-    await practiceEntries.map { practiceEntry in
-      PracticeData(
-        entry: practiceEntry.entry,
-        hiddenWord: Double.random(in: 0..<1) < probability ? .original : .translated
-      )
+  ) async {
+    withErrorReporting {
+      try database.write { db in
+        for row in rows {
+          try PracticeEntry
+            .find(row.practiceEntry.id)
+            .update(
+              set: {
+                $0.isOriginalHidden = Double.random(in: 0..<1) < probability
+              }
+            )
+            .execute(db)
+        }
+      }
     }
   }
   
-  var currentEntry: PracticeData? {
-    guard !practiceEntries.isEmpty, currentIndex < practiceEntries.count
-    else { return nil }
-    return practiceEntries[currentIndex]
+  var currentEntry: PracticeRow? {
+    guard !rows.isEmpty, currentIndex < rows.count else { return nil }
+    return rows[currentIndex]
   }
   
   var progress: Double {
-    guard !practiceEntries.isEmpty else { return 0 }
-    return Double(currentIndex + 1) / Double(practiceEntries.count)
+    guard !rows.isEmpty else { return 0 }
+    return Double(currentIndex + 1) / Double(rows.count)
   }
   
   var progressText: String {
-    guard !practiceEntries.isEmpty else { return "0 / 0" }
-    return "\(currentIndex + 1) / \(practiceEntries.count)"
+    guard !rows.isEmpty else { return "0 / 0" }
+    return "\(currentIndex + 1) / \(rows.count)"
   }
   
   var canGoPrevious: Bool {
@@ -175,29 +187,25 @@ class PracticeViewModel {
   }
   
   var canGoNext: Bool {
-    currentIndex < practiceEntries.count - 1
+    currentIndex < rows.count - 1
   }
   
   func revealTranslation() {
     isTranslationRevealed = true
   }
   
-  func nextEntry() {
+  func nextEntry() async {
     guard canGoNext else { return }
     currentIndex += 1
     isTranslationRevealed = false
-    Task {
-      await savePractice()
-    }
+    await savePractice()
   }
   
-  func previousEntry() {
+  func previousEntry() async {
     guard canGoPrevious else { return }
     currentIndex -= 1
     isTranslationRevealed = false
-    Task {
-      await savePractice()
-    }
+    await savePractice()
   }
   
   func settingsButtonTapped() {
@@ -205,20 +213,15 @@ class PracticeViewModel {
   }
 }
 
-enum HiddenWord {
-  case original
-  case translated
-}
-
-struct PracticeData {
-  let entry: VocabularyEntry
-  let hiddenWord: HiddenWord
+@Selection struct PracticeRow {
+  let practiceEntry: PracticeEntry
+  let vocabularyEntry: VocabularyEntry
   
   var visibleWord: String {
-    hiddenWord == .original ? entry.translatedWord : entry.sourceWord
+    practiceEntry.isOriginalHidden ? vocabularyEntry.translatedWord : vocabularyEntry.sourceWord
   }
   
-  var hiddenWordText: String {
-    hiddenWord == .original ? entry.sourceWord : entry.translatedWord
+  var hiddenWord: String {
+    practiceEntry.isOriginalHidden ? vocabularyEntry.sourceWord : vocabularyEntry.translatedWord
   }
 }
