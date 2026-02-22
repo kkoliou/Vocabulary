@@ -196,5 +196,105 @@ extension BaseSuite {
       model.addVocabularyTapped()
       #expect(model.addVocabIsPresented == true)
     }
+
+    @Test func deletingVocabularyAlsoDeletesItsEntries_firstIndex() async throws {
+      // Seed entries for two vocabularies: Spanish (-1) and French (-2)
+      try await database.write { db in
+        try db.seed {
+          VocabularyEntry.Draft(
+            id: UUID(101),
+            vocabularyID: UUID(-1),
+            sourceWord: "hola",
+            translatedWord: "hello",
+            isHighlighted: false
+          )
+          VocabularyEntry.Draft(
+            id: UUID(102),
+            vocabularyID: UUID(-1),
+            sourceWord: "adios",
+            translatedWord: "goodbye",
+            isHighlighted: false
+          )
+          VocabularyEntry.Draft(
+            id: UUID(201),
+            vocabularyID: UUID(-2),
+            sourceWord: "bonjour",
+            translatedWord: "hello",
+            isHighlighted: false
+          )
+        }
+      }
+
+      // Sanity: 3 entries total
+      let initialCount = try await database.read { db in
+        try VocabularyEntry.fetchCount(db)
+      }
+      #expect(initialCount == 3)
+
+      // Delete Spanish at index 0
+      await model.deleteVocabularies(at: [0])
+      try await model.$vocabularies.load()
+
+      // Entries for Spanish should be gone; French entry should remain
+      let remainingEntries = try await database.read { db in
+        try VocabularyEntry.fetchAll(db)
+      }
+      #expect(remainingEntries.count == 1)
+      #expect(remainingEntries.first?.vocabularyID == UUID(-2))
+      #expect(Set(remainingEntries.map(\.id)) == Set([UUID(201)]))
+    }
+
+    @Test func deletingVocabularyAlsoDeletesItsEntries_middleIndex() async throws {
+      // Re-seed minimal vocabularies and entries to isolate the case
+      try await database.write { db in
+        // Clear all
+        try Practice.delete().execute(db)
+        try PracticeEntry.delete().execute(db)
+        try VocabularyEntry.delete().execute(db)
+        try Vocabulary.delete().execute(db)
+
+        // Seed three vocabularies again
+        try db.seed {
+          Vocabulary.Draft(id: UUID(-10), name: "One", createdAt: Date(timeIntervalSince1970: 100))
+          Vocabulary.Draft(id: UUID(-20), name: "Two", createdAt: Date(timeIntervalSince1970: 200))
+          Vocabulary.Draft(id: UUID(-30), name: "Three", createdAt: Date(timeIntervalSince1970: 300))
+        }
+
+        // Seed entries tied to the middle vocabulary (-20)
+        try db.seed {
+          VocabularyEntry.Draft(
+            id: UUID(301),
+            vocabularyID: UUID(-20),
+            sourceWord: "uno",
+            translatedWord: "one",
+            isHighlighted: false
+          )
+          VocabularyEntry.Draft(
+            id: UUID(302),
+            vocabularyID: UUID(-20),
+            sourceWord: "dos",
+            translatedWord: "two",
+            isHighlighted: false
+          )
+        }
+      }
+
+      // Create a fresh model so indices reflect the new ordering
+      let freshModel = VocabulariesViewModel()
+      await freshModel.doInit()
+
+      // Ensure order is by createdAt ascending: One (-10), Two (-20), Three (-30)
+      #expect(freshModel.vocabularies.map(\.id) == [UUID(-10), UUID(-20), UUID(-30)])
+
+      // Delete the middle vocabulary (index 1 => id -20)
+      await freshModel.deleteVocabularies(at: [1])
+      try await freshModel.$vocabularies.load()
+
+      // Verify entries for -20 are deleted
+      let remainingEntries = try await database.read { db in
+        try VocabularyEntry.fetchAll(db)
+      }
+      #expect(remainingEntries.isEmpty)
+    }
   }
 }
