@@ -96,6 +96,17 @@ public struct VocabularyView: View {
         )
       }
     )
+    .alert(
+      Strings.localized("Create new practice?"),
+      isPresented: $viewModel.isCreatePracticeAlertPresented
+    ) {
+      Button(Strings.localized("Cancel"), role: .cancel) {}
+      Button(Strings.localized("Create")) {
+        viewModel.confirmCreateNewPractice()
+      }
+    } message: {
+      Text(Strings.localized("You already have a pending practice. Creating a new one will replace it. Are you sure you want to continue?"))
+    }
   }
   
   private var practicesSectionView: some View {

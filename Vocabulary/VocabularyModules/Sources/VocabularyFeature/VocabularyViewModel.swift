@@ -25,6 +25,7 @@ public class VocabularyViewModel {
   var isAddEntryPresented = false
   var isAddFilePresented = false
   var isPracticePresented = false
+  var isCreatePracticeAlertPresented = false
   var isLoading = false
   let vocabulary: Vocabulary
   var sortOption: SortOption = .defaultSort {
@@ -126,6 +127,17 @@ public class VocabularyViewModel {
   }
   
   func practiceTapped() {
+    let exists = pendingPracticesRows.count > 0
+    if exists {
+      isCreatePracticeAlertPresented = true
+    } else {
+      isPracticePresented = true
+    }
+  }
+  
+  func confirmCreateNewPractice() {
+    // User confirmed to create a new practice; proceed to PracticeView with a new practice
+    isCreatePracticeAlertPresented = false
     isPracticePresented = true
   }
   
