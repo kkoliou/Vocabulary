@@ -79,9 +79,7 @@ public struct PracticeView: View {
       PracticeSettingsView(
         probability: viewModel.hiddenWordProbability,
         onApply: { newProbability in
-          Task {
-            await viewModel.applyHiddenWordProbability(newProbability)
-          }
+          await viewModel.applyHiddenWordProbability(newProbability)
         }
       )
       .presentationDetents([.medium])

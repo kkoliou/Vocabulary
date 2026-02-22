@@ -143,13 +143,16 @@ class PracticeViewModel {
   
   func applyHiddenWordProbability(_ probability: Double) async {
     hiddenWordProbability = probability
-    await updateEntriesWithHiddenWordProbability(probability)
+    await updateEntriesWithHiddenWordProbability(probability, database: database, rows: rows)
     await savePractice()
     await initPracticeData()
   }
   
+  @concurrent
   private func updateEntriesWithHiddenWordProbability(
-    _ probability: Double
+    _ probability: Double,
+    database: DatabaseWriter,
+    rows: [PracticeRow]
   ) async {
     withErrorReporting {
       try database.write { db in

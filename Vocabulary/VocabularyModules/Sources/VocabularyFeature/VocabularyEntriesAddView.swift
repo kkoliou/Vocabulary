@@ -51,6 +51,7 @@ struct VocabularyEntriesAddView: View {
         }
       }
     }
+    .interactiveDismissDisabled(viewModel.isImporting)
   }
   
   private var howItWorksSection: some View {

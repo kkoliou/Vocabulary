@@ -18,7 +18,7 @@ struct PracticeSettingsView: View {
   
   init(
     probability: Double,
-    onApply: @escaping (Double) -> Void
+    onApply: @escaping (Double) async -> Void
   ) {
     _probability = State(initialValue: probability)
     self.onApply = onApply
@@ -30,6 +30,7 @@ struct PracticeSettingsView: View {
         Section {
           VStack(alignment: .leading, spacing: 8) {
             Slider(value: $probability, in: 0...1, step: 0.1)
+              .disabled(isLoading)
             Text(probabilityLabel)
               .font(AppTypography.subheadline)
               .foregroundStyle(.secondary)
@@ -67,6 +68,7 @@ struct PracticeSettingsView: View {
         }
       }
     }
+    .interactiveDismissDisabled(isLoading)
   }
   
   private var probabilityLabel: String {
