@@ -9,6 +9,7 @@ import SQLiteData
 import VocabularyDB
 import Observation
 import Shared
+import Foundation
 
 @Observable @MainActor
 public class VocabularyViewModel {
@@ -142,10 +143,12 @@ public class VocabularyViewModel {
     isPracticePresented = true
   }
   
-  func deletePractice(_ practiceRow: PendingPracticeRow) {
+  func deletePractices(at offsets: IndexSet) {
     withErrorReporting {
       try database.write { db in
-        try Practice.find(practiceRow.practice.id).delete().execute(db)
+        try Practice.find(offsets.map { pendingPracticesRows[$0].practice.id })
+          .delete()
+          .execute(db)
       }
     }
   }

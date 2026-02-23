@@ -74,7 +74,6 @@ public struct VocabularyView: View {
             Image(systemName: "brain.head.profile")
           }
         )
-        
       }
     }
     .task {
@@ -130,9 +129,7 @@ public struct VocabularyView: View {
         )
       }
       .onDelete { indexSet in
-        indexSet.forEach { index in
-          viewModel.deletePractice(viewModel.pendingPracticesRows[index])
-        }
+        viewModel.deletePractices(at: indexSet)
       }
     }
   }
@@ -202,4 +199,3 @@ enum SortOption {
     VocabularyView(vocabulary: vocab)
   }
 }
-
