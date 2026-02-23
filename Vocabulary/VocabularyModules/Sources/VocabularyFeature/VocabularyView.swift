@@ -19,6 +19,7 @@ public struct VocabularyView: View {
     _viewModel = State(wrappedValue: VocabularyViewModel(vocabulary: vocabulary))
   }
   
+  
   public var body: some View {
     Form {
       if viewModel.isLoading {
@@ -38,6 +39,7 @@ public struct VocabularyView: View {
         }
       }
     }
+    .searchable(text: $viewModel.searchText, prompt: "Search entries")
     .navigationTitle(viewModel.vocabulary.name)
     .toolbar {
       ToolbarItemGroup(placement: .primaryAction) {
@@ -138,7 +140,7 @@ public struct VocabularyView: View {
   
   private var vocabularySectionView: some View {
     Section(header: Text(Strings.localized("Vocabulary"))) {
-      ForEach(viewModel.entries, id: \.id) { entry in
+      ForEach(viewModel.filteredEntries, id: \.id) { entry in
         EntryRowView(
           entry: entry,
           onRemoveFromHighlights: {

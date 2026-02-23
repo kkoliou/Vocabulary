@@ -27,6 +27,7 @@ public class VocabularyViewModel {
   var isPracticePresented = false
   var isCreatePracticeAlertPresented = false
   var isLoading = false
+  var searchText = ""
   let vocabulary: Vocabulary
   var sortOption: SortOption = .defaultSort {
     didSet {
@@ -162,6 +163,18 @@ public class VocabularyViewModel {
   
   private func reloadData() async {
     await doInit()
+  }
+  
+  var filteredEntries: [VocabularyEntry] {
+    if searchText.isEmpty {
+      return entries
+    }
+    
+    let lowercasedSearch = searchText.lowercased()
+    return entries.filter { entry in
+      entry.sourceWord.lowercased().contains(lowercasedSearch) ||
+      entry.translatedWord.lowercased().contains(lowercasedSearch)
+    }
   }
 }
 
