@@ -19,7 +19,6 @@ public struct VocabularyView: View {
     _viewModel = State(wrappedValue: VocabularyViewModel(vocabulary: vocabulary))
   }
   
-  
   public var body: some View {
     Form {
       if viewModel.isLoading {
