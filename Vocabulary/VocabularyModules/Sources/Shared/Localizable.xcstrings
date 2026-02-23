@@ -4,307 +4,868 @@
     "Add": {
       "extractionState": "manual",
       "localizations": {
-        "el": { "stringUnit": { "state": "translated", "value": "Προσθήκη" } }
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Add"
+          }
+        },
+        "el": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Προσθήκη"
+          }
+        }
       }
     },
     "Add Entry": {
       "extractionState": "manual",
       "localizations": {
-        "el": { "stringUnit": { "state": "translated", "value": "Προσθήκη καταχώρισης" } }
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Add New Entry"
+          }
+        },
+        "el": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Προσθήκη καταχώρισης"
+          }
+        }
       }
     },
     "Add some vocabulary entries to practice": {
       "extractionState": "manual",
       "localizations": {
-        "el": { "stringUnit": { "state": "translated", "value": "Πρόσθεσε μερικές λέξεις για εξάσκηση" } }
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Add a few words to start practicing"
+          }
+        },
+        "el": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Πρόσθεσε μερικές λέξεις για εξάσκηση"
+          }
+        }
       }
     },
     "Add vocabulary": {
       "extractionState": "manual",
       "localizations": {
-        "el": { "stringUnit": { "state": "translated", "value": "Προσθήκη λεξιλογίου" } }
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Add Vocabulary"
+          }
+        },
+        "el": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Προσθήκη λεξιλογίου"
+          }
+        }
       }
     },
     "Alphabetical": {
       "extractionState": "manual",
       "localizations": {
-        "el": { "stringUnit": { "state": "translated", "value": "Αλφαβητικά" } }
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Alphabetical Order"
+          }
+        },
+        "el": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Αλφαβητικά"
+          }
+        }
       }
     },
     "An entry with this original word already exists in this vocabulary": {
       "extractionState": "manual",
       "localizations": {
-        "el": { "stringUnit": { "state": "translated", "value": "Υπάρχει ήδη καταχώριση με αυτή τη λέξη σε αυτό το λεξιλόγιο" } }
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "This word is already in your vocabulary list"
+          }
+        },
+        "el": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Υπάρχει ήδη καταχώριση με αυτή τη λέξη σε αυτό το λεξιλόγιο"
+          }
+        }
       }
     },
     "Cancel": {
       "extractionState": "manual",
       "localizations": {
-        "el": { "stringUnit": { "state": "translated", "value": "Άκυρο" } }
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Cancel"
+          }
+        },
+        "el": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Άκυρο"
+          }
+        }
       }
     },
     "Choose a descriptive name to organize your learning.": {
       "extractionState": "manual",
       "localizations": {
-        "el": { "stringUnit": { "state": "translated", "value": "Επίλεξε ένα περιγραφικό όνομα για να οργανώσεις τη μάθησή σου." } }
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Choose a clear name to organize your learning."
+          }
+        },
+        "el": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Επίλεξε ένα περιγραφικό όνομα για να οργανώσεις τη μάθησή σου."
+          }
+        }
       }
     },
     "Choose CSV File": {
       "extractionState": "manual",
       "localizations": {
-        "el": { "stringUnit": { "state": "translated", "value": "Επιλογή αρχείου CSV" } }
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Choose a CSV File"
+          }
+        },
+        "el": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Επιλογή αρχείου CSV"
+          }
+        }
       }
     },
     "Could not read the selected file. Please try again.": {
       "extractionState": "manual",
       "localizations": {
-        "el": { "stringUnit": { "state": "translated", "value": "Δεν ήταν δυνατή η ανάγνωση του αρχείου. Προσπάθησε ξανά." } }
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "We couldn’t read that file. Please try again."
+          }
+        },
+        "el": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Δεν ήταν δυνατή η ανάγνωση του αρχείου. Προσπάθησε ξανά."
+          }
+        }
       }
     },
     "Create": {
       "extractionState": "manual",
       "localizations": {
-        "el": { "stringUnit": { "state": "translated", "value": "Δημιουργία" } }
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Create"
+          }
+        },
+        "el": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Δημιουργία"
+          }
+        }
       }
     },
     "Create new practice?": {
       "extractionState": "manual",
       "localizations": {
-        "el": { "stringUnit": { "state": "translated", "value": "Να δημιουργηθεί νέα εξάσκηση;" } }
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Start a new practice session?"
+          }
+        },
+        "el": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Να δημιουργηθεί νέα εξάσκηση;"
+          }
+        }
       }
     },
     "Create your first word list to start studying.": {
       "extractionState": "manual",
       "localizations": {
-        "el": { "stringUnit": { "state": "translated", "value": "Δημιούργησε την πρώτη σου λίστα λέξεων για να ξεκινήσεις τη μελέτη." } }
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Create your first word list to begin studying."
+          }
+        },
+        "el": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Δημιούργησε την πρώτη σου λίστα λέξεων για να ξεκινήσεις τη μελέτη."
+          }
+        }
       }
     },
     "CSV Format": {
       "extractionState": "manual",
       "localizations": {
-        "el": { "stringUnit": { "state": "translated", "value": "Μορφή CSV" } }
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "CSV Format"
+          }
+        },
+        "el": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Μορφή CSV"
+          }
+        }
       }
     },
     "Default": {
       "extractionState": "manual",
       "localizations": {
-        "el": { "stringUnit": { "state": "translated", "value": "Προεπιλογή" } }
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Default"
+          }
+        },
+        "el": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Προεπιλογή"
+          }
+        }
       }
     },
     "Edit Entry": {
       "extractionState": "manual",
       "localizations": {
-        "el": { "stringUnit": { "state": "translated", "value": "Επεξεργασία καταχώρισης" } }
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Edit Entry"
+          }
+        },
+        "el": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Επεξεργασία καταχώρισης"
+          }
+        }
       }
     },
     "Error": {
       "extractionState": "manual",
       "localizations": {
-        "el": { "stringUnit": { "state": "translated", "value": "Σφάλμα" } }
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Something went wrong"
+          }
+        },
+        "el": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Σφάλμα"
+          }
+        }
       }
     },
     "File": {
       "extractionState": "manual",
       "localizations": {
-        "el": { "stringUnit": { "state": "translated", "value": "Αρχείο" } }
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "File"
+          }
+        },
+        "el": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Αρχείο"
+          }
+        }
       }
     },
     "First column: Original word or phrase": {
       "extractionState": "manual",
       "localizations": {
-        "el": { "stringUnit": { "state": "translated", "value": "Πρώτη στήλη: Αρχική λέξη ή φράση" } }
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "First column: Original word or phrase"
+          }
+        },
+        "el": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Πρώτη στήλη: Αρχική λέξη ή φράση"
+          }
+        }
       }
     },
     "Highlights": {
       "extractionState": "manual",
       "localizations": {
-        "el": { "stringUnit": { "state": "translated", "value": "Σημαντικά σημεία" } }
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Highlights"
+          }
+        },
+        "el": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Σημαντικά σημεία"
+          }
+        }
       }
     },
     "How It Works": {
       "extractionState": "manual",
       "localizations": {
-        "el": { "stringUnit": { "state": "translated", "value": "Πώς λειτουργεί" } }
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "How It Works"
+          }
+        },
+        "el": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Πώς λειτουργεί"
+          }
+        }
       }
     },
     "Import File": {
       "extractionState": "manual",
       "localizations": {
-        "el": { "stringUnit": { "state": "translated", "value": "Εισαγωγή αρχείου" } }
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Import a File"
+          }
+        },
+        "el": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Εισαγωγή αρχείου"
+          }
+        }
       }
     },
     "Import from File": {
       "extractionState": "manual",
       "localizations": {
-        "el": { "stringUnit": { "state": "translated", "value": "Εισαγωγή από αρχείο" } }
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Import from a File"
+          }
+        },
+        "el": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Εισαγωγή από αρχείο"
+          }
+        }
       }
     },
     "New Vocabulary": {
       "extractionState": "manual",
       "localizations": {
-        "el": { "stringUnit": { "state": "translated", "value": "Νέο λεξιλόγιο" } }
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "New Vocabulary List"
+          }
+        },
+        "el": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Νέο λεξιλόγιο"
+          }
+        }
       }
     },
     "No entries": {
       "extractionState": "manual",
       "localizations": {
-        "el": { "stringUnit": { "state": "translated", "value": "Δεν υπάρχουν καταχωρίσεις" } }
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No words yet"
+          }
+        },
+        "el": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Δεν υπάρχουν καταχωρίσεις"
+          }
+        }
       }
     },
     "No vocabulary yet": {
       "extractionState": "manual",
       "localizations": {
-        "el": { "stringUnit": { "state": "translated", "value": "Δεν υπάρχει ακόμη λεξιλόγιο" } }
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "You don’t have any vocabulary lists yet"
+          }
+        },
+        "el": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Δεν υπάρχει ακόμη λεξιλόγιο"
+          }
+        }
       }
     },
     "OK": {
       "extractionState": "manual",
       "localizations": {
-        "el": { "stringUnit": { "state": "translated", "value": "OK" } }
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "OK"
+          }
+        },
+        "el": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "OK"
+          }
+        }
       }
     },
     "One or more rows are missing required fields (original or translation). Please check your CSV.": {
       "extractionState": "manual",
       "localizations": {
-        "el": { "stringUnit": { "state": "translated", "value": "Μία ή περισσότερες γραμμές δεν έχουν συμπληρωμένα τα απαιτούμενα πεδία (αρχική λέξη ή μετάφραση). Έλεγξε το αρχείο CSV." } }
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Some rows are missing the word or translation. Please check your CSV file."
+          }
+        },
+        "el": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Μία ή περισσότερες γραμμές δεν έχουν συμπληρωμένα τα απαιτούμενα πεδία (αρχική λέξη ή μετάφραση). Έλεγξε το αρχείο CSV."
+          }
+        }
       }
     },
     "Original": {
       "extractionState": "manual",
       "localizations": {
-        "el": { "stringUnit": { "state": "translated", "value": "Αρχική λέξη" } }
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Original Word"
+          }
+        },
+        "el": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Αρχική λέξη"
+          }
+        }
       }
     },
     "Pending practice": {
       "extractionState": "manual",
       "localizations": {
-        "el": { "stringUnit": { "state": "translated", "value": "Εκκρεμής εξάσκηση" } }
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Practice waiting"
+          }
+        },
+        "el": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Εκκρεμής εξάσκηση"
+          }
+        }
       }
     },
     "Pending practices": {
       "extractionState": "manual",
       "localizations": {
-        "el": { "stringUnit": { "state": "translated", "value": "Εκκρεμείς εξασκήσεις" } }
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Practices waiting"
+          }
+        },
+        "el": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Εκκρεμείς εξασκήσεις"
+          }
+        }
       }
     },
     "Practice": {
       "extractionState": "manual",
       "localizations": {
-        "el": { "stringUnit": { "state": "translated", "value": "Εξάσκηση" } }
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Practice"
+          }
+        },
+        "el": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Εξάσκηση"
+          }
+        }
       }
     },
     "Provide a vocabulary name": {
       "extractionState": "manual",
       "localizations": {
-        "el": { "stringUnit": { "state": "translated", "value": "Δώσε ένα όνομα στο λεξιλόγιο" } }
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Please enter a name for your vocabulary list"
+          }
+        },
+        "el": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Δώσε ένα όνομα στο λεξιλόγιο"
+          }
+        }
       }
     },
     "Provide both original and translation": {
       "extractionState": "manual",
       "localizations": {
-        "el": { "stringUnit": { "state": "translated", "value": "Συμπλήρωσε και την αρχική λέξη και τη μετάφραση" } }
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Please enter both the word and its translation"
+          }
+        },
+        "el": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Συμπλήρωσε και την αρχική λέξη και τη μετάφραση"
+          }
+        }
       }
     },
     "Save": {
       "extractionState": "manual",
       "localizations": {
-        "el": { "stringUnit": { "state": "translated", "value": "Αποθήκευση" } }
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Save"
+          }
+        },
+        "el": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Αποθήκευση"
+          }
+        }
       }
     },
     "Second column: Translation": {
       "extractionState": "manual",
       "localizations": {
-        "el": { "stringUnit": { "state": "translated", "value": "Δεύτερη στήλη: Μετάφραση" } }
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Second column: Translation"
+          }
+        },
+        "el": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Δεύτερη στήλη: Μετάφραση"
+          }
+        }
       }
     },
     "Select a CSV file from your device": {
       "extractionState": "manual",
       "localizations": {
-        "el": { "stringUnit": { "state": "translated", "value": "Επίλεξε ένα αρχείο CSV από τη συσκευή σου" } }
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Select a CSV file from your device"
+          }
+        },
+        "el": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Επίλεξε ένα αρχείο CSV από τη συσκευή σου"
+          }
+        }
       }
     },
     "Something went wrong": {
       "extractionState": "manual",
       "localizations": {
-        "el": { "stringUnit": { "state": "translated", "value": "Κάτι πήγε στραβά" } }
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Something went wrong"
+          }
+        },
+        "el": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Κάτι πήγε στραβά"
+          }
+        }
       }
     },
     "Something went wrong.": {
       "extractionState": "manual",
       "localizations": {
-        "el": { "stringUnit": { "state": "translated", "value": "Κάτι πήγε στραβά." } }
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Something went wrong."
+          }
+        },
+        "el": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Κάτι πήγε στραβά."
+          }
+        }
       }
     },
     "Sort": {
       "extractionState": "manual",
       "localizations": {
-        "el": { "stringUnit": { "state": "translated", "value": "Ταξινόμηση" } }
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sort"
+          }
+        },
+        "el": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ταξινόμηση"
+          }
+        }
       }
     },
     "Sort By": {
       "extractionState": "manual",
       "localizations": {
-        "el": { "stringUnit": { "state": "translated", "value": "Ταξινόμηση κατά" } }
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sort by"
+          }
+        },
+        "el": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ταξινόμηση κατά"
+          }
+        }
       }
     },
     "The file format is invalid. Please ensure your CSV uses commas to separate values.": {
       "extractionState": "manual",
       "localizations": {
-        "el": { "stringUnit": { "state": "translated", "value": "Η μορφή του αρχείου δεν είναι έγκυρη. Βεβαιώσου ότι το CSV χρησιμοποιεί κόμματα για τον διαχωρισμό των τιμών." } }
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "That file format isn’t valid. Make sure your CSV uses commas to separate values."
+          }
+        },
+        "el": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Η μορφή του αρχείου δεν είναι έγκυρη. Βεβαιώσου ότι το CSV χρησιμοποιεί κόμματα για τον διαχωρισμό των τιμών."
+          }
+        }
       }
     },
     "The vocabulary already exists": {
       "extractionState": "manual",
       "localizations": {
-        "el": { "stringUnit": { "state": "translated", "value": "Το λεξιλόγιο υπάρχει ήδη" } }
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "A vocabulary list with this name already exists"
+          }
+        },
+        "el": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Το λεξιλόγιο υπάρχει ήδη"
+          }
+        }
       }
     },
     "Tip: You can use your AI agent to help generate a properly formatted CSV file.": {
       "extractionState": "manual",
       "localizations": {
-        "el": { "stringUnit": { "state": "translated", "value": "Συμβουλή: Μπορείς να χρησιμοποιήσεις τον AI βοηθό σου για να δημιουργήσεις σωστά μορφοποιημένο αρχείο CSV." } }
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tip: You can use AI to help generate a properly formatted CSV file."
+          }
+        },
+        "el": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Συμβουλή: Μπορείς να χρησιμοποιήσεις τον AI βοηθό σου για να δημιουργήσεις σωστά μορφοποιημένο αρχείο CSV."
+          }
+        }
       }
     },
     "Translation": {
       "extractionState": "manual",
       "localizations": {
-        "el": { "stringUnit": { "state": "translated", "value": "Μετάφραση" } }
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Translation"
+          }
+        },
+        "el": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Μετάφραση"
+          }
+        }
       }
     },
     "Vocabularies": {
       "extractionState": "manual",
       "localizations": {
-        "el": { "stringUnit": { "state": "translated", "value": "Λεξιλόγια" } }
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Vocabulary Lists"
+          }
+        },
+        "el": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Λεξιλόγια"
+          }
+        }
       }
     },
     "Vocabulary name": {
       "extractionState": "manual",
       "localizations": {
-        "el": { "stringUnit": { "state": "translated", "value": "Όνομα λεξιλογίου" } }
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Vocabulary List Name"
+          }
+        },
+        "el": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Όνομα λεξιλογίου"
+          }
+        }
       }
     },
     "Word or phrase": {
       "extractionState": "manual",
       "localizations": {
-        "el": { "stringUnit": { "state": "translated", "value": "Λέξη ή φράση" } }
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Word or Phrase"
+          }
+        },
+        "el": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Λέξη ή φράση"
+          }
+        }
       }
     },
     "You already have a pending practice. Creating a new one will replace it. Are you sure you want to continue?": {
       "extractionState": "manual",
       "localizations": {
-        "el": { "stringUnit": { "state": "translated", "value": "Έχεις ήδη μια εκκρεμή εξάσκηση. Αν δημιουργήσεις νέα, θα αντικαταστήσει την υπάρχουσα. Θέλεις να συνεχίσεις;" } }
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "You already have a practice session waiting. Starting a new one will replace it. Continue?"
+          }
+        },
+        "el": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Έχεις ήδη μια εκκρεμή εξάσκηση. Αν δημιουργήσεις νέα, θα αντικαταστήσει την υπάρχουσα. Θέλεις να συνεχίσεις;"
+          }
+        }
       }
     },
     "Your CSV file should have two columns:": {
       "extractionState": "manual",
       "localizations": {
-        "el": { "stringUnit": { "state": "translated", "value": "Το αρχείο CSV πρέπει να έχει δύο στήλες:" } }
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Your CSV file should include two columns:"
+          }
+        },
+        "el": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Το αρχείο CSV πρέπει να έχει δύο στήλες:"
+          }
+        }
       }
     },
     "Your translation": {
       "extractionState": "manual",
       "localizations": {
-        "el": { "stringUnit": { "state": "translated", "value": "Η μετάφρασή σου" } }
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Your Translation"
+          }
+        },
+        "el": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Η μετάφρασή σου"
+          }
+        }
       }
     }
   },
