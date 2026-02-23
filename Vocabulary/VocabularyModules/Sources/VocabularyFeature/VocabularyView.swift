@@ -186,7 +186,7 @@ enum SortOption {
     case .defaultSort:
       return Strings.localized("Default")
     case .highlights:
-      return Strings.localized("Highlights")
+      return Strings.localized("Highlight")
     case .alphabetical:
       return Strings.localized("Alphabetical")
     }
