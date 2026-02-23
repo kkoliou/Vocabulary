@@ -383,5 +383,131 @@ extension BaseSuite {
       #expect(model.dismiss == false)
       #expect(model.triggerSuccess == false)
     }
+
+    @Test func editExistingEntrySuccessfully() async throws {
+      // Fetch an existing entry ("hello" -> "hola") and edit its translation
+      let original = try await database.read { db in
+        try VocabularyEntry
+          .where { $0.sourceWord == "hello" && $0.vocabularyID == UUID(-1) }
+          .fetchOne(db)
+      }
+      let existing = try #require(original)
+
+      // Assuming the ViewModel can be initialized for editing with an existing entry
+      let editModel = VocabularyEntryAddViewModel(vocabulary: vocabulary, entryToEdit: existing)
+
+      // Pre-filled fields should reflect existing values
+      #expect(editModel.source == "hello")
+      #expect(editModel.translation == "hola")
+      #expect(editModel.saveButtonDisabled == false)
+
+      // Change only the translation
+      editModel.translation = "hola!!!"
+      editModel.saveButtonTapped()
+
+      #expect(editModel.triggerSuccess == true)
+      #expect(editModel.dismiss == true)
+
+      // Verify database reflects the updated translation
+      let updated = try await database.read { db in
+        try VocabularyEntry
+          .where { $0.sourceWord == "hello" && $0.vocabularyID == UUID(-1) }
+          .fetchOne(db)
+      }
+      let updatedEntry = try #require(updated)
+      #expect(updatedEntry.translatedWord == "hola!!!")
+      #expect(updatedEntry.sourceWord == "hello")
+    }
+
+    @Test func editExistingEntryTrimWhitespace() async throws {
+      let original = try await database.read { db in
+        try VocabularyEntry
+          .where { $0.sourceWord == "goodbye" && $0.vocabularyID == UUID(-1) }
+          .fetchOne(db)
+      }
+      let existing = try #require(original)
+
+      let editModel = VocabularyEntryAddViewModel(vocabulary: vocabulary, entryToEdit: existing)
+
+      editModel.source = "  goodbye  "
+      editModel.translation = "  adiós!!!  "
+      editModel.saveButtonTapped()
+
+      #expect(editModel.triggerSuccess == true)
+
+      let updated = try await database.read { db in
+        try VocabularyEntry
+          .where { $0.sourceWord == "goodbye" && $0.vocabularyID == UUID(-1) }
+          .fetchOne(db)
+      }
+      let updatedEntry = try #require(updated)
+      #expect(updatedEntry.sourceWord == "goodbye")
+      #expect(updatedEntry.translatedWord == "adiós!!!")
+    }
+
+    @Test func editExistingEntryEmptyFieldsShowsAlert() async throws {
+      let original = try await database.read { db in
+        try VocabularyEntry
+          .where { $0.sourceWord == "hello" && $0.vocabularyID == UUID(-1) }
+          .fetchOne(db)
+      }
+      let existing = try #require(original)
+
+      let editModel = VocabularyEntryAddViewModel(vocabulary: vocabulary, entryToEdit: existing)
+
+      editModel.source = ""
+      editModel.translation = ""
+      editModel.saveButtonTapped()
+
+      #expect(editModel.triggerSuccess == false)
+      #expect(editModel.isAlertPresented == true)
+      #expect(editModel.alertTitle == Strings.localized("Provide both original and translation"))
+    }
+
+    @Test func editExistingEntryWhitespaceOnlyShowsAlert() async throws {
+      let original = try await database.read { db in
+        try VocabularyEntry
+          .where { $0.sourceWord == "hello" && $0.vocabularyID == UUID(-1) }
+          .fetchOne(db)
+      }
+      let existing = try #require(original)
+
+      let editModel = VocabularyEntryAddViewModel(vocabulary: vocabulary, entryToEdit: existing)
+
+      editModel.source = "   "
+      editModel.translation = "   "
+      editModel.saveButtonTapped()
+
+      #expect(editModel.triggerSuccess == false)
+      #expect(editModel.isAlertPresented == true)
+      #expect(editModel.alertTitle == Strings.localized("Provide both original and translation"))
+    }
+
+    @Test func editExistingEntryNoChangesStillValid() async throws {
+      let original = try await database.read { db in
+        try VocabularyEntry
+          .where { $0.sourceWord == "hello" && $0.vocabularyID == UUID(-1) }
+          .fetchOne(db)
+      }
+      let existing = try #require(original)
+
+      let editModel = VocabularyEntryAddViewModel(vocabulary: vocabulary, entryToEdit: existing)
+
+      // No changes
+      editModel.saveButtonTapped()
+
+      #expect(editModel.triggerSuccess == true)
+      #expect(editModel.dismiss == true)
+
+      // Verify nothing changed
+      let after = try await database.read { db in
+        try VocabularyEntry
+          .where { $0.id == existing.id }
+          .fetchOne(db)
+      }
+      let afterEntry = try #require(after)
+      #expect(afterEntry.sourceWord == existing.sourceWord)
+      #expect(afterEntry.translatedWord == existing.translatedWord)
+    }
   }
 }
