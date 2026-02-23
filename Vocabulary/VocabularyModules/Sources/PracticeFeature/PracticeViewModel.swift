@@ -219,7 +219,7 @@ class PracticeViewModel {
   }
 }
 
-@Selection struct PracticeRow {
+@Selection struct PracticeRow: Equatable {
   let practiceEntry: PracticeEntry
   let vocabularyEntry: VocabularyEntry
   
