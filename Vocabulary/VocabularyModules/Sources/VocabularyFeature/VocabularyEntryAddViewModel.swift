@@ -16,6 +16,7 @@ class VocabularyEntryAddViewModel {
   
   @ObservationIgnored @Dependency(\.defaultDatabase) var database
   let vocabulary: Vocabulary
+  let entryToEdit: VocabularyEntry?
   var source: String = "" {
     didSet {
       checkSaveButtonState()
@@ -32,8 +33,14 @@ class VocabularyEntryAddViewModel {
   var alertTitle: LocalizedStringResource?
   var isAlertPresented = false
   
-  init(vocabulary: Vocabulary) {
+  init(vocabulary: Vocabulary, entryToEdit: VocabularyEntry? = nil) {
     self.vocabulary = vocabulary
+    self.entryToEdit = entryToEdit
+    
+    if let entry = entryToEdit {
+      self.source = entry.sourceWord
+      self.translation = entry.translatedWord
+    }
   }
   
   private func checkSaveButtonState() {
@@ -51,23 +58,35 @@ class VocabularyEntryAddViewModel {
     }
     do {
       try database.write { db in
-        let exists = try VocabularyEntry
-          .where { $0.sourceWord == sourceTrimmed && $0.vocabularyID == vocabulary.id }
-          .fetchCount(db) > 0
+        if let entryToEdit = entryToEdit {
+          // Update existing entry
+          try VocabularyEntry
+            .find(entryToEdit.id)
+            .update {
+              $0.sourceWord = sourceTrimmed
+              $0.translatedWord = translationTrimmed
+            }
+            .execute(db)
+        } else {
+          // Create new entry
+          let exists = try VocabularyEntry
+            .where { $0.sourceWord == sourceTrimmed && $0.vocabularyID == vocabulary.id }
+            .fetchCount(db) > 0
 
-        if exists {
-          throw AddVocabularyEntryError.alreadyExists
-        }
+          if exists {
+            throw AddVocabularyEntryError.alreadyExists
+          }
 
-        try VocabularyEntry.insert {
-          VocabularyEntry.Draft(
-            vocabularyID: vocabulary.id,
-            sourceWord: sourceTrimmed,
-            translatedWord: translationTrimmed,
-            isHighlighted: false
-          )
+          try VocabularyEntry.insert {
+            VocabularyEntry.Draft(
+              vocabularyID: vocabulary.id,
+              sourceWord: sourceTrimmed,
+              translatedWord: translationTrimmed,
+              isHighlighted: false
+            )
+          }
+          .execute(db)
         }
-        .execute(db)
       }
       triggerSuccess = true
       dismiss = true

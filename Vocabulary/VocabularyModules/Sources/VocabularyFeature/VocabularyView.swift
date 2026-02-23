@@ -38,7 +38,7 @@ public struct VocabularyView: View {
         }
       }
     }
-    .searchable(text: $viewModel.searchText, prompt: "Search entries")
+    .searchable(text: $viewModel.searchText, prompt: "Search in vocabulary")
     .navigationTitle(viewModel.vocabulary.name)
     .toolbar {
       ToolbarItemGroup(placement: .primaryAction) {
@@ -82,6 +82,12 @@ public struct VocabularyView: View {
     .vSheet(isPresented: $viewModel.isAddEntryPresented) {
       VocabularyEntryAddView(vocabulary: viewModel.vocabulary)
         .largePresentationDetents()
+    }
+    .vSheet(isPresented: $viewModel.isEditEntryPresented) {
+      if let entryToEdit = viewModel.entryToEdit {
+        VocabularyEntryAddView(vocabulary: viewModel.vocabulary, entryToEdit: entryToEdit)
+          .largePresentationDetents()
+      }
     }
     .vSheet(isPresented: $viewModel.isAddFilePresented) {
       VocabularyEntriesAddView(vocabulary: viewModel.vocabulary)
@@ -144,6 +150,12 @@ public struct VocabularyView: View {
           },
           onAddToHighlights: {
             viewModel.addToHighlightsTapped(for: entry)
+          },
+          onEdit: {
+            viewModel.editEntry(entry)
+          },
+          onDelete: {
+            viewModel.deleteEntry(entry)
           }
         )
         .font(AppTypography.body)

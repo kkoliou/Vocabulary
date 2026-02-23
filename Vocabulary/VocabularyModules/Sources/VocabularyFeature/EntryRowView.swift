@@ -14,6 +14,8 @@ struct EntryRowView: View {
   let entry: VocabularyEntry
   let onRemoveFromHighlights: () -> Void
   let onAddToHighlights: () -> Void
+  let onEdit: () -> Void
+  let onDelete: () -> Void
   
   var body: some View {
     VStack(alignment: .leading, spacing: 4) {
@@ -54,6 +56,18 @@ struct EntryRowView: View {
         )
         .tint(AppColors.accent)
       }
+      
+      Menu {
+        Button(action: onEdit) {
+          Label("Edit", systemImage: "pencil")
+        }
+        Button(role: .destructive, action: onDelete) {
+          Label("Delete", systemImage: "trash")
+        }
+      } label: {
+        Image(systemName: "ellipsis")
+          .font(AppTypography.body)
+      }
     }
   }
 }
@@ -81,5 +95,5 @@ struct EntryRowView: View {
       try VocabularyEntry.fetchOne(db)!
     }
   }
-  EntryRowView(entry: entry, onRemoveFromHighlights: {}, onAddToHighlights: {})
+  EntryRowView(entry: entry, onRemoveFromHighlights: {}, onAddToHighlights: {}, onEdit: {}, onDelete: {})
 }

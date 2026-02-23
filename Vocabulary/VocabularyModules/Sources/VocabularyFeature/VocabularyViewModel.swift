@@ -27,8 +27,10 @@ public class VocabularyViewModel {
   var isAddFilePresented = false
   var isPracticePresented = false
   var isCreatePracticeAlertPresented = false
+  var isEditEntryPresented = false
   var isLoading = false
   var searchText = ""
+  var entryToEdit: VocabularyEntry?
   let vocabulary: Vocabulary
   var sortOption: SortOption = .defaultSort {
     didSet {
@@ -151,6 +153,22 @@ public class VocabularyViewModel {
           .execute(db)
       }
     }
+  }
+  
+  func deleteEntry(_ entry: VocabularyEntry) {
+    withErrorReporting {
+      try database.write { db in
+        try VocabularyEntry
+          .find(entry.id)
+          .delete()
+          .execute(db)
+      }
+    }
+  }
+  
+  func editEntry(_ entry: VocabularyEntry) {
+    entryToEdit = entry
+    isEditEntryPresented = true
   }
   
   private func changeHighlighted(to value: Bool, for entry: VocabularyEntry) {

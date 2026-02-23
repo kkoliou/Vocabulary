@@ -20,10 +20,11 @@ struct VocabularyEntryAddView: View {
     case source, translation
   }
   
-  public init(vocabulary: Vocabulary) {
+  public init(vocabulary: Vocabulary, entryToEdit: VocabularyEntry? = nil) {
     _viewModel = State(
       wrappedValue: VocabularyEntryAddViewModel(
-        vocabulary: vocabulary
+        vocabulary: vocabulary,
+        entryToEdit: entryToEdit
       )
     )
   }
@@ -57,7 +58,7 @@ struct VocabularyEntryAddView: View {
           }
         }
       }
-      .navigationTitle(Strings.localized("Add Entry"))
+      .navigationTitle(viewModel.entryToEdit != nil ? Strings.localized("Edit Entry") : Strings.localized("Add Entry"))
       .navigationBarTitleDisplayMode(.inline)
       .toolbar {
         ToolbarItem(placement: .confirmationAction) {
