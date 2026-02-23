@@ -653,5 +653,44 @@ extension BaseSuite {
       #expect(frenchModel.entries.map(\.sourceWord) == frenchInitialOrder)
       #expect(frenchModel.sortOption == .defaultSort)
     }
+    
+    @Test func deleteEntryRemovesItFromListAndDatabase() async throws {
+      // Precondition: model has 4 Spanish entries
+      #expect(model.entries.count == 4)
+      let entryToDelete = model.entries[0]
+      let entryId = entryToDelete.id
+
+      // Perform delete using the view model's API
+      model.deleteEntry(entryToDelete)
+      try await model.$entries.load()
+
+      // UI list should update
+      #expect(model.entries.count == 3)
+      #expect(model.entries.contains { $0.id == entryId } == false)
+
+      // Database should no longer have the entry
+      let deleted = try await database.read { db in
+        try VocabularyEntry.find(entryId).fetchOne(db)
+      }
+      #expect(deleted == nil)
+    }
+    
+    @Test func editEntrySetsStateAndPresentsEditor() async throws {
+      // Pick an existing entry
+      let entry = model.entries[0]
+
+      // Precondition
+      #expect(model.isEditEntryPresented == false)
+      #expect(model.entryToEdit == nil)
+
+      // Invoke edit
+      model.editEntry(entry)
+
+      // Postconditions
+      #expect(model.isEditEntryPresented == true)
+      #expect(model.entryToEdit?.id == entry.id)
+      #expect(model.entryToEdit?.sourceWord == entry.sourceWord)
+      #expect(model.entryToEdit?.translatedWord == entry.translatedWord)
+    }
   }
 }
