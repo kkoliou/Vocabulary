@@ -61,7 +61,11 @@ public struct PracticeView: View {
           }
         )
       } else {
-        EmptyStateView()
+        ContentUnavailableView(
+          Strings.localized("No entries"),
+          systemImage: "book.closed",
+          description: Text(Strings.localized("Add some vocabulary entries to practice"))
+        )
       }
     }
     .navigationTitle(Strings.localized("Practice"))

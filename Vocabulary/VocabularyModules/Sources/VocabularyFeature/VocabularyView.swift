@@ -20,14 +20,14 @@ public struct VocabularyView: View {
   }
   
   public var body: some View {
-    Form {
+    Group {
       if viewModel.isLoading {
         HStack() {
           Spacer()
           ProgressView()
           Spacer()
         }
-      } else {
+      } else if !viewModel.pendingPracticesRows.isEmpty || !viewModel.entries.isEmpty {
         List {
           if !viewModel.pendingPracticesRows.isEmpty {
             practicesSectionView
@@ -36,10 +36,16 @@ public struct VocabularyView: View {
             vocabularySectionView
           }
         }
+        .searchable(text: $viewModel.searchText, prompt: "Search in vocabulary")
+      } else {
+        ContentUnavailableView(
+          Strings.localized("No entries"),
+          systemImage: "book.closed"
+        )
       }
     }
-    .searchable(text: $viewModel.searchText, prompt: "Search in vocabulary")
     .navigationTitle(viewModel.vocabulary.name)
+    .navigationBarTitleDisplayMode(.inline)
     .toolbar {
       ToolbarItemGroup(placement: .primaryAction) {
         Menu {
