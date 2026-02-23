@@ -42,7 +42,7 @@ struct EntryRowView: View {
           role: .cancel,
           action: onRemoveFromHighlights,
           label: {
-            Label("Remove Highlight", systemImage: "bookmark.slash")
+            Label(Strings.localized("Remove Highlight"), systemImage: "bookmark.slash")
           }
         )
         .tint(AppColors.accent)
@@ -51,7 +51,7 @@ struct EntryRowView: View {
           role: .cancel,
           action: onAddToHighlights,
           label: {
-            Label("Highlight", systemImage: "bookmark.fill")
+            Label(Strings.localized("Highlight"), systemImage: "bookmark.fill")
           }
         )
         .tint(AppColors.accent)
@@ -59,10 +59,10 @@ struct EntryRowView: View {
       
       Menu {
         Button(action: onEdit) {
-          Label("Edit", systemImage: "pencil")
+          Label(Strings.localized("Edit"), systemImage: "pencil")
         }
         Button(role: .destructive, action: onDelete) {
-          Label("Delete", systemImage: "trash")
+          Label(Strings.localized("Delete"), systemImage: "trash")
         }
       } label: {
         Image(systemName: "ellipsis")

@@ -111,7 +111,7 @@ private struct TranslationSection: View {
             removal: .scale(scale: 0.9).combined(with: .opacity)
           ))
       } else {
-        RevealButton(title: "Reveal", onReveal: onReveal)
+        RevealButton(title: Strings.localized("Reveal"), onReveal: onReveal)
       }
     }
     .frame(minHeight: 100)
@@ -119,7 +119,7 @@ private struct TranslationSection: View {
 }
 
 private struct RevealButton: View {
-  let title: String
+  let title: LocalizedStringResource
   let onReveal: () -> Void
   
   var body: some View {

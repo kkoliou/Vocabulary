@@ -37,12 +37,12 @@ struct PracticeSettingsView: View {
           }
           .padding(.vertical, 8)
         } header: {
-          Text("Hidden Word Randomness")
+          Text(Strings.localized("Hidden Word Randomness"))
         } footer: {
-          Text("Adjust the probability that the original word (vs translation) will be hidden. 50% means equal chance for each.")
+          Text(Strings.localized("Adjust the probability that the original word (vs translation) will be hidden. 50% means equal chance for each."))
         }
       }
-      .navigationTitle("Settings")
+      .navigationTitle(Strings.localized("Settings"))
       .navigationBarTitleDisplayMode(.inline)
       .toolbar {
         ToolbarItem(placement: .confirmationAction) {
@@ -71,15 +71,15 @@ struct PracticeSettingsView: View {
     .interactiveDismissDisabled(isLoading)
   }
   
-  private var probabilityLabel: String {
+  private var probabilityLabel: LocalizedStringResource {
     let percent = Int(probability * 100)
     switch percent {
     case 0:
-      return "Always hide translation"
+      return Strings.localized("Always hide translation")
     case 100:
-      return "Always hide original"
+      return Strings.localized("Always hide original")
     default:
-      return "\(percent)% chance to hide original"
+      return "\(percent)% \(Strings.localized("chance to hide original"))"
     }
   }
 }

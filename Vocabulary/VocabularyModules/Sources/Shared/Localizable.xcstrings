@@ -783,6 +783,23 @@
         }
       }
     },
+    "Vocabulary" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "el" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Λεξιλόγιο"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Vocabulary"
+          }
+        }
+      }
+    },
     "Vocabulary name": {
       "extractionState": "manual",
       "localizations": {
@@ -849,6 +866,163 @@
             "value": "Το αρχείο CSV πρέπει να έχει δύο στήλες:"
           }
         }
+      }
+    },
+    "Adjust the probability that the original word (vs translation) will be hidden. 50% means equal chance for each.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Set the likelihood that the original word will be hidden instead of the translation. At 50%, each has an equal chance of being hidden."
+          }
+        },
+        "el": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ρύθμισε την πιθανότητα να αποκρύπτεται η αρχική λέξη αντί για τη μετάφραση. Στο 50%, κάθε μία έχει ίση πιθανότητα να κρυφτεί."
+          }
+        }
+      }
+    },
+    "Delete": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Delete"
+          }
+        },
+        "el": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Διαγραφή"
+          }
+        }
+      }
+    },
+    "Edit": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Edit"
+          }
+        },
+        "el": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Επεξεργασία"
+          }
+        }
+      }
+    },
+    "Hidden Word Randomness": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Hidden Word Randomness"
+          }
+        },
+        "el": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Τυχαιότητα Κρυφής Λέξης"
+          }
+        }
+      }
+    },
+    "Highlight": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Highlight"
+          }
+        },
+        "el": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Επισήμανση"
+          }
+        }
+      }
+    },
+    "Remove Highlight": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Remove Highlight"
+          }
+        },
+        "el": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Αφαίρεση επισήμανσης"
+          }
+        }
+      }
+    },
+    "Reveal": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Reveal"
+          }
+        },
+        "el": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Αποκάλυψη"
+          }
+        }
+      }
+    },
+    "Settings": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Settings"
+          }
+        },
+        "el": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ρυθμίσεις"
+          }
+        }
+      }
+    },
+    "Always hide translation": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": { "stringUnit": { "state": "translated", "value": "Always hide translation" } },
+        "el": { "stringUnit": { "state": "translated", "value": "Πάντα απόκρυψη μετάφρασης" } }
+      }
+    },
+    "Always hide original": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": { "stringUnit": { "state": "translated", "value": "Always hide original" } },
+        "el": { "stringUnit": { "state": "translated", "value": "Πάντα απόκρυψη αρχικής" } }
+      }
+    },
+    "chance to hide original": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": { "stringUnit": { "state": "translated", "value": "chance to hide original" } },
+        "el": { "stringUnit": { "state": "translated", "value": "πιθανότητα απόκρυψης αρχικής" } }
       }
     },
     "Your translation": {
