@@ -36,7 +36,7 @@ public struct VocabularyView: View {
             vocabularySectionView
           }
         }
-        .searchable(text: $viewModel.searchText, prompt: "Search in vocabulary")
+        .searchable(text: $viewModel.searchText, prompt: Strings.localized("Search in vocabulary"))
       } else {
         ContentUnavailableView(
           Strings.localized("No entries"),
