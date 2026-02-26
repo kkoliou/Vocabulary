@@ -22,6 +22,7 @@ class PracticeViewModel {
   var isTranslationRevealed: Bool = false
   var isInitialLoading = false
   var hiddenWordProbability: Double = 0.5
+  var isAutoRevealEnabled: Bool = false
   var isRandomnessSettingsPresented = false
   private var saveTask: Task<Void, Never>?
   
@@ -144,11 +145,29 @@ class PracticeViewModel {
     }
   }
   
-  func applyHiddenWordProbability(_ probability: Double) async {
+  func applySettings(probability: Double, autoRevealEnabled: Bool) async {
+    if probability != hiddenWordProbability {
+      await applyHiddenWordProbability(probability)
+    }
+    if autoRevealEnabled != isAutoRevealEnabled {
+      applyAutoReveal(autoRevealEnabled)
+    }
+  }
+  
+  private func applyHiddenWordProbability(_ probability: Double) async {
     hiddenWordProbability = probability
     await updateEntriesWithHiddenWordProbability(probability, database: database, rows: rows)
     await savePractice()
     await initPracticeData()
+  }
+  
+  private func applyAutoReveal(_ enabled: Bool) {
+    isAutoRevealEnabled = enabled
+    if enabled {
+      isTranslationRevealed = true
+    } else {
+      isTranslationRevealed = false
+    }
   }
   
   @concurrent
@@ -203,14 +222,14 @@ class PracticeViewModel {
   func nextEntry() async {
     guard canGoNext else { return }
     currentIndex += 1
-    isTranslationRevealed = false
+    isTranslationRevealed = isAutoRevealEnabled
     await savePractice()
   }
   
   func previousEntry() async {
     guard canGoPrevious else { return }
     currentIndex -= 1
-    isTranslationRevealed = false
+    isTranslationRevealed = isAutoRevealEnabled
     await savePractice()
   }
   

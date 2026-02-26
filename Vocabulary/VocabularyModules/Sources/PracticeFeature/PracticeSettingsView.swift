@@ -13,14 +13,17 @@ import Shared
 struct PracticeSettingsView: View {
   @Environment(\.dismiss) private var dismiss
   @State private var probability: Double
-  let onApply: (Double) async -> Void
+  @State private var isAutoRevealEnabled: Bool
+  let onApply: (Double, Bool) async -> Void
   @State private var isLoading = false
   
   init(
     probability: Double,
-    onApply: @escaping (Double) async -> Void
+    isAutoRevealEnabled: Bool = false,
+    onApply: @escaping (Double, Bool) async -> Void
   ) {
     _probability = State(initialValue: probability)
+    _isAutoRevealEnabled = State(initialValue: isAutoRevealEnabled)
     self.onApply = onApply
   }
   
@@ -41,6 +44,14 @@ struct PracticeSettingsView: View {
         } footer: {
           Text(Strings.localized("Adjust the probability that the original word (vs translation) will be hidden. 50% means equal chance for each."))
         }
+        
+        Section {
+          Toggle(Strings.localized("Auto Reveal Hidden Word"), isOn: $isAutoRevealEnabled)
+            .tint(Color.accentColor)
+            .disabled(isLoading)
+        } footer: {
+          Text(Strings.localized("Automatically reveal the hidden word for all words"))
+        }
       }
       .navigationTitle(Strings.localized("Settings"))
       .navigationBarTitleDisplayMode(.inline)
@@ -50,7 +61,7 @@ struct PracticeSettingsView: View {
             action: {
               Task {
                 isLoading = true
-                await onApply(probability)
+                await onApply(probability, isAutoRevealEnabled)
                 isLoading = false
                 let generator = UIImpactFeedbackGenerator(style: .light)
                 generator.impactOccurred()

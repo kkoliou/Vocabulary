@@ -154,6 +154,40 @@
         }
       }
     },
+    "Auto Reveal Hidden Word": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Auto-reveal hidden word"
+          }
+        },
+        "el": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Αυτόματη εμφάνιση κρυμμένης λέξης"
+          }
+        }
+      }
+    },
+    "Automatically reveal the hidden word for all words": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Automatically reveal the hidden word for all entries."
+          }
+        },
+        "el": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Να εμφανίζεται αυτόματα η κρυμμένη λέξη για όλες τις λέξεις."
+          }
+        }
+      }
+    },
     "Cancel" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -749,6 +783,23 @@
         }
       }
     },
+    "Search in vocabulary" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "el" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Αναζήτηση στο λεξιλόγιο"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Search your vocabulary"
+          }
+        }
+      }
+    },
     "Second column: Translation" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -1034,23 +1085,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Your CSV file should include two columns:"
-          }
-        }
-      }
-    },
-    "Search in vocabulary": {
-      "extractionState": "manual",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Search your vocabulary"
-          }
-        },
-        "el": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Αναζήτηση στο λεξιλόγιο"
           }
         }
       }

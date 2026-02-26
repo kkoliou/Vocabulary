@@ -82,8 +82,12 @@ public struct PracticeView: View {
     .vSheet(isPresented: $viewModel.isRandomnessSettingsPresented) {
       PracticeSettingsView(
         probability: viewModel.hiddenWordProbability,
-        onApply: { newProbability in
-          await viewModel.applyHiddenWordProbability(newProbability)
+        isAutoRevealEnabled: viewModel.isAutoRevealEnabled,
+        onApply: { newProbability, autoRevealEnabled in
+          await viewModel.applySettings(
+            probability: newProbability,
+            autoRevealEnabled: autoRevealEnabled
+          )
         }
       )
       .presentationDetents([.medium])

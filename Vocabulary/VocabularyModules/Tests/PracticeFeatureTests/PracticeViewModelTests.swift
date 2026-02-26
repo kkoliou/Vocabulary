@@ -156,6 +156,7 @@ extension BaseSuite {
       
       #expect(model.currentIndex == 0)
       #expect(model.isTranslationRevealed == false)
+      #expect(model.isAutoRevealEnabled == false)
       #expect(model.hiddenWordProbability == 0.5)
       #expect(model.isRandomnessSettingsPresented == false)
       #expect(model.currentEntry != nil)
@@ -200,7 +201,9 @@ extension BaseSuite {
       
       await model.nextEntry()
       
+      // When auto-reveal is disabled, translation should be reset
       #expect(model.isTranslationRevealed == false)
+      #expect(model.isAutoRevealEnabled == false)
     }
     
     @Test func previousEntryResetsRevealedTranslation() async throws {
@@ -213,7 +216,9 @@ extension BaseSuite {
       
       await model.previousEntry()
       
+      // When auto-reveal is disabled, translation should be reset
       #expect(model.isTranslationRevealed == false)
+      #expect(model.isAutoRevealEnabled == false)
     }
     
     @Test func cannotGoNextOnLastEntry() async throws {
@@ -349,20 +354,21 @@ extension BaseSuite {
       #expect(model.hiddenWordProbability == 0.5)
     }
     
-    @Test func applyHiddenWordProbability() async throws {
+    @Test func applySettings() async throws {
       let model = PracticeViewModel(vocabulary: vocabulary, practice: nil)
       await model.doInit()
       
-      await model.applyHiddenWordProbability(0.8)
+      await model.applySettings(probability: 0.8, autoRevealEnabled: false)
       
       #expect(model.hiddenWordProbability == 0.8)
+      #expect(model.isAutoRevealEnabled == false)
     }
     
-    @Test func applyHiddenWordProbabilityZero() async throws {
+    @Test func applySettingsWithZeroProbability() async throws {
       let model = PracticeViewModel(vocabulary: vocabulary, practice: nil)
       await model.doInit()
       
-      await model.applyHiddenWordProbability(0.0)
+      await model.applySettings(probability: 0.0, autoRevealEnabled: false)
       
       #expect(model.hiddenWordProbability == 0.0)
       
@@ -370,11 +376,11 @@ extension BaseSuite {
       #expect(model.rows.allSatisfy { !$0.practiceEntry.isOriginalHidden })
     }
     
-    @Test func applyHiddenWordProbabilityOne() async throws {
+    @Test func applySettingsWithFullProbability() async throws {
       let model = PracticeViewModel(vocabulary: vocabulary, practice: nil)
       await model.doInit()
       
-      await model.applyHiddenWordProbability(1.0)
+      await model.applySettings(probability: 1.0, autoRevealEnabled: false)
       
       #expect(model.hiddenWordProbability == 1.0)
       
@@ -387,7 +393,7 @@ extension BaseSuite {
       await model.doInit()
       let practiceId = model.practice!.id
       
-      await model.applyHiddenWordProbability(1.0)
+      await model.applySettings(probability: 1.0, autoRevealEnabled: false)
       
       // Verify in database
       let entries = try await database.read { db in
@@ -404,7 +410,7 @@ extension BaseSuite {
       await model.doInit()
       let practiceId = model.practice!.id
       
-      await model.applyHiddenWordProbability(0.7)
+      await model.applySettings(probability: 0.7, autoRevealEnabled: false)
       
       // Verify in practice database
       let practice = try await database.read { db in
@@ -418,7 +424,7 @@ extension BaseSuite {
       // Create practice with specific probability
       let model1 = PracticeViewModel(vocabulary: vocabulary, practice: nil)
       await model1.doInit()
-      await model1.applyHiddenWordProbability(0.6)
+      await model1.applySettings(probability: 0.6, autoRevealEnabled: false)
       let practiceId = model1.practice!.id
       
       // Load in new model
@@ -586,9 +592,10 @@ extension BaseSuite {
       model.revealTranslation()
       #expect(model.isTranslationRevealed == true)
       
-      // Moving resets the state
+      // Moving resets the state (when auto-reveal is disabled)
       await model.nextEntry()
       #expect(model.isTranslationRevealed == false)
+      #expect(model.isAutoRevealEnabled == false)
       
       // Reveal again
       model.revealTranslation()
@@ -596,6 +603,53 @@ extension BaseSuite {
       
       // Go back
       await model.previousEntry()
+      #expect(model.isTranslationRevealed == false)
+    }
+    
+    // MARK: - Auto Reveal Tests
+    
+    @Test func applySettingsWithAutoRevealEnabled() async throws {
+      let model = PracticeViewModel(vocabulary: vocabulary, practice: nil)
+      await model.doInit()
+      
+      #expect(model.isAutoRevealEnabled == false)
+      #expect(model.isTranslationRevealed == false)
+      
+      await model.applySettings(probability: 0.5, autoRevealEnabled: true)
+      
+      #expect(model.isAutoRevealEnabled == true)
+      #expect(model.isTranslationRevealed == true)
+    }
+    
+    @Test func autoRevealMaintainsStateOnNavigation() async throws {
+      let model = PracticeViewModel(vocabulary: vocabulary, practice: nil)
+      await model.doInit()
+      
+      await model.applySettings(probability: 0.5, autoRevealEnabled: true)
+      #expect(model.isTranslationRevealed == true)
+      
+      await model.nextEntry()
+      
+      // Translation should remain revealed when auto-reveal is enabled
+      #expect(model.isTranslationRevealed == true)
+      #expect(model.isAutoRevealEnabled == true)
+      
+      await model.previousEntry()
+      
+      #expect(model.isTranslationRevealed == true)
+    }
+    
+    @Test func disablingAutoRevealHidesTranslation() async throws {
+      let model = PracticeViewModel(vocabulary: vocabulary, practice: nil)
+      await model.doInit()
+      
+      await model.applySettings(probability: 0.5, autoRevealEnabled: true)
+      #expect(model.isTranslationRevealed == true)
+      
+      // Disable auto-reveal
+      await model.applySettings(probability: 0.5, autoRevealEnabled: false)
+      
+      #expect(model.isAutoRevealEnabled == false)
       #expect(model.isTranslationRevealed == false)
     }
   }
