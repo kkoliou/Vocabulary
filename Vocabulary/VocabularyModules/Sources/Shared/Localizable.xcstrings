@@ -154,36 +154,36 @@
         }
       }
     },
-    "Auto Reveal Hidden Word": {
-      "extractionState": "manual",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Auto-reveal hidden word"
+    "Auto Reveal Hidden Word" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "el" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Αυτόματη εμφάνιση μετάφρασης"
           }
         },
-        "el": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Αυτόματη εμφάνιση κρυμμένης λέξης"
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Auto-reveal translation"
           }
         }
       }
     },
-    "Automatically reveal the hidden word for all words": {
-      "extractionState": "manual",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Automatically reveal the hidden word for all entries."
+    "Automatically reveal the hidden word for all words" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "el" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Να εμφανίζεται αυτόματα η μετάφραση για όλες τις λέξεις."
           }
         },
-        "el": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Να εμφανίζεται αυτόματα η κρυμμένη λέξη για όλες τις λέξεις."
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Automatically reveal the translation for all entries."
           }
         }
       }
