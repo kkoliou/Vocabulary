@@ -48,38 +48,9 @@ public struct VocabularyView: View {
     .navigationBarTitleDisplayMode(.inline)
     .toolbar {
       ToolbarItemGroup(placement: .primaryAction) {
-        Menu {
-          Picker(Strings.localized("Sort By"), selection: $viewModel.sortOption) {
-            ForEach([SortOption.defaultSort, .highlights, .alphabetical], id: \.self) { option in
-              Label(option.title, systemImage: option.icon)
-                .font(AppTypography.body)
-                .tag(option)
-            }
-          }
-          .pickerStyle(.inline)
-        } label: {
-          Label(Strings.localized("Sort"), systemImage: "arrow.up.arrow.down")
-        }
-        
-        Menu {
-          Button(Strings.localized("Add Entry"), systemImage: "plus") {
-            viewModel.addEntryTapped()
-          }
-          Button(Strings.localized("Import File"), systemImage: "tray.and.arrow.down") {
-            viewModel.addFileTapped()
-          }
-        } label: {
-          Label(Strings.localized("Add"), systemImage: "plus")
-        }
-        
-        Button(
-          action: {
-            viewModel.practiceTapped()
-          },
-          label: {
-            Image(systemName: "brain.head.profile")
-          }
-        )
+        sortingActionView
+        entriesActionView
+        practiceActionView
       }
     }
     .task {
@@ -104,7 +75,8 @@ public struct VocabularyView: View {
       destination: {
         PracticeView(
           vocabulary: viewModel.vocabulary,
-          practice: nil
+          practice: nil,
+          scope: viewModel.selectedPracticeScope
         )
       }
     )
@@ -173,6 +145,61 @@ public struct VocabularyView: View {
     viewModel.pendingPracticesRows.count == 1
     ? Strings.localized("Pending practice")
     : Strings.localized("Pending practices")
+  }
+  
+  @ViewBuilder
+  private var sortingActionView: some View {
+    Menu {
+      Picker(Strings.localized("Sort By"), selection: $viewModel.sortOption) {
+        ForEach([SortOption.defaultSort, .highlights, .alphabetical], id: \.self) { option in
+          Label(option.title, systemImage: option.icon)
+            .font(AppTypography.body)
+            .tag(option)
+        }
+      }
+      .pickerStyle(.inline)
+    } label: {
+      Label(Strings.localized("Sort"), systemImage: "arrow.up.arrow.down")
+    }
+  }
+  
+  @ViewBuilder
+  private var entriesActionView: some View {
+    Menu {
+      Button(Strings.localized("Add Entry"), systemImage: "plus") {
+        viewModel.addEntryTapped()
+      }
+      Button(Strings.localized("Import File"), systemImage: "tray.and.arrow.down") {
+        viewModel.addFileTapped()
+      }
+    } label: {
+      Label(Strings.localized("Add"), systemImage: "plus")
+    }
+  }
+  
+  @ViewBuilder
+  private var practiceActionView: some View {
+    if viewModel.hasHighlightedEntries {
+      Menu {
+        Button(Strings.localized("Highlights"), systemImage: "bookmark") {
+          viewModel.startPractice(scope: .highlights)
+        }
+        Button(Strings.localized("All vocabulary"), systemImage: "book.pages") {
+          viewModel.startPractice(scope: .all)
+        }
+      } label: {
+        Label(Strings.localized("Practice"), systemImage: "brain.head.profile")
+      }
+    } else {
+      Button(
+        action: {
+          viewModel.practiceTapped()
+        },
+        label: {
+          Image(systemName: "brain.head.profile")
+        }
+      )
+    }
   }
 }
 

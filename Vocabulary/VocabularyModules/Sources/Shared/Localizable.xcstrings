@@ -86,6 +86,23 @@
         }
       }
     },
+    "All vocabulary" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "el" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Όλο το λεξιλόγιο"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "All vocabulary"
+          }
+        }
+      }
+    },
     "Alphabetical" : {
       "extractionState" : "manual",
       "localizations" : {

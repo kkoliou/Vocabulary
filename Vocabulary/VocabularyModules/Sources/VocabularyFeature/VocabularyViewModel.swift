@@ -10,6 +10,7 @@ import VocabularyDB
 import Observation
 import Shared
 import Foundation
+import PracticeFeature
 
 @Observable @MainActor
 public class VocabularyViewModel {
@@ -43,6 +44,8 @@ public class VocabularyViewModel {
     }
   }
   var reloadTask: Task<Void, Never>?
+  var selectedPracticeScope: PracticeScope = .all
+  var isPracticeScopeMenuPresented = false
   
   public init(vocabulary: Vocabulary) {
     self.vocabulary = vocabulary
@@ -130,18 +133,30 @@ public class VocabularyViewModel {
     changeHighlighted(to: true, for: entry)
   }
   
+  var hasHighlightedEntries: Bool {
+    entries.contains { $0.isHighlighted }
+  }
+  
   func practiceTapped() {
-    let exists = pendingPracticesRows.count > 0
-    if exists {
-      isCreatePracticeAlertPresented = true
+    if hasHighlightedEntries {
+      isPracticeScopeMenuPresented = true
     } else {
-      isPracticePresented = true
+      startPractice(scope: .all)
     }
   }
   
   func confirmCreateNewPractice() {
-    // User confirmed to create a new practice; proceed to PracticeView with a new practice
     isCreatePracticeAlertPresented = false
+    startPractice(scope: selectedPracticeScope, checkForPendingPractices: false)
+  }
+  
+  func startPractice(scope: PracticeScope, checkForPendingPractices: Bool = true) {
+    selectedPracticeScope = scope
+    if checkForPendingPractices && pendingPracticesRows.count > 0 {
+      isCreatePracticeAlertPresented = true
+      return
+    }
+    isPracticeScopeMenuPresented = false
     isPracticePresented = true
   }
   

@@ -17,6 +17,7 @@ class PracticeViewModel {
   @ObservationIgnored @Dependency(\.defaultDatabase) var database
   var rows = [PracticeRow]()
   let vocabulary: Vocabulary
+  let scope: PracticeScope
   var practice: Practice?
   var currentIndex: Int = 0
   var isTranslationRevealed: Bool = false
@@ -28,10 +29,12 @@ class PracticeViewModel {
   
   public init(
     vocabulary: Vocabulary,
-    practice: Practice?
+    practice: Practice?,
+    scope: PracticeScope = .all
   ) {
     self.vocabulary = vocabulary
     self.practice = practice
+    self.scope = scope
     if let practice = practice {
       self.hiddenWordProbability = practice.hiddenWordProbability
     }
@@ -72,9 +75,17 @@ class PracticeViewModel {
     let probability = hiddenWordProbability
     await withErrorReporting {
       let entries = try await database.read { db in
-        try VocabularyEntry
+        let base = VocabularyEntry
           .where { $0.vocabularyID.eq(vocabulary.id) }
-          .fetchAll(db)
+        switch scope {
+        case .all:
+          return try base
+            .fetchAll(db)
+        case .highlights:
+          return try base
+            .where { $0.isHighlighted.eq(true) }
+            .fetchAll(db)
+        }
       }
       
       let shuffledEntries = entries.shuffled()
@@ -249,4 +260,9 @@ class PracticeViewModel {
   var hiddenWord: String {
     practiceEntry.isOriginalHidden ? vocabularyEntry.sourceWord : vocabularyEntry.translatedWord
   }
+}
+
+public enum PracticeScope: Sendable, Equatable {
+  case all
+  case highlights
 }

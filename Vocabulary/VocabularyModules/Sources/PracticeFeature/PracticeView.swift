@@ -15,11 +15,12 @@ public struct PracticeView: View {
   @Environment(\.dismiss) private var dismiss
   @State var viewModel: PracticeViewModel
   
-  public init(vocabulary: Vocabulary, practice: Practice? = nil) {
+  public init(vocabulary: Vocabulary, practice: Practice? = nil, scope: PracticeScope = .all) {
     _viewModel = State(
       wrappedValue: PracticeViewModel(
         vocabulary: vocabulary,
-        practice: practice
+        practice: practice,
+        scope: scope
       )
     )
   }
@@ -111,3 +112,4 @@ public struct PracticeView: View {
     PracticeView(vocabulary: vocab)
   }
 }
+
