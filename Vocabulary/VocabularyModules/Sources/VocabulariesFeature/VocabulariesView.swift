@@ -23,9 +23,9 @@ public struct VocabulariesView: View {
   public var body: some View {
     NavigationStack {
       Group {
-        if viewModel.$vocabularies.isLoading && !viewModel.firstInitExecuted {
+        if viewModel.isLoading {
           ProgressView()
-        } else if isEmptyState {
+        } else if viewModel.vocabularies.isEmpty {
           emptyState
         } else {
           vocabList
@@ -36,17 +36,15 @@ public struct VocabulariesView: View {
         VocabularyView(vocabulary: $0)
       }
       .toolbar {
-        if !isEmptyState {
-          ToolbarItem(placement: .primaryAction) {
-            Button(
-              action: {
-                viewModel.addVocabularyTapped()
-              },
-              label: {
-                Image(systemName: "plus")
-              }
-            )
-          }
+        ToolbarItem(placement: .primaryAction) {
+          Button(
+            action: {
+              viewModel.addVocabularyTapped()
+            },
+            label: {
+              Image(systemName: "plus")
+            }
+          )
         }
       }
     }
@@ -67,11 +65,6 @@ public struct VocabulariesView: View {
       description: {
         Text(Strings.localized("Create your first word list to start studying."))
           .font(AppTypography.subheadline)
-      },
-      actions: {
-        Button(Strings.localized("Add vocabulary")) {
-          viewModel.addVocabularyTapped()
-        }
       }
     )
   }
@@ -92,10 +85,6 @@ public struct VocabulariesView: View {
         }
       }
     }
-  }
-  
-  private var isEmptyState: Bool {
-    !viewModel.$vocabularies.isLoading && viewModel.vocabularies.isEmpty
   }
 }
 

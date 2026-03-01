@@ -18,10 +18,12 @@ public class VocabulariesViewModel {
   @ObservationIgnored @FetchAll(Vocabulary.none) var vocabularies
   @ObservationIgnored var firstInitExecuted = false
   var addVocabIsPresented = false
+  var isLoading = false
   
   public init() {}
   
   func doInit() async {
+    setLoadingIfNeeded(true)
     _ = await withErrorReporting {
       try await $vocabularies
         .load(
@@ -30,7 +32,13 @@ public class VocabulariesViewModel {
           animation: .default
         )
     }
+    setLoadingIfNeeded(false)
     firstInitExecuted = true
+  }
+  
+  private func setLoadingIfNeeded(_ loading: Bool) {
+    if firstInitExecuted { return }
+    isLoading = loading
   }
   
   func addVocabularyTapped() {
