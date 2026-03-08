@@ -106,7 +106,6 @@ class VocabularyEntriesAddViewModel {
     return try VocabularyCsvParser.parse(csvString: fileContent)
   }
   
-  @concurrent
   private func storeEntries(_ entries: [VocabularyWord]) async throws {
     try await database.write { db in
         try db.seed {
