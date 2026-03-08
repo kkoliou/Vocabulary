@@ -511,6 +511,23 @@
         }
       }
     },
+    "Highlights" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "el" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Επισημάνσεις"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Highlights"
+          }
+        }
+      }
+    },
     "How It Works" : {
       "extractionState" : "manual",
       "localizations" : {

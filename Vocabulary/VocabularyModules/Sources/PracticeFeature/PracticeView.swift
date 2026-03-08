@@ -112,4 +112,3 @@ public struct PracticeView: View {
     PracticeView(vocabulary: vocab)
   }
 }
-

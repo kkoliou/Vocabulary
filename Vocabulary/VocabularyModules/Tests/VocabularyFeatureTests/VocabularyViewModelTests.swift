@@ -692,5 +692,45 @@ extension BaseSuite {
       #expect(model.entryToEdit?.sourceWord == entry.sourceWord)
       #expect(model.entryToEdit?.translatedWord == entry.translatedWord)
     }
+
+    @Test func highlightedEntriesReflectsOnlyHighlightedForCurrentVocabulary() async throws {
+      // Precondition: Seed has 2 highlighted (Spanish) and 0 highlighted (French)
+      // The view model is for Spanish vocabulary (-1)
+      // Ensure highlightedEntries contains only highlighted entries from the same vocabulary
+      #expect(model.highlightedEntries.allSatisfy { $0.vocabularyID == model.vocabulary.id })
+      #expect(model.highlightedEntries.allSatisfy { $0.isHighlighted })
+
+      // Count should match the number of highlighted Spanish entries in the database (2 initially)
+      #expect(model.highlightedEntries.count == 2)
+
+      // Sanity check names
+      let sources = Set(model.highlightedEntries.map(\.sourceWord))
+      #expect(sources.isSuperset(of: ["goodbye", "please"]))
+    }
+
+    @Test func highlightedEntriesUpdatesWhenTogglingHighlightStatus() async throws {
+      // Pick an unhighlighted entry and a highlighted entry
+      let initiallyUnhighlighted = try #require(model.entries.first { !$0.isHighlighted })
+      let initiallyHighlighted = try #require(model.entries.first { $0.isHighlighted })
+
+      let initialCount = model.highlightedEntries.count
+      #expect(initialCount == 2)
+
+      // Add unhighlighted to highlights
+      model.addToHighlightsTapped(for: initiallyUnhighlighted)
+      try await model.$entries.load()
+
+      // highlightedEntries should increase by 1 and include the toggled entry
+      #expect(model.highlightedEntries.count == initialCount + 1)
+      #expect(model.highlightedEntries.contains { $0.id == initiallyUnhighlighted.id })
+
+      // Remove a highlighted entry from highlights
+      model.removeFromHighlightsTapped(for: initiallyHighlighted)
+      try await model.$entries.load()
+
+      // highlightedEntries should decrease by 1 from the previous count and no longer include the removed entry
+      #expect(model.highlightedEntries.count == initialCount)
+      #expect(model.highlightedEntries.contains { $0.id == initiallyHighlighted.id } == false)
+    }
   }
 }

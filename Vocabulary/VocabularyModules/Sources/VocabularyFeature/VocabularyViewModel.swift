@@ -23,6 +23,7 @@ public class VocabularyViewModel {
   @ObservationIgnored @Dependency(\.defaultDatabase) var database
   @ObservationIgnored @FetchAll(VocabularyEntry.none) var entries
   @ObservationIgnored @FetchAll(PendingPracticeRow.none) var pendingPracticesRows
+  @ObservationIgnored @FetchAll(VocabularyEntry.where(\.isHighlighted)) var highlightedEntries
   @ObservationIgnored var firstInitExecuted = false
   var isAddEntryPresented = false
   var isAddFilePresented = false
@@ -44,7 +45,7 @@ public class VocabularyViewModel {
     }
   }
   var reloadTask: Task<Void, Never>?
-  var selectedPracticeScope: PracticeScope = .all
+  @ObservationIgnored var selectedPracticeScope: PracticeScope = .all
   var isPracticeScopeMenuPresented = false
   
   public init(vocabulary: Vocabulary) {
@@ -133,12 +134,8 @@ public class VocabularyViewModel {
     changeHighlighted(to: true, for: entry)
   }
   
-  var hasHighlightedEntries: Bool {
-    entries.contains { $0.isHighlighted }
-  }
-  
   func practiceTapped() {
-    if hasHighlightedEntries {
+    if !highlightedEntries.isEmpty {
       isPracticeScopeMenuPresented = true
     } else {
       startPractice(scope: .all)
@@ -213,4 +210,3 @@ public class VocabularyViewModel {
     }
   }
 }
-
