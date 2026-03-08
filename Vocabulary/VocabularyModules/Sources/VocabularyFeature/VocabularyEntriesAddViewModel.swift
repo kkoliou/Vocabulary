@@ -85,17 +85,38 @@ class VocabularyEntriesAddViewModel {
   }
   
   private func handleImportingError(_ error: Error) {
-    if let error = error as? VocabularyCsvParser.ParseError {
-      switch error {
-      case .fileNotFound:
-        errorMessage = Strings.localized("Could not read the selected file. Please try again.")
-      case .invalidFormat:
-        errorMessage = Strings.localized("The file format is invalid. Please ensure your CSV uses commas to separate values.")
-      case .missingRequiredFields:
-        errorMessage = Strings.localized("One or more rows are missing required fields (original or translation). Please check your CSV.")
-      }
+    if let parseError = error as? VocabularyCsvParser.ParseError {
+      handleParseError(parseError)
+    } else if let importError = error as? ImportEntriesError {
+      handleImportLimitError(importError)
     } else {
       errorMessage = Strings.localized("Something went wrong.")
+    }
+  }
+  
+  private func handleParseError(_ error: VocabularyCsvParser.ParseError) {
+    switch error {
+    case .fileNotFound:
+      errorMessage = Strings.localized("Could not read the selected file. Please try again.")
+    case .invalidFormat:
+      errorMessage = Strings.localized("The file format is invalid. Please ensure your CSV uses commas to separate values.")
+    case .missingRequiredFields:
+      errorMessage = Strings.localized("One or more rows are missing required fields (original or translation). Please check your CSV.")
+    }
+  }
+  
+  private func handleImportLimitError(_ error: ImportEntriesError) {
+    switch error {
+    case .vocabularyLimitExceeded(let limit, let availableSlots):
+      errorMessage = Strings.localized("This vocabulary can only accommodate \(availableSlots) more entries (limit: \(limit))")
+    case .appLimitExceeded(let limit, let availableSlots):
+      errorMessage = Strings.localized("The app can only accommodate \(availableSlots) more entries globally (limit: \(limit))")
+    case .notEnoughCapacity(let entriesCount, let vocabularyAvailable, let appAvailable):
+      if appAvailable < vocabularyAvailable {
+        errorMessage = Strings.localized("Cannot import \(entriesCount) entries. App limit exceeded. Only \(appAvailable) slots available globally.")
+      } else {
+        errorMessage = Strings.localized("Cannot import \(entriesCount) entries. Vocabulary limit exceeded. Only \(vocabularyAvailable) slots available.")
+      }
     }
   }
   
@@ -107,9 +128,14 @@ class VocabularyEntriesAddViewModel {
   }
   
   private func storeEntries(_ entries: [VocabularyWord]) async throws {
+    try await ImportValidator().validateImportLimits(
+      entriesCount: entries.count,
+      vocabularyId: vocabulary.id,
+      database: database
+    )
     try await database.write { db in
-        try db.seed {
-          for entry in entries {
+      try db.seed {
+        for entry in entries {
           VocabularyEntry.Draft(
             vocabularyID: vocabulary.id,
             sourceWord: entry.source,
