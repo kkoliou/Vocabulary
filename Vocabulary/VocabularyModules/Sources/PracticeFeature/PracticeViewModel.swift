@@ -156,6 +156,20 @@ class PracticeViewModel {
     }
   }
   
+  private func updatePracticeLocalState() async {
+    guard let id = practice?.id else { return }
+    withErrorReporting {
+      let practice = try database.read { db in
+        try Practice
+          .find(id)
+          .fetchOne(db)
+      }
+      if let practice {
+        self.practice = practice
+      }
+    }
+  }
+  
   func applySettings(probability: Double, autoRevealEnabled: Bool) async {
     if probability != hiddenWordProbability {
       await applyHiddenWordProbability(probability)
@@ -169,6 +183,7 @@ class PracticeViewModel {
     hiddenWordProbability = probability
     await updateEntriesWithHiddenWordProbability(probability, database: database, rows: rows)
     await savePractice()
+    await updatePracticeLocalState()
     await initPracticeData()
   }
   

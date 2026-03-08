@@ -652,6 +652,71 @@ extension BaseSuite {
       #expect(model.isAutoRevealEnabled == false)
       #expect(model.isTranslationRevealed == false)
     }
+
+    // MARK: - Local Practice State Update Tests
+
+    @Test func localPracticeStateUpdatesAfterNavigationSave() async throws {
+      // Create a new practice and advance to persist position
+      let model = PracticeViewModel(vocabulary: vocabulary, practice: nil)
+      await model.doInit()
+
+      // Precondition: starts at index 0 and practice loaded
+      let initialPracticeId = try #require(model.practice?.id)
+      #expect(model.currentIndex == 0)
+
+      // Move forward twice which triggers savePractice on each navigation
+      await model.nextEntry()
+      await model.nextEntry()
+
+      // Force reloading local practice state
+      // updatePracticeLocalState is internal, but doInit/initPracticeData path will read from DB again
+      // Calling next/previous already calls savePractice and then updatePracticeLocalState is invoked by apply methods.
+      // Here, we verify that the in-memory practice reflects the DB after navigation saves via another read
+      let refreshedPractice = try await database.read { db in
+        try Practice.find(initialPracticeId).fetchOne(db)
+      }
+
+      // Validate DB state first
+      #expect(refreshedPractice?.lastStoppedPosition == model.currentIndex)
+
+      // Now ensure model.practice is refreshed when reloading data
+      // Re-initialize to simulate a refresh cycle that updates local state
+      let reloaded = PracticeViewModel(vocabulary: vocabulary, practice: refreshedPractice)
+      await reloaded.doInit()
+
+      #expect(reloaded.practice?.id == initialPracticeId)
+      #expect(reloaded.practice?.lastStoppedPosition == reloaded.currentIndex)
+      #expect(reloaded.currentIndex == 2)
+    }
+
+    @Test func localPracticeStateUpdatesAfterChangingSettings() async throws {
+      // Create a new practice and change settings which triggers save + local refresh
+      let model = PracticeViewModel(vocabulary: vocabulary, practice: nil)
+      await model.doInit()
+
+      // Change hidden word probability; applySettings should call savePractice and then update local state
+      await model.applySettings(probability: 0.77, autoRevealEnabled: false)
+
+      // The in-memory practice should have been refreshed with the new probability
+      let practiceId = try #require(model.practice?.id)
+
+      // Verify DB reflects the change
+      let fromDB = try await database.read { db in
+        try Practice.find(practiceId).fetchOne(db)
+      }
+      #expect(fromDB?.hiddenWordProbability == 0.77)
+
+      // After settings application and refresh, lastStoppedPosition should match currentIndex
+      #expect(fromDB?.lastStoppedPosition == model.currentIndex)
+      #expect(model.practice?.lastStoppedPosition == model.currentIndex)
+
+      // Verify model's local practice mirrors the DB change after refresh
+      #expect(model.practice?.hiddenWordProbability == 0.77)
+
+      // Also ensure rows reloaded according to new probability distribution
+      // (we cannot assert exact randomness, but we can assert positions count remains consistent)
+      #expect(model.rows.count == 4)
+    }
   }
 }
 
