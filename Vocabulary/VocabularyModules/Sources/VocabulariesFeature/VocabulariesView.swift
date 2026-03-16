@@ -65,7 +65,7 @@ public struct VocabulariesView: View {
             .font(AppTypography.title3)
         },
         description: {
-          Text(Strings.localized("We can add some English-Greek vocabularies for you."))
+          Text(Strings.localized("Add English-Greek vocabularies to get started"))
             .font(AppTypography.subheadline)
         },
         actions: {
@@ -80,7 +80,7 @@ public struct VocabulariesView: View {
                 Image(systemName: "plus.circle.fill")
                   .font(AppTypography.callout)
                 
-                Text(Strings.localized("Add Samples"))
+                Text(Strings.localized("Add vocabularies"))
                   .font(AppTypography.callout.weight(.semibold))
               }
               .opacity(viewModel.isAddSampleVocabsLoading ? 0 : 1)
