@@ -7,8 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		7DB838A12F40F917006540B8 /* VocabulariesFeature in Frameworks */ = {isa = PBXBuildFile; productRef = 7DB838A02F40F917006540B8 /* VocabulariesFeature */; };
-		7DB838A72F40F917006540B8 /* VocabularyFeature in Frameworks */ = {isa = PBXBuildFile; productRef = 7DB838A62F40F917006540B8 /* VocabularyFeature */; };
+		7DB4BAB82F6898B0007AE733 /* VocabulariesFeature in Frameworks */ = {isa = PBXBuildFile; productRef = 7DB4BAB72F6898B0007AE733 /* VocabulariesFeature */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -34,9 +33,22 @@
 		7D7F31B52F2024D7007F2307 /* VocabularyUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = VocabularyUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
+/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		7DB4BAC82F689942007AE733 /* Exceptions for "Vocabulary" folder in "Vocabulary" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Info.plist,
+			);
+			target = 7D7F319D2F2024D6007F2307 /* Vocabulary */;
+		};
+/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
+
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		7D7F31A02F2024D6007F2307 /* Vocabulary */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				7DB4BAC82F689942007AE733 /* Exceptions for "Vocabulary" folder in "Vocabulary" target */,
+			);
 			path = Vocabulary;
 			sourceTree = "<group>";
 		};
@@ -57,8 +69,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				7DB838A72F40F917006540B8 /* VocabularyFeature in Frameworks */,
-				7DB838A12F40F917006540B8 /* VocabulariesFeature in Frameworks */,
+				7DB4BAB82F6898B0007AE733 /* VocabulariesFeature in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -127,8 +138,7 @@
 			);
 			name = Vocabulary;
 			packageProductDependencies = (
-				7DB838A02F40F917006540B8 /* VocabulariesFeature */,
-				7DB838A62F40F917006540B8 /* VocabularyFeature */,
+				7DB4BAB72F6898B0007AE733 /* VocabulariesFeature */,
 			);
 			productName = Vocabulary;
 			productReference = 7D7F319E2F2024D6007F2307 /* Vocabulary.app */;
@@ -208,8 +218,8 @@
 			hasScannedForEncodings = 0;
 			knownRegions = (
 				en,
-				Base,
 				el,
+				Base,
 			);
 			mainGroup = 7D7F31952F2024D6007F2307;
 			minimizedProjectReferenceProxies = 1;
@@ -427,6 +437,7 @@
 				ENABLE_PREVIEWS = YES;
 				ENABLE_USER_SELECTED_FILES = readonly;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = Vocabulary/Info.plist;
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphoneos*]" = YES;
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphonesimulator*]" = YES;
 				"INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents[sdk=iphoneos*]" = YES;
@@ -437,6 +448,7 @@
 				"INFOPLIST_KEY_UIStatusBarStyle[sdk=iphonesimulator*]" = UIStatusBarStyleDefault;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UIUserInterfaceStyle = yes;
 				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
 				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks";
 				"LD_RUNPATH_SEARCH_PATHS[sdk=macosx*]" = "@executable_path/../Frameworks";
@@ -474,6 +486,7 @@
 				ENABLE_PREVIEWS = YES;
 				ENABLE_USER_SELECTED_FILES = readonly;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = Vocabulary/Info.plist;
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphoneos*]" = YES;
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphonesimulator*]" = YES;
 				"INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents[sdk=iphoneos*]" = YES;
@@ -484,6 +497,7 @@
 				"INFOPLIST_KEY_UIStatusBarStyle[sdk=iphonesimulator*]" = UIStatusBarStyleDefault;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UIUserInterfaceStyle = yes;
 				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
 				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks";
 				"LD_RUNPATH_SEARCH_PATHS[sdk=macosx*]" = "@executable_path/../Frameworks";
@@ -655,13 +669,9 @@
 /* End XCConfigurationList section */
 
 /* Begin XCSwiftPackageProductDependency section */
-		7DB838A02F40F917006540B8 /* VocabulariesFeature */ = {
+		7DB4BAB72F6898B0007AE733 /* VocabulariesFeature */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = VocabulariesFeature;
-		};
-		7DB838A62F40F917006540B8 /* VocabularyFeature */ = {
-			isa = XCSwiftPackageProductDependency;
-			productName = VocabularyFeature;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};
