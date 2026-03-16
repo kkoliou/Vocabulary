@@ -97,6 +97,7 @@ public struct VocabulariesView: View {
             }
           )
           .buttonStyle(.bordered)
+          .disabled(viewModel.isAddSampleVocabsLoading)
         }
       )
     }

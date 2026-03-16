@@ -78,6 +78,9 @@ package.targets.append(contentsOf: [
       "VocabularyDB",
       "Shared",
       "VocabularyFeature"
+    ],
+    resources: [
+      .process("Sample vocabularies")
     ]
   ),
   .testTarget(
