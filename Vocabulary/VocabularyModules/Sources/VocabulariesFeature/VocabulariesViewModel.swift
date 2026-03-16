@@ -19,6 +19,7 @@ public class VocabulariesViewModel {
   @ObservationIgnored var firstInitExecuted = false
   var addVocabIsPresented = false
   var isLoading = false
+  var isAddSampleVocabsLoading = false
   
   public init() {}
   
@@ -55,4 +56,11 @@ public class VocabulariesViewModel {
     }
   }
   
+  func addPreMadeVocabularies() async {
+    isAddSampleVocabsLoading = true
+    
+    try? await Task.sleep(for: .seconds(2))
+    
+    isAddSampleVocabsLoading = false
+  }
 }
