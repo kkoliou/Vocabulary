@@ -296,5 +296,25 @@ extension BaseSuite {
       }
       #expect(remainingEntries.isEmpty)
     }
+    
+    @Test func addPreMadeVocabularies_whenNoCSVResources_doesNotChangeDatabaseAndResetsLoading() async throws {
+      let initialCount = try await database.read { db in
+        try Vocabulary.fetchCount(db)
+      }
+      
+      #expect(model.isAddSampleVocabsLoading == false)
+      await model.addPreMadeVocabularies()
+      #expect(model.isAddSampleVocabsLoading == false)
+      let finalCount = try await database.read { db in
+        try Vocabulary.fetchCount(db)
+      }
+      
+      let bundle = Bundle.module
+      let csvFilesCount = bundle.urls(forResourcesWithExtension: "csv", subdirectory: nil)?.count ?? 0
+      
+      #expect(finalCount == initialCount + csvFilesCount)
+      try await model.$vocabularies.load()
+      #expect(model.vocabularies.count == finalCount)
+    }
   }
 }
