@@ -1,7 +1,17 @@
 {
-  "fill" : {
-    "solid" : "display-p3:0.61385,0.19371,0.17941,1.00000"
-  },
+  "fill-specializations" : [
+    {
+      "value" : {
+        "solid" : "display-p3:0.61385,0.19371,0.17941,1.00000"
+      }
+    },
+    {
+      "appearance" : "dark",
+      "value" : {
+        "solid" : "display-p3:0.14912,0.14912,0.14912,1.00000"
+      }
+    }
+  ],
   "groups" : [
     {
       "layers" : [
@@ -15,7 +25,7 @@
             {
               "appearance" : "dark",
               "value" : {
-                "solid" : "extended-gray:1.00000,1.00000"
+                "solid" : "display-p3:0.84920,0.25762,0.23784,1.00000"
               }
             }
           ],
@@ -43,9 +53,19 @@
     {
       "layers" : [
         {
-          "fill" : {
-            "solid" : "display-p3:0.61385,0.19371,0.17941,1.00000"
-          },
+          "fill-specializations" : [
+            {
+              "value" : {
+                "solid" : "display-p3:0.61385,0.19371,0.17941,1.00000"
+              }
+            },
+            {
+              "appearance" : "dark",
+              "value" : {
+                "solid" : "display-p3:0.15674,0.15674,0.15674,1.00000"
+              }
+            }
+          ],
           "glass-specializations" : [
             {
               "appearance" : "tinted",
