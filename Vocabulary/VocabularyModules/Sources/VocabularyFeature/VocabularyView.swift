@@ -124,10 +124,16 @@ public struct VocabularyView: View {
         EntryRowView(
           entry: entry,
           onRemoveFromHighlights: {
-            viewModel.removeFromHighlightsTapped(for: entry)
+            Task {
+              await sleepAfterHighlightingIfNeeded()
+              await viewModel.removeFromHighlightsTapped(for: entry)
+            }
           },
           onAddToHighlights: {
-            viewModel.addToHighlightsTapped(for: entry)
+            Task {
+              await sleepAfterHighlightingIfNeeded()
+              await viewModel.addToHighlightsTapped(for: entry)
+            }
           },
           onEdit: {
             viewModel.editEntry(entry)
@@ -200,6 +206,12 @@ public struct VocabularyView: View {
         }
       )
     }
+  }
+  
+  /// Let the cell's swipe animation finish and then execute the rest
+  private func sleepAfterHighlightingIfNeeded() async {
+    guard viewModel.sortOption == .highlights else { return }
+    try? await Task.sleep(for: .seconds(0.8))
   }
 }
 

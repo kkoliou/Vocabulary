@@ -126,12 +126,12 @@ public class VocabularyViewModel {
     isAddFilePresented = true
   }
   
-  func removeFromHighlightsTapped(for entry: VocabularyEntry) {
-    changeHighlighted(to: false, for: entry)
+  func removeFromHighlightsTapped(for entry: VocabularyEntry) async {
+    await changeHighlighted(to: false, for: entry)
   }
   
-  func addToHighlightsTapped(for entry: VocabularyEntry) {
-    changeHighlighted(to: true, for: entry)
+  func addToHighlightsTapped(for entry: VocabularyEntry) async {
+    await changeHighlighted(to: true, for: entry)
   }
   
   func practiceTapped() {
@@ -183,9 +183,9 @@ public class VocabularyViewModel {
     isEditEntryPresented = true
   }
   
-  private func changeHighlighted(to value: Bool, for entry: VocabularyEntry) {
-    withErrorReporting {
-      try database.write { db in
+  private func changeHighlighted(to value: Bool, for entry: VocabularyEntry) async {
+    await withErrorReporting {
+      try await database.write { db in
         try VocabularyEntry
           .find(entry.id)
           .update(set: { $0.isHighlighted = value })
