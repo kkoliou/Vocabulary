@@ -22,9 +22,17 @@ struct ProgressBarView: View {
         
         Spacer()
         
-        Text(vocabularyName)
-          .font(AppTypography.subheadline.weight(.medium))
-          .foregroundStyle(.secondary)
+        HStack(spacing: 4) {
+          Text(vocabularyName)
+            .font(AppTypography.subheadline.weight(.medium))
+            .foregroundStyle(.secondary)
+          
+          if progress == 1 {
+            Image(systemName: "checkmark.circle.fill")
+              .foregroundStyle(Color.green)
+          }
+        }
+        .animation(.default, value: progress)
       }
       
       GeometryReader { geometry in
@@ -36,7 +44,7 @@ struct ProgressBarView: View {
           
           // Progress fill
           RoundedRectangle(cornerRadius: 8)
-            .fill(Color.accentColor)
+            .fill(progress == 1.0 ? Color.green : Color.accentColor)
             .frame(width: geometry.size.width * progress, height: 8)
             .animation(.spring(response: 0.5, dampingFraction: 0.7), value: progress)
         }
