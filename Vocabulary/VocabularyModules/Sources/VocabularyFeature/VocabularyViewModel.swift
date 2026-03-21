@@ -9,6 +9,7 @@ import SQLiteData
 import VocabularyDB
 import Observation
 import Shared
+import Sharing
 import Foundation
 import PracticeFeature
 
@@ -34,22 +35,14 @@ public class VocabularyViewModel {
   var searchText = ""
   var entryToEdit: VocabularyEntry?
   let vocabulary: Vocabulary
-  var sortOption: SortOption = .defaultSort {
-    didSet {
-      reloadTask?.cancel()
-      reloadTask = Task {
-        try? await Task.sleep(for: .milliseconds(100))
-        if Task.isCancelled { return }
-        await reloadData()
-      }
-    }
-  }
+  @ObservationIgnored @Shared var sortOption: SortOption
   var reloadTask: Task<Void, Never>?
   @ObservationIgnored var selectedPracticeScope: PracticeScope = .all
   var isPracticeScopeMenuPresented = false
   
   public init(vocabulary: Vocabulary) {
     self.vocabulary = vocabulary
+    _sortOption = Shared(wrappedValue: .defaultSort, .appStorage("sortOption_\(vocabulary.id)"))
   }
   
   func doInit() async {
@@ -111,6 +104,16 @@ public class VocabularyViewModel {
     }
     
     try await loadPendingPractices()
+  }
+  
+  func changeSortOption(to option: SortOption) async {
+    $sortOption.withLock { $0 = option }
+    reloadTask?.cancel()
+    reloadTask = Task {
+      try? await Task.sleep(for: .milliseconds(100))
+      if Task.isCancelled { return }
+      try? await loadEntries()
+    }
   }
   
   private func showLoadingOnFirstInit(_ loading: Bool) {
@@ -192,10 +195,6 @@ public class VocabularyViewModel {
           .execute(db)
       }
     }
-  }
-  
-  private func reloadData() async {
-    await doInit()
   }
   
   var filteredEntries: [VocabularyEntry] {

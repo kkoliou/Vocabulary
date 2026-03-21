@@ -164,6 +164,11 @@ public struct VocabularyView: View {
         }
       }
       .pickerStyle(.inline)
+      .onChange(of: viewModel.sortOption) { _, newValue in
+        Task {
+          await viewModel.changeSortOption(to: newValue)
+        }
+      }
     } label: {
       Label(Strings.localized("Sort"), systemImage: "arrow.up.arrow.down")
     }
@@ -215,10 +220,10 @@ public struct VocabularyView: View {
   }
 }
 
-enum SortOption {
-  case defaultSort
-  case highlights
-  case alphabetical
+enum SortOption: String, Equatable {
+  case defaultSort = "default"
+  case highlights = "highlights"
+  case alphabetical = "alphabetical"
   
   var title: LocalizedStringResource {
     switch self {
