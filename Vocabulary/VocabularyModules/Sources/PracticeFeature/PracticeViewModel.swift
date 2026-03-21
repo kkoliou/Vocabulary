@@ -26,6 +26,7 @@ class PracticeViewModel {
   var isAutoRevealEnabled: Bool = false
   var isRandomnessSettingsPresented = false
   private var saveTask: Task<Void, Never>?
+  private let quickPracticeEntriesCount = 20
   
   public init(
     vocabulary: Vocabulary,
@@ -78,7 +79,7 @@ class PracticeViewModel {
         let base = VocabularyEntry
           .where { $0.vocabularyID.eq(vocabulary.id) }
         switch scope {
-        case .all:
+        case .all, .quick:
           return try base
             .fetchAll(db)
         case .highlights:
@@ -88,7 +89,10 @@ class PracticeViewModel {
         }
       }
       
-      let shuffledEntries = entries.shuffled()
+      let shuffledEntries: [VocabularyEntry] = {
+        let shuffled = entries.shuffled()
+        return scope == .quick ? Array(shuffled.prefix(quickPracticeEntriesCount)) : shuffled
+      }()
       
       let practiceId = UUID()
       try await database.write { db in
@@ -280,4 +284,5 @@ class PracticeViewModel {
 public enum PracticeScope: Sendable, Equatable {
   case all
   case highlights
+  case quick
 }

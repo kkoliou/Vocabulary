@@ -190,26 +190,18 @@ public struct VocabularyView: View {
   
   @ViewBuilder
   private var practiceActionView: some View {
-    if !viewModel.highlightedEntries.isEmpty {
-      Menu {
-        Button(Strings.localized("Highlights"), systemImage: "bookmark") {
-          viewModel.startPractice(scope: .highlights)
-        }
-        Button(Strings.localized("All vocabulary"), systemImage: "book.pages") {
-          viewModel.startPractice(scope: .all)
-        }
-      } label: {
-        Label(Strings.localized("Practice"), systemImage: "brain.head.profile")
+    Menu {
+      Button(Strings.localized("Highlights"), systemImage: "bookmark") {
+        viewModel.startPractice(scope: .highlights)
       }
-    } else {
-      Button(
-        action: {
-          viewModel.practiceTapped()
-        },
-        label: {
-          Image(systemName: "brain.head.profile")
-        }
-      )
+      Button(Strings.localized("All vocabulary"), systemImage: "book.pages") {
+        viewModel.startPractice(scope: .all)
+      }
+      Button(Strings.localized("Quick practice"), systemImage: "bolt") {
+        viewModel.startPractice(scope: .quick)
+      }
+    } label: {
+      Label(Strings.localized("Practice"), systemImage: "brain.head.profile")
     }
   }
   

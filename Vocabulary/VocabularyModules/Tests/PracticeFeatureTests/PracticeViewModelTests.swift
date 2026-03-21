@@ -35,7 +35,7 @@ extension BaseSuite {
             vocabularyID: UUID(-1),
             sourceWord: "goodbye",
             translatedWord: "adiós",
-            isHighlighted: false
+            isHighlighted: true
           )
           VocabularyEntry.Draft(
             id: UUID(-12),
@@ -49,7 +49,7 @@ extension BaseSuite {
             vocabularyID: UUID(-1),
             sourceWord: "please",
             translatedWord: "por favor",
-            isHighlighted: false
+            isHighlighted: true
           )
           
           // French vocabulary entries
@@ -716,6 +716,159 @@ extension BaseSuite {
       // Also ensure rows reloaded according to new probability distribution
       // (we cannot assert exact randomness, but we can assert positions count remains consistent)
       #expect(model.rows.count == 4)
+    }
+
+    @Test func scopeAllIncludesAllEntries() async throws {
+      let model = PracticeViewModel(vocabulary: vocabulary, practice: nil, scope: .all)
+      await model.doInit()
+
+      #expect(model.rows.count == 4)
+      let sourceWords = Set(model.rows.map { $0.vocabularyEntry.sourceWord })
+      #expect(sourceWords == ["hello", "goodbye", "thank you", "please"])
+    }
+
+    @Test func scopeHighlightsIncludesOnlyHighlightedEntries() async throws {
+      let model = PracticeViewModel(vocabulary: vocabulary, practice: nil, scope: .highlights)
+      await model.doInit()
+
+      #expect(model.rows.count == 2)
+      #expect(model.rows.allSatisfy { $0.vocabularyEntry.isHighlighted })
+      let sourceWords = Set(model.rows.map { $0.vocabularyEntry.sourceWord })
+      #expect(sourceWords == ["goodbye", "please"])
+    }
+
+    @Test func scopeQuickLimitedTo20Entries() async throws {
+      try await database.write { db in
+        try db.seed {
+          for i in 0..<50 {
+            VocabularyEntry.Draft(
+              id: UUID(-100 - i),
+              vocabularyID: UUID(-1),
+              sourceWord: "word\(i)",
+              translatedWord: "translation\(i)",
+              isHighlighted: false
+            )
+          }
+        }
+      }
+
+      let model = PracticeViewModel(vocabulary: vocabulary, practice: nil, scope: .quick)
+      await model.doInit()
+
+      #expect(model.rows.count == 20)
+    }
+
+    @Test func scopeQuickWithFewerThan20Entries() async throws {
+      let model = PracticeViewModel(vocabulary: vocabulary, practice: nil, scope: .quick)
+      await model.doInit()
+
+      #expect(model.rows.count == 4)
+    }
+
+    @Test func scopeHighlightsWithNoneHighlightedReturnsEmpty() async throws {
+      try await database.write { db in
+        try VocabularyEntry
+          .where { $0.vocabularyID.eq(UUID(-2)) }
+          .update { $0.isHighlighted = false }
+          .execute(db)
+      }
+
+      let frenchVocab = try await database.read { db in
+        try Vocabulary.find(UUID(-2)).fetchOne(db)
+      }!
+
+      let model = PracticeViewModel(vocabulary: frenchVocab, practice: nil, scope: .highlights)
+      await model.doInit()
+
+      #expect(model.rows.isEmpty)
+      #expect(model.currentEntry == nil)
+    }
+
+    @Test func differentScopesCreateDifferentPractices() async throws {
+      let model1 = PracticeViewModel(vocabulary: vocabulary, practice: nil, scope: .all)
+      await model1.doInit()
+      let allPracticeId = model1.practice?.id
+
+      let model2 = PracticeViewModel(vocabulary: vocabulary, practice: nil, scope: .highlights)
+      await model2.doInit()
+      let highlightsPracticeId = model2.practice?.id
+
+      #expect(allPracticeId != highlightsPracticeId)
+      #expect(model1.rows.count != model2.rows.count)
+    }
+
+    @Test func highlightsScopeEntriesAreDifferentFromAll() async throws {
+      let modelAll = PracticeViewModel(vocabulary: vocabulary, practice: nil, scope: .all)
+      await modelAll.doInit()
+
+      let modelHighlights = PracticeViewModel(vocabulary: vocabulary, practice: nil, scope: .highlights)
+      await modelHighlights.doInit()
+
+      let allWords = Set(modelAll.rows.map { $0.vocabularyEntry.id })
+      let highlightsWords = Set(modelHighlights.rows.map { $0.vocabularyEntry.id })
+
+      #expect(highlightsWords.isSubset(of: allWords))
+      #expect(highlightsWords != allWords)
+    }
+
+    @Test func scopePreservedWhenLoadingExistingPractice() async throws {
+      let model1 = PracticeViewModel(vocabulary: vocabulary, practice: nil, scope: .highlights)
+      await model1.doInit()
+      let practiceId = model1.practice!.id
+
+      let existingPractice = try await database.read { db in
+        try Practice.find(practiceId).fetchOne(db)
+      }
+
+      let model2 = PracticeViewModel(vocabulary: vocabulary, practice: existingPractice, scope: .highlights)
+      await model2.doInit()
+
+      #expect(model2.rows.count == 2)
+      #expect(model2.scope == .highlights)
+    }
+
+    @Test func scopeAllIncludesHighlightedAndNonHighlighted() async throws {
+      let model = PracticeViewModel(vocabulary: vocabulary, practice: nil, scope: .all)
+      await model.doInit()
+
+      let highlighted = model.rows.filter { $0.vocabularyEntry.isHighlighted }.count
+      let notHighlighted = model.rows.filter { !$0.vocabularyEntry.isHighlighted }.count
+
+      #expect(highlighted == 2)
+      #expect(notHighlighted == 2)
+      #expect(highlighted + notHighlighted == model.rows.count)
+    }
+
+    @Test func quickAndAllHaveSameEntriesWhenUnder20() async throws {
+      let modelAll = PracticeViewModel(vocabulary: vocabulary, practice: nil, scope: .all)
+      await modelAll.doInit()
+
+      let modelQuick = PracticeViewModel(vocabulary: vocabulary, practice: nil, scope: .quick)
+      await modelQuick.doInit()
+
+      let allIds = Set(modelAll.rows.map { $0.vocabularyEntry.id })
+      let quickIds = Set(modelQuick.rows.map { $0.vocabularyEntry.id })
+
+      #expect(allIds == quickIds)
+      #expect(modelAll.rows.count == modelQuick.rows.count)
+    }
+
+    @Test func scopeHighlightsNavigationWorks() async throws {
+      let model = PracticeViewModel(vocabulary: vocabulary, practice: nil, scope: .highlights)
+      await model.doInit()
+
+      #expect(model.currentIndex == 0)
+      #expect(model.canGoNext == true)
+
+      await model.nextEntry()
+
+      #expect(model.currentIndex == 1)
+      #expect(model.canGoNext == false)
+      #expect(model.canGoPrevious == true)
+
+      await model.previousEntry()
+
+      #expect(model.currentIndex == 0)
     }
   }
 }
