@@ -21,7 +21,7 @@ class VocabularyEntriesAddViewModel {
   var isImporting = false
   var fileName: String?
   var fileContent: String?
-  var errorMessage: LocalizedStringResource?
+  var errorMessage: String?
   var dismiss = false
   var triggerSuccess = false
   
@@ -90,32 +90,44 @@ class VocabularyEntriesAddViewModel {
     } else if let importError = error as? ImportEntriesError {
       handleImportLimitError(importError)
     } else {
-      errorMessage = Strings.localized("Something went wrong.")
+      errorMessage = String(localized: "Something went wrong.", bundle: .sharedModule)
     }
   }
   
   private func handleParseError(_ error: VocabularyCsvParser.ParseError) {
     switch error {
     case .fileNotFound:
-      errorMessage = Strings.localized("Could not read the selected file. Please try again.")
+      errorMessage = String(localized: "Could not read the selected file. Please try again.", bundle: .sharedModule)
     case .invalidFormat:
-      errorMessage = Strings.localized("The file format is invalid. Please ensure your CSV uses commas to separate values.")
+      errorMessage = String(localized: "The file format is invalid. Please ensure your CSV uses commas to separate values.", bundle: .sharedModule)
     case .missingRequiredFields:
-      errorMessage = Strings.localized("One or more rows are missing required fields (original or translation). Please check your CSV.")
+      errorMessage = String(localized: "One or more rows are missing required fields (original or translation). Please check your CSV.", bundle: .sharedModule)
     }
   }
   
   private func handleImportLimitError(_ error: ImportEntriesError) {
     switch error {
     case .vocabularyLimitExceeded(let limit, let availableSlots):
-      errorMessage = Strings.localized("This vocabulary can only accommodate \(availableSlots) more entries (limit: \(limit))")
+      errorMessage = String(
+        localized: "This vocabulary can only accommodate \(availableSlots) more entries (limit: \(limit))",
+        bundle: .sharedModule
+      )
     case .appLimitExceeded(let limit, let availableSlots):
-      errorMessage = Strings.localized("The app can only accommodate \(availableSlots) more entries globally (limit: \(limit))")
+      errorMessage = String(
+        localized: "The app can only accommodate \(availableSlots) more entries globally (limit: \(limit))",
+        bundle: .sharedModule
+      )
     case .notEnoughCapacity(let entriesCount, let vocabularyAvailable, let appAvailable):
       if appAvailable < vocabularyAvailable {
-        errorMessage = Strings.localized("Cannot import \(entriesCount) entries. App limit exceeded. Only \(appAvailable) slots available globally.")
+        errorMessage = String(
+          localized: "Cannot import \(entriesCount) entries. App limit exceeded. Only \(appAvailable) slots available globally.",
+          bundle: .sharedModule
+        )
       } else {
-        errorMessage = Strings.localized("Cannot import \(entriesCount) entries. Vocabulary limit exceeded. Only \(vocabularyAvailable) slots available.")
+        errorMessage = String(
+          localized: "Cannot import \(entriesCount) entries. Vocabulary limit exceeded. Only \(vocabularyAvailable) slots available.",
+          bundle: .sharedModule
+        )
       }
     }
   }

@@ -59,7 +59,7 @@ class VocabularyEntryAddViewModel {
     }
     
     do {
-      if let entryToEdit = entryToEdit {
+      if entryToEdit != nil {
         try await updateExistingEntry(sourceTrimmed, translationTrimmed)
       } else {
         try await createNewEntry(sourceTrimmed, translationTrimmed)
@@ -129,23 +129,33 @@ class VocabularyEntryAddViewModel {
   
   func handleError(_ error: Error) {
     guard let error = error as? AddVocabularyEntryError else {
-      displayAlert("Something went wrong")
+      displayAlert(Strings.localized("Something went wrong"))
       return
     }
     switch error {
     case .emptyName:
-      displayAlert("Provide both original and translation")
+      displayAlert(Strings.localized("Provide both original and translation"))
     case .alreadyExists:
-      displayAlert("An entry with this original word already exists in this vocabulary")
+      displayAlert(Strings.localized("An entry with this original word already exists in this vocabulary"))
     case .vocabularyLimitExceeded(let limit):
-      displayAlert("This vocabulary has reached its limit of \(limit) entries")
+      displayAlert(
+        LocalizedStringResource(
+          "This vocabulary has reached its limit of \(limit) entries",
+          bundle: .sharedModule
+        )
+      )
     case .appLimitExceeded(let limit):
-      displayAlert("The app has reached its limit of \(limit) total entries across all vocabularies")
+      displayAlert(
+        LocalizedStringResource(
+          "The app has reached its limit of \(limit) total entries across all vocabularies",
+          bundle: .sharedModule
+        )
+      )
     }
   }
   
-  private func displayAlert(_ message: StaticString) {
-    alertTitle = Strings.localized(message)
+  private func displayAlert(_ message: LocalizedStringResource) {
+    alertTitle = message
     isAlertPresented = true
   }
 }

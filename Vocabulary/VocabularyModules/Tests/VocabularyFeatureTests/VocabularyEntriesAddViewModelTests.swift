@@ -78,7 +78,7 @@ extension BaseSuite {
     @Test func clearFileResetsState() async throws {
       model.fileContent = "source,translation\nhello,hola"
       model.fileName = "test.csv"
-      model.errorMessage = Strings.localized("Some error")
+      model.errorMessage = "Some error"
       
       model.clearFile()
       
