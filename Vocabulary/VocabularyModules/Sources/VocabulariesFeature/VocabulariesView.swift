@@ -58,15 +58,49 @@ public struct VocabulariesView: View {
   }
   
   private var emptyState: some View {
-    ContentUnavailableView(
-      label: {
-        Label(Strings.localized("No vocabulary yet"), systemImage: "book.pages.fill")
-      },
-      description: {
-        Text(Strings.localized("Create your first word list to start studying."))
-          .font(AppTypography.subheadline)
-      }
-    )
+    VStack(spacing: 24) {
+      ContentUnavailableView(
+        label: {
+          Label(Strings.localized("No vocabulary yet"), systemImage: "book.pages.fill")
+            .font(AppTypography.title3)
+        },
+        description: {
+          Text(Strings.localized("Add English-Greek vocabularies to get started"))
+            .font(AppTypography.subheadline)
+        },
+        actions: {
+          Button(
+            action: {
+              Task {
+                await viewModel.addPreMadeVocabularies()
+              }
+            },
+            label: {
+              HStack(spacing: 10) {
+                Image(systemName: "plus.circle.fill")
+                  .font(AppTypography.callout)
+                
+                Text(Strings.localized("Add vocabularies"))
+                  .font(AppTypography.callout.weight(.semibold))
+              }
+              .opacity(viewModel.isAddSampleVocabsLoading ? 0 : 1)
+              .overlay {
+                if viewModel.isAddSampleVocabsLoading {
+                  ProgressView()
+                }
+              }
+              .animation(.easeInOut(duration: 0.25), value: viewModel.isAddSampleVocabsLoading)
+              .padding(.horizontal, 12)
+              .padding(.vertical, 12)
+              .clipShape(.capsule)
+              .shadow(color: .black.opacity(0.12), radius: 8, x: 0, y: 4)
+            }
+          )
+          .buttonStyle(.bordered)
+          .disabled(viewModel.isAddSampleVocabsLoading)
+        }
+      )
+    }
   }
   
   private var vocabList: some View {
@@ -91,7 +125,6 @@ public struct VocabulariesView: View {
 #Preview {
   let _ = prepareDependencies {
     try! $0.bootstrapDatabase()
-    try! $0.defaultDatabase.seedForPreview()
   }
   NavigationStack {
     VocabulariesView()

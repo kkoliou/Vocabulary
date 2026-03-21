@@ -10,6 +10,7 @@ import Foundation
 import SQLiteData
 import VocabularyDB
 import Shared
+import VocabularyCsvParser
 
 @Observable @MainActor
 public class VocabulariesViewModel {
@@ -19,6 +20,7 @@ public class VocabulariesViewModel {
   @ObservationIgnored var firstInitExecuted = false
   var addVocabIsPresented = false
   var isLoading = false
+  var isAddSampleVocabsLoading = false
   
   public init() {}
   
@@ -55,4 +57,50 @@ public class VocabulariesViewModel {
     }
   }
   
+  func addPreMadeVocabularies() async {
+    isAddSampleVocabsLoading = true
+
+    @Sendable func resolveCSVFiles() throws -> [URL] {
+      let bundle = Bundle.module
+      
+      if let urls = bundle.urls(forResourcesWithExtension: "csv", subdirectory: nil), !urls.isEmpty {
+        return urls.sorted { $0.lastPathComponent < $1.lastPathComponent }
+      }
+      
+      throw NSError(
+        domain: "Bundle",
+        code: -1,
+        userInfo: [NSLocalizedDescriptionKey: "Could not find any CSV files in bundle."]
+      )
+    }
+
+    await withErrorReporting {
+      try await database.write { db in
+        let csvFiles = try resolveCSVFiles()
+
+        for csvURL in csvFiles {
+          let words = try VocabularyCsvParser.parse(fileUrl: csvURL)
+          let vocabName = csvURL.deletingPathExtension().lastPathComponent
+          let vocabId = UUID()
+          try Vocabulary.insert {
+            Vocabulary.Draft(id: vocabId, name: vocabName, createdAt: Date())
+          }
+          .execute(db)
+          
+          try db.seed {
+            for word in words {
+              VocabularyEntry.Draft(
+                vocabularyID: vocabId,
+                sourceWord: word.source,
+                translatedWord: word.translated,
+                isHighlighted: false
+              )
+            }
+          }
+        }
+      }
+    }
+    
+    isAddSampleVocabsLoading = false
+  }
 }

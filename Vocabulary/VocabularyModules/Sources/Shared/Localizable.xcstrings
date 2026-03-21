@@ -18,6 +18,23 @@
         }
       }
     },
+    "Add English-Greek vocabularies to get started" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "el" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Πρόσθεσε ελληνοαγγλικά λεξιλόγια για να ξεκινήσεις"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Add English-Greek vocabularies to get started"
+          }
+        }
+      }
+    },
     "Add Entry" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -48,6 +65,23 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Add a few words to start practicing"
+          }
+        }
+      }
+    },
+    "Add vocabularies" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "el" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Πρόσθεσε τα λεξιλόγια"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Add vocabularies"
           }
         }
       }

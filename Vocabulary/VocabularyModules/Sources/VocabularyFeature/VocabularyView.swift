@@ -124,10 +124,16 @@ public struct VocabularyView: View {
         EntryRowView(
           entry: entry,
           onRemoveFromHighlights: {
-            viewModel.removeFromHighlightsTapped(for: entry)
+            Task {
+              await sleepAfterHighlightingIfNeeded()
+              await viewModel.removeFromHighlightsTapped(for: entry)
+            }
           },
           onAddToHighlights: {
-            viewModel.addToHighlightsTapped(for: entry)
+            Task {
+              await sleepAfterHighlightingIfNeeded()
+              await viewModel.addToHighlightsTapped(for: entry)
+            }
           },
           onEdit: {
             viewModel.editEntry(entry)
@@ -158,6 +164,11 @@ public struct VocabularyView: View {
         }
       }
       .pickerStyle(.inline)
+      .onChange(of: viewModel.sortOption) { _, newValue in
+        Task {
+          await viewModel.changeSortOption(to: newValue)
+        }
+      }
     } label: {
       Label(Strings.localized("Sort"), systemImage: "arrow.up.arrow.down")
     }
@@ -179,34 +190,32 @@ public struct VocabularyView: View {
   
   @ViewBuilder
   private var practiceActionView: some View {
-    if !viewModel.highlightedEntries.isEmpty {
-      Menu {
-        Button(Strings.localized("Highlights"), systemImage: "bookmark") {
-          viewModel.startPractice(scope: .highlights)
-        }
-        Button(Strings.localized("All vocabulary"), systemImage: "book.pages") {
-          viewModel.startPractice(scope: .all)
-        }
-      } label: {
-        Label(Strings.localized("Practice"), systemImage: "brain.head.profile")
+    Menu {
+      Button(Strings.localized("Highlights"), systemImage: "bookmark") {
+        viewModel.startPractice(scope: .highlights)
       }
-    } else {
-      Button(
-        action: {
-          viewModel.practiceTapped()
-        },
-        label: {
-          Image(systemName: "brain.head.profile")
-        }
-      )
+      Button(Strings.localized("All vocabulary"), systemImage: "book.pages") {
+        viewModel.startPractice(scope: .all)
+      }
+      Button(Strings.localized("Quick practice"), systemImage: "bolt") {
+        viewModel.startPractice(scope: .quick)
+      }
+    } label: {
+      Label(Strings.localized("Practice"), systemImage: "brain.head.profile")
     }
+  }
+  
+  /// Let the cell's swipe animation finish and then execute the rest
+  private func sleepAfterHighlightingIfNeeded() async {
+    guard viewModel.sortOption == .highlights else { return }
+    try? await Task.sleep(for: .seconds(0.8))
   }
 }
 
-enum SortOption {
-  case defaultSort
-  case highlights
-  case alphabetical
+enum SortOption: String, Equatable {
+  case defaultSort = "default"
+  case highlights = "highlights"
+  case alphabetical = "alphabetical"
   
   var title: LocalizedStringResource {
     switch self {

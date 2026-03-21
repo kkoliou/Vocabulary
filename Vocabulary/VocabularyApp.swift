@@ -16,7 +16,6 @@ struct VocabularyApp: App {
   init() {
     prepareDependencies {
       try! $0.bootstrapDatabase()
-      try! $0.defaultDatabase.seed()
     }
   }
   

@@ -126,7 +126,7 @@ extension BaseSuite {
       #expect(entry.isHighlighted == false)
       
       await expectDifference(model.entries) {
-        model.addToHighlightsTapped(for: entry)
+        await model.addToHighlightsTapped(for: entry)
         try await model.$entries.load()
       } changes: { entries in
         entries[0].isHighlighted = true
@@ -145,7 +145,7 @@ extension BaseSuite {
       #expect(entry.isHighlighted == true)
       
       await expectDifference(model.entries) {
-        model.removeFromHighlightsTapped(for: entry)
+        await model.removeFromHighlightsTapped(for: entry)
         try await model.$entries.load()
       } changes: { entries in
         entries[1].isHighlighted = false
@@ -164,7 +164,7 @@ extension BaseSuite {
       
       // Add to highlights
       await expectDifference(model.entries) {
-        model.addToHighlightsTapped(for: entry)
+        await model.addToHighlightsTapped(for: entry)
         try await model.$entries.load()
       } changes: { entries in
         entries[0].isHighlighted = true
@@ -172,7 +172,7 @@ extension BaseSuite {
       
       // Remove from highlights
       await expectDifference(model.entries) {
-        model.removeFromHighlightsTapped(for: model.entries[0])
+        await model.removeFromHighlightsTapped(for: model.entries[0])
         try await model.$entries.load()
       } changes: { entries in
         entries[0].isHighlighted = false
@@ -180,7 +180,7 @@ extension BaseSuite {
       
       // Add to highlights again
       await expectDifference(model.entries) {
-        model.addToHighlightsTapped(for: model.entries[0])
+        await model.addToHighlightsTapped(for: model.entries[0])
         try await model.$entries.load()
       } changes: { entries in
         entries[0].isHighlighted = true
@@ -195,11 +195,11 @@ extension BaseSuite {
       #expect(thirdEntry.isHighlighted == false)
       
       // Highlight first entry
-      model.addToHighlightsTapped(for: firstEntry)
+      await model.addToHighlightsTapped(for: firstEntry)
       try await model.$entries.load()
       
       // Highlight third entry
-      model.addToHighlightsTapped(for: model.entries[2])
+      await model.addToHighlightsTapped(for: model.entries[2])
       try await model.$entries.load()
       
       #expect(model.entries[0].isHighlighted == true)
@@ -218,7 +218,7 @@ extension BaseSuite {
     @Test func highlightDoesNotAffectOtherVocabularies() async throws {
       let entry = model.entries[0]
       
-      model.addToHighlightsTapped(for: entry)
+      await model.addToHighlightsTapped(for: entry)
       try await model.$entries.load()
       
       // Verify French vocabulary entries are unchanged
@@ -287,7 +287,7 @@ extension BaseSuite {
       let entry = model.entries[1] // "goodbye" already highlighted
       #expect(entry.isHighlighted == true)
       
-      model.addToHighlightsTapped(for: entry)
+      await model.addToHighlightsTapped(for: entry)
       try await model.$entries.load()
       
       // Should still be highlighted
@@ -298,7 +298,7 @@ extension BaseSuite {
       let entry = model.entries[0] // "hello" not highlighted
       #expect(entry.isHighlighted == false)
       
-      model.removeFromHighlightsTapped(for: entry)
+      await model.removeFromHighlightsTapped(for: entry)
       try await model.$entries.load()
       
       // Should still not be highlighted
@@ -319,7 +319,7 @@ extension BaseSuite {
       #expect(model.entries.count == 4)
       
       // Modify Spanish vocabulary
-      model.addToHighlightsTapped(for: model.entries[0])
+      await  model.addToHighlightsTapped(for: model.entries[0])
       try await model.$entries.load()
       
       // French vocabulary should be unaffected
@@ -344,7 +344,7 @@ extension BaseSuite {
     
     @Test func highlightAllEntries() async throws {
       for entry in model.entries {
-        model.addToHighlightsTapped(for: entry)
+        await model.addToHighlightsTapped(for: entry)
       }
       try await model.$entries.load()
       
@@ -363,7 +363,7 @@ extension BaseSuite {
     
     @Test func unhighlightAllEntries() async throws {
       for entry in model.entries {
-        model.removeFromHighlightsTapped(for: entry)
+        await model.removeFromHighlightsTapped(for: entry)
       }
       try await model.$entries.load()
       
@@ -385,14 +385,12 @@ extension BaseSuite {
       
       // Perform various operations
       model.addEntryTapped()
-      model.addToHighlightsTapped(for: model.entries[0])
+      await model.addToHighlightsTapped(for: model.entries[0])
       try await model.$entries.load()
       
       // Vocabulary should remain the same
       #expect(model.vocabulary.id == originalVocabId)
     }
-    
-    // MARK: - Sorting Tests
     
     @Test func defaultSortOrderByRowId() async throws {
       #expect(model.sortOption == .defaultSort)
@@ -405,9 +403,7 @@ extension BaseSuite {
     }
     
     @Test func sortByHighlightsDescending() async throws {
-      model.sortOption = .highlights
-      
-      // Wait for reload triggered by didSet
+      await model.changeSortOption(to: .highlights)
       await model.reloadTask?.value
       
       // Highlighted entries should come first
@@ -425,11 +421,8 @@ extension BaseSuite {
     }
     
     @Test func sortByAlphabetical() async throws {
-      model.sortOption = .alphabetical
-      
-      // Wait for reload triggered by didSet
+      await model.changeSortOption(to: .alphabetical)
       await model.reloadTask?.value
-      
       let sourceWords = model.entries.map(\.sourceWord)
       
       expectNoDifference(
@@ -442,13 +435,13 @@ extension BaseSuite {
       let initialOrder = model.entries.map(\.sourceWord)
       #expect(initialOrder == ["hello", "goodbye", "thank you", "please"])
       
-      model.sortOption = .alphabetical
+      await model.changeSortOption(to: .alphabetical)
       await model.reloadTask?.value
       
       let alphabeticalOrder = model.entries.map(\.sourceWord)
       #expect(alphabeticalOrder == ["goodbye", "hello", "please", "thank you"])
       
-      model.sortOption = .highlights
+      await model.changeSortOption(to: .highlights)
       await model.reloadTask?.value
       
       // First two should be highlighted
@@ -458,12 +451,12 @@ extension BaseSuite {
     
     @Test func sortBackToDefaultAfterChanging() async throws {
       // Change to alphabetical
-      model.sortOption = .alphabetical
+      await model.changeSortOption(to: .alphabetical)
       await model.reloadTask?.value
       #expect(model.entries.map(\.sourceWord) == ["goodbye", "hello", "please", "thank you"])
       
       // Change back to default
-      model.sortOption = .defaultSort
+      await model.changeSortOption(to: .defaultSort)
       await model.reloadTask?.value
       #expect(model.entries.map(\.sourceWord) == ["hello", "goodbye", "thank you", "please"])
     }
@@ -471,12 +464,11 @@ extension BaseSuite {
     @Test func sortByHighlightsWithAllHighlighted() async throws {
       // Highlight all entries
       for entry in model.entries {
-        model.addToHighlightsTapped(for: entry)
+        await model.addToHighlightsTapped(for: entry)
       }
       try await model.$entries.load()
       
-      model.sortOption = .highlights
-      await model.reloadTask?.value
+      await model.changeSortOption(to: .highlights)
       
       // All should be highlighted
       #expect(model.entries.allSatisfy { $0.isHighlighted })
@@ -485,12 +477,11 @@ extension BaseSuite {
     @Test func sortByHighlightsWithNoneHighlighted() async throws {
       // Unhighlight all entries
       for entry in model.entries {
-        model.removeFromHighlightsTapped(for: entry)
+        await model.removeFromHighlightsTapped(for: entry)
       }
       try await model.$entries.load()
       
-      model.sortOption = .highlights
-      await model.reloadTask?.value
+      await model.changeSortOption(to: .highlights)
       
       // None should be highlighted
       #expect(model.entries.allSatisfy { !$0.isHighlighted })
@@ -517,7 +508,8 @@ extension BaseSuite {
         }
       }
       
-      model.sortOption = .alphabetical
+      try await model.$entries.load()
+      await model.changeSortOption(to: .alphabetical)
       await model.reloadTask?.value
       
       let sourceWords = model.entries.map(\.sourceWord)
@@ -548,8 +540,8 @@ extension BaseSuite {
         }
       }
       
-      model.sortOption = .alphabetical
-      await model.reloadTask?.value
+      try await model.$entries.load()
+      await model.changeSortOption(to: .alphabetical)
       
       // Capital letters typically come before lowercase in ASCII sorting
       let appleIndex = model.entries.firstIndex { $0.sourceWord == "Apple" }
@@ -560,15 +552,15 @@ extension BaseSuite {
     }
     
     @Test func highlightChangeMaintainsSortOrder() async throws {
-      model.sortOption = .highlights
-      await model.reloadTask?.value
+      await model.changeSortOption(to: .highlights)
       
       let initialHighlightedCount = model.entries.filter { $0.isHighlighted }.count
       #expect(initialHighlightedCount == 2)
       
       // Add an unhighlighted entry to highlights
       let unhighlightedEntry = model.entries.first { !$0.isHighlighted }!
-      model.addToHighlightsTapped(for: unhighlightedEntry)
+      await model.addToHighlightsTapped(for: unhighlightedEntry)
+      await model.reloadTask?.value
       try await model.$entries.load()
       
       // After reload, should still be sorted by highlights
@@ -583,12 +575,11 @@ extension BaseSuite {
     }
     
     @Test func sortOptionPersistsAcrossOperations() async throws {
-      model.sortOption = .alphabetical
-      await model.reloadTask?.value
+      await model.changeSortOption(to: .alphabetical)
       
       // Perform operations
       model.addEntryTapped()
-      model.addToHighlightsTapped(for: model.entries[0])
+      await model.addToHighlightsTapped(for: model.entries[0])
       try await model.$entries.load()
       
       // Sort option should still be alphabetical
@@ -596,11 +587,9 @@ extension BaseSuite {
     }
     
     @Test func multipleSortChangesInQuickSuccession() async throws {
-      model.sortOption = .alphabetical
-      model.sortOption = .highlights
-      model.sortOption = .defaultSort
-      
-      await model.reloadTask?.value
+      await model.changeSortOption(to: .alphabetical)
+      await model.changeSortOption(to: .highlights)
+      await model.changeSortOption(to: .defaultSort)
       
       // Should end up with default sort
       #expect(model.sortOption == .defaultSort)
@@ -624,12 +613,10 @@ extension BaseSuite {
       await emptyModel.doInit()
       
       // Change sort options on empty vocabulary
-      emptyModel.sortOption = .alphabetical
-      await model.reloadTask?.value
+      await emptyModel.changeSortOption(to: .alphabetical)
       #expect(emptyModel.entries.isEmpty)
       
-      emptyModel.sortOption = .highlights
-      await model.reloadTask?.value
+      await emptyModel.changeSortOption(to: .highlights)
       #expect(emptyModel.entries.isEmpty)
     }
     
@@ -646,8 +633,7 @@ extension BaseSuite {
       let frenchInitialOrder = frenchModel.entries.map(\.sourceWord)
       
       // Change Spanish model sort
-      model.sortOption = .alphabetical
-      await model.reloadTask?.value
+      await model.changeSortOption(to: .alphabetical)
       
       // French model should be unaffected
       #expect(frenchModel.entries.map(\.sourceWord) == frenchInitialOrder)
@@ -717,7 +703,7 @@ extension BaseSuite {
       #expect(initialCount == 2)
 
       // Add unhighlighted to highlights
-      model.addToHighlightsTapped(for: initiallyUnhighlighted)
+      await model.addToHighlightsTapped(for: initiallyUnhighlighted)
       try await model.$entries.load()
 
       // highlightedEntries should increase by 1 and include the toggled entry
@@ -725,7 +711,7 @@ extension BaseSuite {
       #expect(model.highlightedEntries.contains { $0.id == initiallyUnhighlighted.id })
 
       // Remove a highlighted entry from highlights
-      model.removeFromHighlightsTapped(for: initiallyHighlighted)
+      await model.removeFromHighlightsTapped(for: initiallyHighlighted)
       try await model.$entries.load()
 
       // highlightedEntries should decrease by 1 from the previous count and no longer include the removed entry
