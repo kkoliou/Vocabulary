@@ -188,19 +188,19 @@
         }
       }
     },
-    "An entry with this original word already exists in this vocabulary" : {
+    "An entry with this original word already exists in this vocabulary." : {
       "extractionState" : "manual",
       "localizations" : {
         "el" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Υπάρχει ήδη καταχώριση με αυτή τη λέξη σε αυτό το λεξιλόγιο"
+            "value" : "Υπάρχει ήδη καταχώριση με αυτή τη λέξη σε αυτό το λεξιλόγιο."
           }
         },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "This word is already in your vocabulary list"
+            "value" : "This word is already in your vocabulary list."
           }
         }
       }
@@ -817,19 +817,19 @@
         }
       }
     },
-    "Provide both original and translation" : {
+    "Provide both original and translation." : {
       "extractionState" : "manual",
       "localizations" : {
         "el" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Βάλε τη λέξη και τη μετάφραση"
+            "value" : "Βάλε τη λέξη και τη μετάφραση."
           }
         },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Please enter both the word and its translation"
+            "value" : "Please enter both the word and its translation."
           }
         }
       }
@@ -1038,19 +1038,19 @@
         }
       }
     },
-    "The app has reached its limit of %lld total entries across all vocabularies" : {
+    "The app has reached its limit of %lld total entries across all vocabularies." : {
       "extractionState" : "manual",
       "localizations" : {
         "el" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Η εφαρμογή έφτασε το όριο των %lld συνολικών καταχωρίσεων σε όλα τα λεξιλόγια"
+            "value" : "Η εφαρμογή έφτασε το όριο των %lld συνολικών καταχωρίσεων σε όλα τα λεξιλόγια."
           }
         },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "The app has reached its limit of %lld total entries across all vocabularies"
+            "value" : "The app has reached its limit of %lld total entries across all vocabularies."
           }
         }
       }
@@ -1094,7 +1094,7 @@
       "localizations" : {
         "el" : {
           "stringUnit" : {
-            "state" : "needs_review",
+            "state" : "translated",
             "value" : "Αυτό το λεξιλόγιο μπορεί να δεχτεί μόνο %lld ακόμη καταχωρίσεις."
           }
         },
@@ -1106,19 +1106,19 @@
         }
       }
     },
-    "This vocabulary has reached its limit of %lld entries" : {
+    "This vocabulary has reached its limit of %lld entries." : {
       "extractionState" : "manual",
       "localizations" : {
         "el" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Αυτό το λεξιλόγιο έφτασε το όριο των %lld καταχωρίσεων"
+            "value" : "Αυτό το λεξιλόγιο έφτασε το όριο των %lld καταχωρίσεων."
           }
         },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "This vocabulary has reached its limit of %lld entries"
+            "value" : "This vocabulary has reached its limit of %lld entries."
           }
         }
       }

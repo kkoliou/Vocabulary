@@ -24,9 +24,14 @@ class VocabularyEntriesAddViewModel {
   var errorMessage: LocalizedStringResource?
   var dismiss = false
   var triggerSuccess = false
+  let validator: ImportValidatorProtocol
   
-  init(vocabulary: Vocabulary) {
+  init(
+    vocabulary: Vocabulary,
+    validator: ImportValidatorProtocol = ImportValidator()
+  ) {
     self.vocabulary = vocabulary
+    self.validator = validator
   }
   
   var hasSelectedFile: Bool {
@@ -137,7 +142,7 @@ class VocabularyEntriesAddViewModel {
   }
   
   private func storeEntries(_ entries: [VocabularyWord]) async throws {
-    try await ImportValidator().validateImportLimits(
+    try await validator.validateImportLimits(
       entriesCount: entries.count,
       vocabularyId: vocabulary.id,
       database: database
