@@ -54,7 +54,9 @@ struct VocabularyEntryAddView: View {
           .autocorrectionDisabled()
           .submitLabel(.done)
           .onSubmit {
-            viewModel.saveButtonTapped()
+            Task {
+              await viewModel.saveButtonTapped()
+            }
           }
         }
       }
@@ -62,7 +64,7 @@ struct VocabularyEntryAddView: View {
       .navigationBarTitleDisplayMode(.inline)
       .toolbar {
         ToolbarItem(placement: .confirmationAction) {
-          Button(action: { viewModel.saveButtonTapped() }) {
+          Button(action: { Task { await viewModel.saveButtonTapped() } }) {
             Image(systemName: "checkmark")
           }
           .disabled(viewModel.saveButtonDisabled)

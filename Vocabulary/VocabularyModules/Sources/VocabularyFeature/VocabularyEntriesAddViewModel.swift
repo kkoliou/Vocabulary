@@ -24,9 +24,14 @@ class VocabularyEntriesAddViewModel {
   var errorMessage: LocalizedStringResource?
   var dismiss = false
   var triggerSuccess = false
+  let validator: ImportValidatorProtocol
   
-  init(vocabulary: Vocabulary) {
+  init(
+    vocabulary: Vocabulary,
+    validator: ImportValidatorProtocol = ImportValidator()
+  ) {
     self.vocabulary = vocabulary
+    self.validator = validator
   }
   
   var hasSelectedFile: Bool {
@@ -85,17 +90,47 @@ class VocabularyEntriesAddViewModel {
   }
   
   private func handleImportingError(_ error: Error) {
-    if let error = error as? VocabularyCsvParser.ParseError {
-      switch error {
-      case .fileNotFound:
-        errorMessage = Strings.localized("Could not read the selected file. Please try again.")
-      case .invalidFormat:
-        errorMessage = Strings.localized("The file format is invalid. Please ensure your CSV uses commas to separate values.")
-      case .missingRequiredFields:
-        errorMessage = Strings.localized("One or more rows are missing required fields (original or translation). Please check your CSV.")
-      }
+    if let parseError = error as? VocabularyCsvParser.ParseError {
+      handleParseError(parseError)
+    } else if let importError = error as? ImportEntriesError {
+      handleImportLimitError(importError)
     } else {
-      errorMessage = Strings.localized("Something went wrong.")
+      errorMessage = LocalizedStringResource("Something went wrong.", bundle: .sharedModule)
+    }
+  }
+  
+  private func handleParseError(_ error: VocabularyCsvParser.ParseError) {
+    switch error {
+    case .fileNotFound:
+      errorMessage = LocalizedStringResource(
+        "Could not read the selected file. Please try again.",
+        bundle: .sharedModule
+      )
+    case .invalidFormat:
+      errorMessage = LocalizedStringResource(
+        "The file format is invalid. Please ensure your CSV uses commas to separate values.",
+        bundle: .sharedModule
+      )
+    case .missingRequiredFields:
+      errorMessage = LocalizedStringResource(
+        "One or more rows are missing required fields (original or translation). Please check your CSV.",
+        bundle: .sharedModule
+      )
+    }
+  }
+  
+  private func handleImportLimitError(_ error: ImportEntriesError) {
+    switch error {
+    case .vocabularyLimitExceeded(let data):
+      errorMessage = LocalizedStringResource(
+        "This vocabulary can only accommodate \(data.availableSlots) more entries.",
+        bundle: .sharedModule
+      )
+    case .appLimitExceeded(let data):
+      errorMessage = LocalizedStringResource(
+        "The app can only accommodate \(data.availableSlots) more entries globally.",
+        bundle: .sharedModule
+      )
     }
   }
   
@@ -107,9 +142,14 @@ class VocabularyEntriesAddViewModel {
   }
   
   private func storeEntries(_ entries: [VocabularyWord]) async throws {
+    try await validator.validateImportLimits(
+      entriesCount: entries.count,
+      vocabularyId: vocabulary.id,
+      database: database
+    )
     try await database.write { db in
-        try db.seed {
-          for entry in entries {
+      try db.seed {
+        for entry in entries {
           VocabularyEntry.Draft(
             vocabularyID: vocabulary.id,
             sourceWord: entry.source,

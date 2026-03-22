@@ -103,7 +103,7 @@ extension BaseSuite {
       model.source = "thank you"
       model.translation = "gracias"
       
-      model.saveButtonTapped()
+      await model.saveButtonTapped()
       
       #expect(model.triggerSuccess == true)
       #expect(model.dismiss == true)
@@ -127,7 +127,7 @@ extension BaseSuite {
       model.source = "  water  "
       model.translation = "  agua  "
       
-      model.saveButtonTapped()
+      await model.saveButtonTapped()
       
       #expect(model.triggerSuccess == true)
       
@@ -147,47 +147,47 @@ extension BaseSuite {
       model.source = ""
       model.translation = "gracias"
       
-      model.saveButtonTapped()
+      await model.saveButtonTapped()
       
       #expect(model.triggerSuccess == false)
       #expect(model.dismiss == false)
       #expect(model.isAlertPresented == true)
-      #expect(model.alertTitle == Strings.localized("Provide both original and translation"))
+      #expect(model.alertTitle == Strings.localized("Provide both original and translation."))
     }
 
     @Test func saveEntryWithEmptyTranslation() async throws {
       model.source = "thank you"
       model.translation = ""
       
-      model.saveButtonTapped()
+      await model.saveButtonTapped()
       
       #expect(model.triggerSuccess == false)
       #expect(model.dismiss == false)
       #expect(model.isAlertPresented == true)
-      #expect(model.alertTitle == Strings.localized("Provide both original and translation"))
+      #expect(model.alertTitle == Strings.localized("Provide both original and translation."))
     }
 
     @Test func saveEntryWithWhitespaceOnlyFields() async throws {
       model.source = "   "
       model.translation = "   "
       
-      model.saveButtonTapped()
+      await model.saveButtonTapped()
       
       #expect(model.triggerSuccess == false)
       #expect(model.isAlertPresented == true)
-      #expect(model.alertTitle == Strings.localized("Provide both original and translation"))
+      #expect(model.alertTitle == Strings.localized("Provide both original and translation."))
     }
 
     @Test func saveEntryThatAlreadyExists() async throws {
       model.source = "hello"
       model.translation = "hola nuevo"
       
-      model.saveButtonTapped()
+      await model.saveButtonTapped()
       
       #expect(model.triggerSuccess == false)
       #expect(model.dismiss == false)
       #expect(model.isAlertPresented == true)
-      #expect(model.alertTitle == Strings.localized("An entry with this original word already exists in this vocabulary"))
+      #expect(model.alertTitle == Strings.localized("An entry with this original word already exists in this vocabulary."))
       
       // Verify original entry is unchanged
       let entry = try await database.read { db in
@@ -205,7 +205,7 @@ extension BaseSuite {
       model.source = "Hello"
       model.translation = "Hola"
       
-      model.saveButtonTapped()
+      await model.saveButtonTapped()
       
       // Depending on business logic, this might succeed or fail
       // Adjust expectation based on your requirements
@@ -224,7 +224,7 @@ extension BaseSuite {
       model.source = "café"
       model.translation = "coffee"
       
-      model.saveButtonTapped()
+      await model.saveButtonTapped()
       
       #expect(model.triggerSuccess == true)
       
@@ -241,7 +241,7 @@ extension BaseSuite {
       model.source = "book"
       model.translation = "libro"
       
-      model.saveButtonTapped()
+      await model.saveButtonTapped()
       
       let entry = try await database.read { db in
         try VocabularyEntry
@@ -266,7 +266,7 @@ extension BaseSuite {
       frenchModel.source = "hello"
       frenchModel.translation = "bonjour"
       
-      frenchModel.saveButtonTapped()
+      await frenchModel.saveButtonTapped()
       
       #expect(frenchModel.triggerSuccess == true)
       
@@ -308,14 +308,14 @@ extension BaseSuite {
       // First entry
       model.source = "water"
       model.translation = "agua"
-      model.saveButtonTapped()
+      await model.saveButtonTapped()
       #expect(model.triggerSuccess == true)
       
       // Second entry with new model
       let model2 = VocabularyEntryAddViewModel(vocabulary: vocabulary)
       model2.source = "fire"
       model2.translation = "fuego"
-      model2.saveButtonTapped()
+      await model2.saveButtonTapped()
       #expect(model2.triggerSuccess == true)
       
       // Verify both entries exist
@@ -335,7 +335,7 @@ extension BaseSuite {
       model.source = longSource
       model.translation = longTranslation
       
-      model.saveButtonTapped()
+      await model.saveButtonTapped()
       
       #expect(model.triggerSuccess == true)
       
@@ -354,7 +354,7 @@ extension BaseSuite {
       model.source = "good morning"
       model.translation = "buenos días"
       
-      model.saveButtonTapped()
+      await model.saveButtonTapped()
       
       #expect(model.triggerSuccess == true)
       
@@ -377,7 +377,7 @@ extension BaseSuite {
     @Test func alertDismissalState() async throws {
       model.source = ""
       model.translation = ""
-      model.saveButtonTapped()
+      await model.saveButtonTapped()
       
       #expect(model.isAlertPresented == true)
       #expect(model.dismiss == false)
@@ -403,7 +403,7 @@ extension BaseSuite {
 
       // Change only the translation
       editModel.translation = "hola!!!"
-      editModel.saveButtonTapped()
+      await editModel.saveButtonTapped()
 
       #expect(editModel.triggerSuccess == true)
       #expect(editModel.dismiss == true)
@@ -431,7 +431,7 @@ extension BaseSuite {
 
       editModel.source = "  goodbye  "
       editModel.translation = "  adiós!!!  "
-      editModel.saveButtonTapped()
+      await editModel.saveButtonTapped()
 
       #expect(editModel.triggerSuccess == true)
 
@@ -457,11 +457,11 @@ extension BaseSuite {
 
       editModel.source = ""
       editModel.translation = ""
-      editModel.saveButtonTapped()
+      await editModel.saveButtonTapped()
 
       #expect(editModel.triggerSuccess == false)
       #expect(editModel.isAlertPresented == true)
-      #expect(editModel.alertTitle == Strings.localized("Provide both original and translation"))
+      #expect(editModel.alertTitle == Strings.localized("Provide both original and translation."))
     }
 
     @Test func editExistingEntryWhitespaceOnlyShowsAlert() async throws {
@@ -476,11 +476,11 @@ extension BaseSuite {
 
       editModel.source = "   "
       editModel.translation = "   "
-      editModel.saveButtonTapped()
+      await editModel.saveButtonTapped()
 
       #expect(editModel.triggerSuccess == false)
       #expect(editModel.isAlertPresented == true)
-      #expect(editModel.alertTitle == Strings.localized("Provide both original and translation"))
+      #expect(editModel.alertTitle == Strings.localized("Provide both original and translation."))
     }
 
     @Test func editExistingEntryNoChangesStillValid() async throws {
@@ -494,7 +494,7 @@ extension BaseSuite {
       let editModel = VocabularyEntryAddViewModel(vocabulary: vocabulary, entryToEdit: existing)
 
       // No changes
-      editModel.saveButtonTapped()
+      await editModel.saveButtonTapped()
 
       #expect(editModel.triggerSuccess == true)
       #expect(editModel.dismiss == true)
@@ -508,6 +508,102 @@ extension BaseSuite {
       let afterEntry = try #require(after)
       #expect(afterEntry.sourceWord == existing.sourceWord)
       #expect(afterEntry.translatedWord == existing.translatedWord)
+    }
+
+    @Test func createEntryThrowsVocabularyLimitExceeded() async throws {
+      let mockValidator = MockEntryImportValidator()
+      mockValidator.shouldThrowVocabularyLimit = true
+      
+      let modelWithMock = VocabularyEntryAddViewModel(
+        vocabulary: vocabulary,
+        validator: mockValidator
+      )
+      
+      modelWithMock.source = "new word"
+      modelWithMock.translation = "new translation"
+      
+      await modelWithMock.saveButtonTapped()
+      
+      #expect(modelWithMock.triggerSuccess == false)
+      #expect(modelWithMock.dismiss == false)
+      #expect(modelWithMock.isAlertPresented == true)
+      #expect(modelWithMock.alertTitle != nil)
+    }
+
+    @Test func createEntryThrowsAppLimitExceeded() async throws {
+      let mockValidator = MockEntryImportValidator()
+      mockValidator.shouldThrowAppLimit = true
+      
+      let modelWithMock = VocabularyEntryAddViewModel(
+        vocabulary: vocabulary,
+        validator: mockValidator
+      )
+      
+      modelWithMock.source = "new word"
+      modelWithMock.translation = "new translation"
+      
+      await modelWithMock.saveButtonTapped()
+      
+      #expect(modelWithMock.triggerSuccess == false)
+      #expect(modelWithMock.dismiss == false)
+      #expect(modelWithMock.isAlertPresented == true)
+      #expect(modelWithMock.alertTitle != nil)
+    }
+
+    @Test func editingExistingEntrySkipsValidation() async throws {
+      let original = try await database.read { db in
+        try VocabularyEntry
+          .where { $0.sourceWord == "hello" && $0.vocabularyID == UUID(-1) }
+          .fetchOne(db)
+      }
+      let existing = try #require(original)
+
+      let mockValidator = MockEntryImportValidator()
+      mockValidator.shouldThrowVocabularyLimit = true
+      
+      let editModel = VocabularyEntryAddViewModel(
+        vocabulary: vocabulary,
+        entryToEdit: existing,
+        validator: mockValidator
+      )
+
+      editModel.translation = "updated translation"
+      await editModel.saveButtonTapped()
+
+      #expect(editModel.triggerSuccess == true)
+      #expect(editModel.dismiss == true)
+
+      let updated = try await database.read { db in
+        try VocabularyEntry
+          .where { $0.id == existing.id }
+          .fetchOne(db)
+      }
+      let updatedEntry = try #require(updated)
+      #expect(updatedEntry.translatedWord == "updated translation")
+    }
+  }
+}
+
+@MainActor
+final class MockEntryImportValidator: ImportValidatorProtocol {
+  var shouldThrowVocabularyLimit = false
+  var shouldThrowAppLimit = false
+  
+  func validateImportLimits(
+    entriesCount: Int,
+    vocabularyId: UUID,
+    database: DatabaseReader
+  ) async throws {
+    if shouldThrowVocabularyLimit {
+      throw ImportEntriesError.vocabularyLimitExceeded(
+        .init(limit: 5000, availableSlots: 10)
+      )
+    }
+    
+    if shouldThrowAppLimit {
+      throw ImportEntriesError.appLimitExceeded(
+        .init(limit: 50000, availableSlots: 20)
+      )
     }
   }
 }

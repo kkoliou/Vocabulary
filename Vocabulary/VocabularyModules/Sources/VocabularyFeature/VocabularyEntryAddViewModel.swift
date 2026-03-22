@@ -32,10 +32,16 @@ class VocabularyEntryAddViewModel {
   var triggerSuccess = false
   var alertTitle: LocalizedStringResource?
   var isAlertPresented = false
+  let validator: ImportValidatorProtocol
   
-  init(vocabulary: Vocabulary, entryToEdit: VocabularyEntry? = nil) {
+  init(
+    vocabulary: Vocabulary,
+    entryToEdit: VocabularyEntry? = nil,
+    validator: ImportValidatorProtocol = ImportValidator()
+  ) {
     self.vocabulary = vocabulary
     self.entryToEdit = entryToEdit
+    self.validator = validator
     
     if let entry = entryToEdit {
       self.source = entry.sourceWord
@@ -49,44 +55,20 @@ class VocabularyEntryAddViewModel {
     saveButtonDisabled = sourceIsEmpty || translationIsEmpty
   }
   
-  func saveButtonTapped() {
+  func saveButtonTapped() async {
     let sourceTrimmed = source.trimmed()
     let translationTrimmed = translation.trimmed()
+    
     if sourceTrimmed.isEmpty || translationTrimmed.isEmpty {
       handleError(AddVocabularyEntryError.emptyName)
       return
     }
+    
     do {
-      try database.write { db in
-        if let entryToEdit = entryToEdit {
-          // Update existing entry
-          try VocabularyEntry
-            .find(entryToEdit.id)
-            .update {
-              $0.sourceWord = sourceTrimmed
-              $0.translatedWord = translationTrimmed
-            }
-            .execute(db)
-        } else {
-          // Create new entry
-          let exists = try VocabularyEntry
-            .where { $0.sourceWord == sourceTrimmed && $0.vocabularyID == vocabulary.id }
-            .fetchCount(db) > 0
-
-          if exists {
-            throw AddVocabularyEntryError.alreadyExists
-          }
-
-          try VocabularyEntry.insert {
-            VocabularyEntry.Draft(
-              vocabularyID: vocabulary.id,
-              sourceWord: sourceTrimmed,
-              translatedWord: translationTrimmed,
-              isHighlighted: false
-            )
-          }
-          .execute(db)
-        }
+      if entryToEdit != nil {
+        try await updateExistingEntry(sourceTrimmed, translationTrimmed)
+      } else {
+        try await createNewEntry(sourceTrimmed, translationTrimmed)
       }
       triggerSuccess = true
       dismiss = true
@@ -95,21 +77,78 @@ class VocabularyEntryAddViewModel {
     }
   }
   
-  func handleError(_ error: Error) {
-    guard let error = error as? AddVocabularyEntryError else {
-      displayAlert("Something went wrong")
-      return
-    }
-    switch error {
-    case .emptyName:
-      displayAlert("Provide both original and translation")
-    case .alreadyExists:
-      displayAlert("An entry with this original word already exists in this vocabulary")
+  private func updateExistingEntry(_ source: String, _ translation: String) async throws {
+    try await database.write { db in
+      try VocabularyEntry
+        .find(entryToEdit!.id)
+        .update {
+          $0.sourceWord = source
+          $0.translatedWord = translation
+        }
+        .execute(db)
     }
   }
   
-  private func displayAlert(_ message: StaticString) {
-    alertTitle = Strings.localized(message)
+  private func createNewEntry(_ source: String, _ translation: String) async throws {
+    try await validator.validateImportLimits(
+      entriesCount: 1,
+      vocabularyId: vocabulary.id,
+      database: database
+    )
+    
+    try await database.write { db in
+      let exists = try VocabularyEntry
+        .where { $0.sourceWord == source && $0.vocabularyID == vocabulary.id }
+        .fetchCount(db) > 0
+      
+      if exists {
+        throw AddVocabularyEntryError.alreadyExists
+      }
+      
+      try VocabularyEntry.insert {
+        VocabularyEntry.Draft(
+          vocabularyID: vocabulary.id,
+          sourceWord: source,
+          translatedWord: translation,
+          isHighlighted: false
+        )
+      }
+      .execute(db)
+    }
+  }
+  
+  func handleError(_ error: Error) {
+    if let error = error as? ImportEntriesError {
+      switch error {
+      case .vocabularyLimitExceeded(let limitChecks):
+        displayAlert(
+          LocalizedStringResource(
+            "This vocabulary has reached its limit of \(limitChecks.limit) entries.",
+            bundle: .sharedModule
+          )
+        )
+      case .appLimitExceeded(let limitChecks):
+        displayAlert(
+          LocalizedStringResource(
+            "The app has reached its limit of \(limitChecks.limit) total entries across all vocabularies.",
+            bundle: .sharedModule
+          )
+        )
+      }
+    } else if let error = error as? AddVocabularyEntryError {
+      switch error {
+      case .emptyName:
+        displayAlert(Strings.localized("Provide both original and translation."))
+      case .alreadyExists:
+        displayAlert(Strings.localized("An entry with this original word already exists in this vocabulary."))
+      }
+    } else {
+      displayAlert(Strings.localized("Something went wrong."))
+    }
+  }
+  
+  private func displayAlert(_ message: LocalizedStringResource) {
+    alertTitle = message
     isAlertPresented = true
   }
 }
