@@ -385,6 +385,117 @@ extension BaseSuite {
       #expect(model.fileName == nil)
       #expect(model.fileContent == nil)
     }
+
+    @Test func importEntriesThrowsVocabularyLimitExceeded() async throws {
+      let mockValidator = MockImportValidator()
+      mockValidator.shouldThrowVocabularyLimit = true
+      
+      let modelWithMock = VocabularyEntriesAddViewModel(
+        vocabulary: vocabulary,
+        validator: mockValidator
+      )
+      
+      modelWithMock.fileContent = """
+        source,translation
+        hello,hola
+        goodbye,adiós
+        """
+      
+      await modelWithMock.importEntries()
+      
+      #expect(modelWithMock.triggerSuccess == false)
+      #expect(modelWithMock.dismiss == false)
+      #expect(modelWithMock.isImporting == false)
+      #expect(modelWithMock.errorMessage != nil)
+    }
+
+    @Test func importEntriesThrowsAppLimitExceeded() async throws {
+      let mockValidator = MockImportValidator()
+      mockValidator.shouldThrowAppLimit = true
+      
+      let modelWithMock = VocabularyEntriesAddViewModel(
+        vocabulary: vocabulary,
+        validator: mockValidator
+      )
+      
+      modelWithMock.fileContent = """
+        source,translation
+        hello,hola
+        goodbye,adiós
+        """
+      
+      await modelWithMock.importEntries()
+      
+      #expect(modelWithMock.triggerSuccess == false)
+      #expect(modelWithMock.dismiss == false)
+      #expect(modelWithMock.isImporting == false)
+      #expect(modelWithMock.errorMessage != nil)
+    }
+
+    @Test func importEntriesErrorMessageForVocabularyLimitExceeded() async throws {
+      let mockValidator = MockImportValidator()
+      mockValidator.availableSlots = 10
+      mockValidator.shouldThrowVocabularyLimit = true
+      
+      let modelWithMock = VocabularyEntriesAddViewModel(
+        vocabulary: vocabulary,
+        validator: mockValidator
+      )
+      
+      modelWithMock.fileContent = """
+        source,translation
+        hello,hola
+        """
+      
+      await modelWithMock.importEntries()
+      
+      #expect(modelWithMock.errorMessage != nil)
+    }
+
+    @Test func importEntriesErrorMessageForAppLimitExceeded() async throws {
+      let mockValidator = MockImportValidator()
+      mockValidator.availableSlots = 5
+      mockValidator.shouldThrowAppLimit = true
+      
+      let modelWithMock = VocabularyEntriesAddViewModel(
+        vocabulary: vocabulary,
+        validator: mockValidator
+      )
+      
+      modelWithMock.fileContent = """
+        source,translation
+        hello,hola
+        """
+      
+      await modelWithMock.importEntries()
+      
+      #expect(modelWithMock.errorMessage != nil)
+    }
+  }
+}
+
+@MainActor
+final class MockImportValidator: ImportValidatorProtocol {
+  var shouldThrowVocabularyLimit = false
+  var shouldThrowAppLimit = false
+  var availableSlots = 100
+  
+  func validateImportLimits(
+    entriesCount: Int,
+    vocabularyId: UUID,
+    database: DatabaseReader
+  ) async throws {
+    if shouldThrowVocabularyLimit {
+      throw ImportEntriesError.vocabularyLimitExceeded(
+        .init(limit: 5000, availableSlots: availableSlots)
+      )
+    }
+    
+    if shouldThrowAppLimit {
+      throw ImportEntriesError.appLimitExceeded(
+        .init(limit: 50000, availableSlots: availableSlots)
+      )
+    }
   }
 }
 
