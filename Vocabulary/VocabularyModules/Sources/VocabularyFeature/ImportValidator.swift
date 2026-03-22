@@ -10,46 +10,57 @@ import SQLiteData
 import VocabularyDB
 
 struct ImportValidator {
+  private let vocabularyTotalEntriesLimit: Int = 5000
+  private let appTotalEntriesLimit: Int = 50000
+  
   func validateImportLimits(
     entriesCount: Int,
     vocabularyId: UUID,
     database: DatabaseReader
   ) async throws {
+    struct Counts {
+      let vocabularyEntryCount: Int
+      let totalEntryCount: Int
+    }
     let counts = try await database.read { db in
       let vocabularyEntryCount = try VocabularyEntry
         .where { $0.vocabularyID == vocabularyId }
         .fetchCount(db)
       let totalEntryCount = try VocabularyEntry
         .fetchCount(db)
-      return (vocabularyEntryCount, totalEntryCount)
-    }
-    
-    let vocabularyEntryCount = counts.0
-    let totalEntryCount = counts.1
-    
-    let vocabularyAvailableSlots = 5000 - vocabularyEntryCount
-    let appAvailableSlots = 50000 - totalEntryCount
-    
-    if entriesCount > vocabularyAvailableSlots && entriesCount > appAvailableSlots {
-      throw ImportEntriesError.notEnoughCapacity(
-        entriesCount: entriesCount,
-        vocabularyAvailable: vocabularyAvailableSlots,
-        appAvailable: appAvailableSlots
+      return Counts(
+        vocabularyEntryCount: vocabularyEntryCount,
+        totalEntryCount: totalEntryCount
       )
     }
     
+    let vocabularyEntryCount = counts.vocabularyEntryCount
+    let totalEntryCount = counts.totalEntryCount
+    
+    let vocabularyAvailableSlots = vocabularyTotalEntriesLimit - vocabularyEntryCount
+    
     if entriesCount > vocabularyAvailableSlots {
-      throw ImportEntriesError.vocabularyLimitExceeded(5000, availableSlots: vocabularyAvailableSlots)
+      throw ImportEntriesError.vocabularyLimitExceeded(
+        .init(limit: vocabularyTotalEntriesLimit, availableSlots: vocabularyAvailableSlots)
+      )
     }
     
+    let appAvailableSlots = appTotalEntriesLimit - totalEntryCount
+    
     if entriesCount > appAvailableSlots {
-      throw ImportEntriesError.appLimitExceeded(50000, availableSlots: appAvailableSlots)
+      throw ImportEntriesError.appLimitExceeded(
+        .init(limit: appTotalEntriesLimit, availableSlots: appAvailableSlots)
+      )
     }
   }
 }
 
 enum ImportEntriesError: Error {
-  case vocabularyLimitExceeded(Int, availableSlots: Int)
-  case appLimitExceeded(Int, availableSlots: Int)
-  case notEnoughCapacity(entriesCount: Int, vocabularyAvailable: Int, appAvailable: Int)
+  case vocabularyLimitExceeded(LimitChecks)
+  case appLimitExceeded(LimitChecks)
+}
+
+struct LimitChecks {
+  let limit: Int
+  let availableSlots: Int
 }

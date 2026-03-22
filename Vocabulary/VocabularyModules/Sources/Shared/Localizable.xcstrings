@@ -256,6 +256,40 @@
         }
       }
     },
+    "Cannot import %lld entries. App limit exceeded. Only %lld slots available globally." : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "el" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Δεν είναι δυνατή η εισαγωγή %lld καταχωρίσεων. Η εφαρμογή έχει ξεπεράσει το όριο. Μόνο %lld θέσεις διαθέσιμες συνολικά."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cannot import %lld entries. App limit exceeded. Only %lld slots available globally."
+          }
+        }
+      }
+    },
+    "Cannot import %lld entries. Vocabulary limit exceeded. Only %lld slots available." : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "el" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Δεν είναι δυνατή η εισαγωγή %lld καταχωρίσεων. Το λεξιλόγιο ξεπέρασε το όριο. Μόνο %lld θέσεις διαθέσιμες."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cannot import %lld entries. Vocabulary limit exceeded. Only %lld slots available."
+          }
+        }
+      }
+    },
     "chance to hide original" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -987,6 +1021,40 @@
         }
       }
     },
+    "The app can only accommodate %lld more entries globally." : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "el" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Η εφαρμογή μπορεί να δεχτεί μόνο %lld ακόμη καταχωρίσεις συνολικά."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "The app can only accommodate %lld more entries globally."
+          }
+        }
+      }
+    },
+    "The app has reached its limit of %lld total entries across all vocabularies" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "el" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Η εφαρμογή έφτασε το όριο των %lld συνολικών καταχωρίσεων σε όλα τα λεξιλόγια"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "The app has reached its limit of %lld total entries across all vocabularies"
+          }
+        }
+      }
+    },
     "The file format is invalid. Please ensure your CSV uses commas to separate values." : {
       "extractionState" : "manual",
       "localizations" : {
@@ -1017,6 +1085,40 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "A vocabulary list with this name already exists"
+          }
+        }
+      }
+    },
+    "This vocabulary can only accommodate %lld more entries." : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "el" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "Αυτό το λεξιλόγιο μπορεί να δεχτεί μόνο %lld ακόμη καταχωρίσεις."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "This vocabulary can only accommodate %lld more entries."
+          }
+        }
+      }
+    },
+    "This vocabulary has reached its limit of %lld entries" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "el" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Αυτό το λεξιλόγιο έφτασε το όριο των %lld καταχωρίσεων"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "This vocabulary has reached its limit of %lld entries"
           }
         }
       }
