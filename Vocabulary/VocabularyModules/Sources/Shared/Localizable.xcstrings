@@ -18,23 +18,6 @@
         }
       }
     },
-    "Add English-Greek vocabularies to get started" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "el" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Πρόσθεσε ελληνοαγγλικά λεξιλόγια για να ξεκινήσεις"
-          }
-        },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Add English-Greek vocabularies to get started"
-          }
-        }
-      }
-    },
     "Add Entry" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -65,23 +48,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Add a few words to start practicing"
-          }
-        }
-      }
-    },
-    "Add vocabularies" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "el" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Πρόσθεσε τα λεξιλόγια"
-          }
-        },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Add vocabularies"
           }
         }
       }
@@ -643,6 +609,40 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Import from a File"
+          }
+        }
+      }
+    },
+    "Load English-Greek vocabularies to get started" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "el" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Φόρτωσε ελληνοαγγλικά λεξιλόγια για να ξεκινήσεις"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Load English-Greek vocabularies to get started"
+          }
+        }
+      }
+    },
+    "Load vocabularies" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "el" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Φόρτωσε τα λεξιλόγια"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Load vocabularies"
           }
         }
       }
