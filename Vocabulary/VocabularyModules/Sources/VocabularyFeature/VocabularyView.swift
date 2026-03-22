@@ -89,7 +89,7 @@ public struct VocabularyView: View {
         viewModel.confirmCreateNewPractice()
       }
     } message: {
-      Text(Strings.localized("You already have a pending practice. Creating a new one will replace it. Are you sure you want to continue?"))
+      Text(Strings.localized("You already have a pending practice. Creating a new one will replace it."))
     }
   }
   

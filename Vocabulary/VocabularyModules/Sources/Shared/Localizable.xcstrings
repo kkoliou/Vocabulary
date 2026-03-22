@@ -636,7 +636,7 @@
         "el" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Φόρτωσε τα λεξιλόγια"
+            "value" : "Προσθήκη λεξιλογίων"
           }
         },
         "en" : {
@@ -1225,19 +1225,19 @@
         }
       }
     },
-    "You already have a pending practice. Creating a new one will replace it. Are you sure you want to continue?" : {
+    "You already have a pending practice. Creating a new one will replace it." : {
       "extractionState" : "manual",
       "localizations" : {
         "el" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Έχεις ήδη μια εκκρεμή εξάσκηση. Αν δημιουργήσεις νέα, θα αντικαταστήσει την υπάρχουσα. Θέλεις να συνεχίσεις;"
+            "value" : "Έχεις ήδη μια εκκρεμή εξάσκηση. Αν δημιουργήσεις νέα, θα αντικαταστήσει την υπάρχουσα."
           }
         },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "You already have a practice session waiting. Starting a new one will replace it. Continue?"
+            "value" : "You already have a practice session waiting. Starting a new one will replace it."
           }
         }
       }
