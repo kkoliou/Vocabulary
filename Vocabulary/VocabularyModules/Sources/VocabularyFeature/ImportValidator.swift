@@ -34,7 +34,7 @@ struct ImportValidator: ImportValidatorProtocol {
     }
     let counts = try await database.read { db in
       let vocabularyEntryCount = try VocabularyEntry
-        .where { $0.vocabularyID == vocabularyId }
+        .where { $0.vocabularyID.eq(vocabularyId) }
         .fetchCount(db)
       let totalEntryCount = try VocabularyEntry
         .fetchCount(db)

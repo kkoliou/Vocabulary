@@ -57,9 +57,9 @@ class PracticeViewModel {
       _ = await withErrorReporting {
         let rows = try await database.read { db in
           try PracticeEntry
+            .order(by: \.position)
             .where { $0.practiceID.eq(practice.id) }
             .join(VocabularyEntry.all) { $0.vocabularyEntryID.eq($1.id) }
-            .order(by: \.position)
             .select { PracticeRow.Columns(practiceEntry: $0, vocabularyEntry: $1) }
             .fetchAll(db)
         }
@@ -98,7 +98,7 @@ class PracticeViewModel {
       try await database.write { db in
         
         // Override any other practice of this vocab
-        try Practice.where { $0.vocabularyID == vocabulary.id }
+        try Practice.where { $0.vocabularyID.eq(vocabulary.id) }
           .delete()
           .execute(db)
         
@@ -152,7 +152,7 @@ class PracticeViewModel {
             set: {
               $0.hiddenWordProbability = hiddenWordProbability
               $0.lastStoppedVocabularyEntryID = currentVocabularyEntryID
-              $0.lastStoppedPosition = currentIndex
+              $0.lastStoppedPosition = #bind(currentIndex)
             }
           )
           .execute(db)

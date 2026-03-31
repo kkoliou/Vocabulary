@@ -29,7 +29,7 @@ class VocabularyCreatorViewModel {
     do {
       try database.write { db in
         let exists = try Vocabulary
-          .where { $0.name == trimmed }
+          .where { $0.name.eq(trimmed) }
           .fetchCount(db) > 0
         
         if exists {

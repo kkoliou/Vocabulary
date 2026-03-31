@@ -98,7 +98,7 @@ class VocabularyEntryAddViewModel {
     
     try await database.write { db in
       let exists = try VocabularyEntry
-        .where { $0.sourceWord == source && $0.vocabularyID == vocabulary.id }
+        .where { $0.sourceWord.eq(source) && $0.vocabularyID.eq(vocabulary.id) }
         .fetchCount(db) > 0
       
       if exists {

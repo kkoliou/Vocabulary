@@ -16,8 +16,8 @@ var package = Package(
     .library(name: "VocabularyCsvParser", targets: ["VocabularyCsvParser"]),
   ],
   dependencies: [
-    .package(url: "https://github.com/pointfreeco/sqlite-data", from: "1.5.2"),
-    .package(url: "https://github.com/pointfreeco/swift-dependencies", from: "1.11.0")
+    .package(url: "https://github.com/pointfreeco/sqlite-data", from: "1.6.1"),
+    .package(url: "https://github.com/pointfreeco/swift-dependencies", from: "1.12.0")
   ],
   targets: [
     // MARK: - Shared/Core targets
