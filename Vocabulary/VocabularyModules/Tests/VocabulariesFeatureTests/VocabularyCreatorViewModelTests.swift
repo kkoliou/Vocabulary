@@ -45,7 +45,7 @@ extension BaseSuite {
       // Verify it was actually inserted into the database
       let exists = try await database.read { db in
         try Vocabulary
-          .where { $0.name == "German" }
+          .where { $0.name.eq("German") }
           .fetchCount(db) > 0
       }
       #expect(exists == true)
@@ -84,7 +84,7 @@ extension BaseSuite {
       // Verify it was trimmed before insertion
       let exists = try await database.read { db in
         try Vocabulary
-          .where { $0.name == "Italian" }
+          .where { $0.name.eq("Italian") }
           .fetchCount(db) > 0
       }
       #expect(exists == true)
@@ -101,7 +101,7 @@ extension BaseSuite {
       // Verify only one Spanish vocabulary exists
       let count = try await database.read { db in
         try Vocabulary
-          .where { $0.name == "Spanish" }
+          .where { $0.name.eq("Spanish") }
           .fetchCount(db)
       }
       #expect(count == 1)
@@ -114,7 +114,7 @@ extension BaseSuite {
       
       let exists = try await database.read { db in
         try Vocabulary
-          .where { $0.name == "spanish" }
+          .where { $0.name.eq("spanish") }
           .fetchCount(db) > 0
       }
       #expect(exists == true)
@@ -144,7 +144,7 @@ extension BaseSuite {
       
       let exists = try await database.read { db in
         try Vocabulary
-          .where { $0.name == "中文" }
+          .where { $0.name.eq("中文") }
           .fetchCount(db) > 0
       }
       #expect(exists == true)
@@ -158,7 +158,7 @@ extension BaseSuite {
       
       let exists = try await database.read { db in
         try Vocabulary
-          .where { $0.name == longName }
+          .where { $0.name.eq(longName) }
           .fetchCount(db) > 0
       }
       #expect(exists == true)

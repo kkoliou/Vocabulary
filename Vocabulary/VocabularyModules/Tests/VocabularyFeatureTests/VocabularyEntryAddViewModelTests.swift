@@ -112,7 +112,7 @@ extension BaseSuite {
       // Verify entry was saved to database
       let entry = try await database.read { db in
         try VocabularyEntry
-          .where { $0.sourceWord == "thank you" && $0.vocabularyID == UUID(-1) }
+          .where { $0.sourceWord.eq("thank you") && $0.vocabularyID.eq(UUID(-1)) }
           .fetchOne(db)
       }
       
@@ -134,7 +134,7 @@ extension BaseSuite {
       // Verify whitespace was trimmed
       let entry = try await database.read { db in
         try VocabularyEntry
-          .where { $0.sourceWord == "water" && $0.vocabularyID == UUID(-1) }
+          .where { $0.sourceWord.eq("water") && $0.vocabularyID.eq(UUID(-1)) }
           .fetchOne(db)
       }
       
@@ -192,7 +192,7 @@ extension BaseSuite {
       // Verify original entry is unchanged
       let entry = try await database.read { db in
         try VocabularyEntry
-          .where { $0.sourceWord == "hello" && $0.vocabularyID == UUID(-1) }
+          .where { $0.sourceWord.eq("hello") && $0.vocabularyID.eq(UUID(-1)) }
           .fetchOne(db)
       }
       
@@ -213,7 +213,7 @@ extension BaseSuite {
       
       let entry = try await database.read { db in
         try VocabularyEntry
-          .where { $0.sourceWord == "Hello" && $0.vocabularyID == UUID(-1) }
+          .where { $0.sourceWord.eq("Hello") && $0.vocabularyID.eq(UUID(-1)) }
           .fetchOne(db)
       }
       
@@ -230,7 +230,7 @@ extension BaseSuite {
       
       let entry = try await database.read { db in
         try VocabularyEntry
-          .where { $0.sourceWord == "café" && $0.vocabularyID == UUID(-1) }
+          .where { $0.sourceWord.eq("café") && $0.vocabularyID.eq(UUID(-1)) }
           .fetchOne(db)
       }
       
@@ -245,7 +245,7 @@ extension BaseSuite {
       
       let entry = try await database.read { db in
         try VocabularyEntry
-          .where { $0.sourceWord == "book" && $0.vocabularyID == UUID(-1) }
+          .where { $0.sourceWord.eq("book") && $0.vocabularyID.eq(UUID(-1)) }
           .fetchOne(db)
       }
       
@@ -273,13 +273,13 @@ extension BaseSuite {
       // Verify both entries exist in their respective vocabularies
       let spanishEntry = try await database.read { db in
         try VocabularyEntry
-          .where { $0.sourceWord == "hello" && $0.vocabularyID == UUID(-1) }
+          .where { $0.sourceWord.eq("hello") && $0.vocabularyID.eq(UUID(-1)) }
           .fetchOne(db)
       }
       
       let frenchEntry = try await database.read { db in
         try VocabularyEntry
-          .where { $0.sourceWord == "hello" && $0.vocabularyID == UUID(-2) }
+          .where { $0.sourceWord.eq("hello") && $0.vocabularyID.eq(UUID(-2)) }
           .fetchOne(db)
       }
       
@@ -321,7 +321,7 @@ extension BaseSuite {
       // Verify both entries exist
       let count = try await database.read { db in
         try VocabularyEntry
-          .where { $0.vocabularyID == UUID(-1) }
+          .where { $0.vocabularyID.eq(UUID(-1)) }
           .fetchCount(db)
       }
       
@@ -341,7 +341,7 @@ extension BaseSuite {
       
       let entry = try await database.read { db in
         try VocabularyEntry
-          .where { $0.sourceWord == longSource && $0.vocabularyID == UUID(-1) }
+          .where { $0.sourceWord.eq(longSource) && $0.vocabularyID.eq(UUID(-1)) }
           .fetchOne(db)
       }
       
@@ -360,7 +360,7 @@ extension BaseSuite {
       
       let entry = try await database.read { db in
         try VocabularyEntry
-          .where { $0.sourceWord == "good morning" && $0.vocabularyID == UUID(-1) }
+          .where { $0.sourceWord.eq("good morning") && $0.vocabularyID.eq(UUID(-1)) }
           .fetchOne(db)
       }
       
@@ -388,7 +388,7 @@ extension BaseSuite {
       // Fetch an existing entry ("hello" -> "hola") and edit its translation
       let original = try await database.read { db in
         try VocabularyEntry
-          .where { $0.sourceWord == "hello" && $0.vocabularyID == UUID(-1) }
+          .where { $0.sourceWord.eq("hello") && $0.vocabularyID.eq(UUID(-1)) }
           .fetchOne(db)
       }
       let existing = try #require(original)
@@ -411,7 +411,7 @@ extension BaseSuite {
       // Verify database reflects the updated translation
       let updated = try await database.read { db in
         try VocabularyEntry
-          .where { $0.sourceWord == "hello" && $0.vocabularyID == UUID(-1) }
+          .where { $0.sourceWord.eq("hello") && $0.vocabularyID.eq(UUID(-1)) }
           .fetchOne(db)
       }
       let updatedEntry = try #require(updated)
@@ -422,7 +422,7 @@ extension BaseSuite {
     @Test func editExistingEntryTrimWhitespace() async throws {
       let original = try await database.read { db in
         try VocabularyEntry
-          .where { $0.sourceWord == "goodbye" && $0.vocabularyID == UUID(-1) }
+          .where { $0.sourceWord.eq("goodbye") && $0.vocabularyID.eq(UUID(-1)) }
           .fetchOne(db)
       }
       let existing = try #require(original)
@@ -437,7 +437,7 @@ extension BaseSuite {
 
       let updated = try await database.read { db in
         try VocabularyEntry
-          .where { $0.sourceWord == "goodbye" && $0.vocabularyID == UUID(-1) }
+          .where { $0.sourceWord.eq("goodbye") && $0.vocabularyID.eq(UUID(-1)) }
           .fetchOne(db)
       }
       let updatedEntry = try #require(updated)
@@ -448,7 +448,7 @@ extension BaseSuite {
     @Test func editExistingEntryEmptyFieldsShowsAlert() async throws {
       let original = try await database.read { db in
         try VocabularyEntry
-          .where { $0.sourceWord == "hello" && $0.vocabularyID == UUID(-1) }
+          .where { $0.sourceWord.eq("hello") && $0.vocabularyID.eq(UUID(-1)) }
           .fetchOne(db)
       }
       let existing = try #require(original)
@@ -467,7 +467,7 @@ extension BaseSuite {
     @Test func editExistingEntryWhitespaceOnlyShowsAlert() async throws {
       let original = try await database.read { db in
         try VocabularyEntry
-          .where { $0.sourceWord == "hello" && $0.vocabularyID == UUID(-1) }
+          .where { $0.sourceWord.eq("hello") && $0.vocabularyID.eq(UUID(-1)) }
           .fetchOne(db)
       }
       let existing = try #require(original)
@@ -486,7 +486,7 @@ extension BaseSuite {
     @Test func editExistingEntryNoChangesStillValid() async throws {
       let original = try await database.read { db in
         try VocabularyEntry
-          .where { $0.sourceWord == "hello" && $0.vocabularyID == UUID(-1) }
+          .where { $0.sourceWord.eq("hello") && $0.vocabularyID.eq(UUID(-1)) }
           .fetchOne(db)
       }
       let existing = try #require(original)
@@ -502,7 +502,7 @@ extension BaseSuite {
       // Verify nothing changed
       let after = try await database.read { db in
         try VocabularyEntry
-          .where { $0.id == existing.id }
+          .where { $0.id.eq(existing.id) }
           .fetchOne(db)
       }
       let afterEntry = try #require(after)
@@ -553,7 +553,7 @@ extension BaseSuite {
     @Test func editingExistingEntrySkipsValidation() async throws {
       let original = try await database.read { db in
         try VocabularyEntry
-          .where { $0.sourceWord == "hello" && $0.vocabularyID == UUID(-1) }
+          .where { $0.sourceWord.eq("hello") && $0.vocabularyID.eq(UUID(-1)) }
           .fetchOne(db)
       }
       let existing = try #require(original)
@@ -575,7 +575,7 @@ extension BaseSuite {
 
       let updated = try await database.read { db in
         try VocabularyEntry
-          .where { $0.id == existing.id }
+          .where { $0.id.eq(existing.id) }
           .fetchOne(db)
       }
       let updatedEntry = try #require(updated)

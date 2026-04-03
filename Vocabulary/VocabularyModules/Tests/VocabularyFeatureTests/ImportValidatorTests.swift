@@ -87,7 +87,7 @@ extension BaseSuite {
     @Test func vocabularyLimitChecksExactCount() async throws {
       let currentCount = try await database.read { db in
         try VocabularyEntry
-          .where { $0.vocabularyID == UUID(-1) }
+          .where { $0.vocabularyID.eq(UUID(-1)) }
           .fetchCount(db)
       }
       
@@ -114,7 +114,7 @@ extension BaseSuite {
     @Test func allowsImportEqualToExactLimit() async throws {
       let currentCount = try await database.read { db in
         try VocabularyEntry
-          .where { $0.vocabularyID == UUID(-1) }
+          .where { $0.vocabularyID.eq(UUID(-1)) }
           .fetchCount(db)
       }
       

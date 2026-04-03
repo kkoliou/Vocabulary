@@ -208,7 +208,7 @@ extension BaseSuite {
       // Verify database state
       let highlightedCount = try await database.read { db in
         try VocabularyEntry
-          .where { $0.vocabularyID == UUID(-1) && $0.isHighlighted == true }
+          .where { $0.vocabularyID.eq(UUID(-1)) && $0.isHighlighted.eq(true) }
           .fetchCount(db)
       }
       
@@ -224,7 +224,7 @@ extension BaseSuite {
       // Verify French vocabulary entries are unchanged
       let frenchEntries = try await database.read { db in
         try VocabularyEntry
-          .where { $0.vocabularyID == UUID(-2) }
+          .where { $0.vocabularyID.eq(UUID(-2)) }
           .fetchAll(db)
       }
       
@@ -353,7 +353,7 @@ extension BaseSuite {
       // Verify database state
       let allHighlighted = try await database.read { db in
         try VocabularyEntry
-          .where { $0.vocabularyID == UUID(-1) }
+          .where { $0.vocabularyID.eq(UUID(-1)) }
           .fetchAll(db)
           .allSatisfy { $0.isHighlighted }
       }
@@ -372,7 +372,7 @@ extension BaseSuite {
       // Verify database state
       let noneHighlighted = try await database.read { db in
         try VocabularyEntry
-          .where { $0.vocabularyID == UUID(-1) }
+          .where { $0.vocabularyID.eq(UUID(-1)) }
           .fetchAll(db)
           .allSatisfy { !$0.isHighlighted }
       }
@@ -403,7 +403,8 @@ extension BaseSuite {
     }
     
     @Test func sortByHighlightsDescending() async throws {
-      await model.changeSortOption(to: .highlights)
+      model.changeSortOption(to: .highlights)
+      model.reloadSorting()
       await model.reloadTask?.value
       
       // Highlighted entries should come first
@@ -421,7 +422,8 @@ extension BaseSuite {
     }
     
     @Test func sortByAlphabetical() async throws {
-      await model.changeSortOption(to: .alphabetical)
+      model.changeSortOption(to: .alphabetical)
+      model.reloadSorting()
       await model.reloadTask?.value
       let sourceWords = model.entries.map(\.sourceWord)
       
@@ -435,13 +437,15 @@ extension BaseSuite {
       let initialOrder = model.entries.map(\.sourceWord)
       #expect(initialOrder == ["hello", "goodbye", "thank you", "please"])
       
-      await model.changeSortOption(to: .alphabetical)
+      model.changeSortOption(to: .alphabetical)
+      model.reloadSorting()
       await model.reloadTask?.value
       
       let alphabeticalOrder = model.entries.map(\.sourceWord)
       #expect(alphabeticalOrder == ["goodbye", "hello", "please", "thank you"])
       
-      await model.changeSortOption(to: .highlights)
+      model.changeSortOption(to: .highlights)
+      model.reloadSorting()
       await model.reloadTask?.value
       
       // First two should be highlighted
@@ -449,14 +453,35 @@ extension BaseSuite {
       #expect(model.entries[1].isHighlighted == true)
     }
     
+    @Test func sortOptionChangeDoesNotTriggerReload() async throws {
+      let initialOrder = model.entries.map(\.sourceWord)
+      #expect(initialOrder == ["hello", "goodbye", "thank you", "please"])
+      
+      model.changeSortOption(to: .alphabetical)
+      model.reloadSorting()
+      await model.reloadTask?.value
+      
+      let alphabeticalOrder = model.entries.map(\.sourceWord)
+      #expect(alphabeticalOrder == ["goodbye", "hello", "please", "thank you"])
+      
+      model.changeSortOption(to: .highlights)
+      await model.reloadTask?.value
+      
+      // The order should not changed
+      #expect(model.entries[0].isHighlighted == true)
+      #expect(model.entries[1].isHighlighted == false)
+    }
+    
     @Test func sortBackToDefaultAfterChanging() async throws {
       // Change to alphabetical
-      await model.changeSortOption(to: .alphabetical)
+      model.changeSortOption(to: .alphabetical)
+      model.reloadSorting()
       await model.reloadTask?.value
       #expect(model.entries.map(\.sourceWord) == ["goodbye", "hello", "please", "thank you"])
       
       // Change back to default
-      await model.changeSortOption(to: .defaultSort)
+      model.changeSortOption(to: .defaultSort)
+      model.reloadSorting()
       await model.reloadTask?.value
       #expect(model.entries.map(\.sourceWord) == ["hello", "goodbye", "thank you", "please"])
     }
@@ -468,7 +493,7 @@ extension BaseSuite {
       }
       try await model.$entries.load()
       
-      await model.changeSortOption(to: .highlights)
+      model.changeSortOption(to: .highlights)
       
       // All should be highlighted
       #expect(model.entries.allSatisfy { $0.isHighlighted })
@@ -481,7 +506,7 @@ extension BaseSuite {
       }
       try await model.$entries.load()
       
-      await model.changeSortOption(to: .highlights)
+      model.changeSortOption(to: .highlights)
       
       // None should be highlighted
       #expect(model.entries.allSatisfy { !$0.isHighlighted })
@@ -509,7 +534,8 @@ extension BaseSuite {
       }
       
       try await model.$entries.load()
-      await model.changeSortOption(to: .alphabetical)
+      model.changeSortOption(to: .alphabetical)
+      model.reloadSorting()
       await model.reloadTask?.value
       
       let sourceWords = model.entries.map(\.sourceWord)
@@ -541,7 +567,7 @@ extension BaseSuite {
       }
       
       try await model.$entries.load()
-      await model.changeSortOption(to: .alphabetical)
+      model.changeSortOption(to: .alphabetical)
       
       // Capital letters typically come before lowercase in ASCII sorting
       let appleIndex = model.entries.firstIndex { $0.sourceWord == "Apple" }
@@ -552,7 +578,8 @@ extension BaseSuite {
     }
     
     @Test func highlightChangeMaintainsSortOrder() async throws {
-      await model.changeSortOption(to: .highlights)
+      model.changeSortOption(to: .highlights)
+      model.reloadSorting()
       
       let initialHighlightedCount = model.entries.filter { $0.isHighlighted }.count
       #expect(initialHighlightedCount == 2)
@@ -575,7 +602,7 @@ extension BaseSuite {
     }
     
     @Test func sortOptionPersistsAcrossOperations() async throws {
-      await model.changeSortOption(to: .alphabetical)
+      model.changeSortOption(to: .alphabetical)
       
       // Perform operations
       model.addEntryTapped()
@@ -587,9 +614,9 @@ extension BaseSuite {
     }
     
     @Test func multipleSortChangesInQuickSuccession() async throws {
-      await model.changeSortOption(to: .alphabetical)
-      await model.changeSortOption(to: .highlights)
-      await model.changeSortOption(to: .defaultSort)
+      model.changeSortOption(to: .alphabetical)
+      model.changeSortOption(to: .highlights)
+      model.changeSortOption(to: .defaultSort)
       
       // Should end up with default sort
       #expect(model.sortOption == .defaultSort)
@@ -613,10 +640,10 @@ extension BaseSuite {
       await emptyModel.doInit()
       
       // Change sort options on empty vocabulary
-      await emptyModel.changeSortOption(to: .alphabetical)
+      emptyModel.changeSortOption(to: .alphabetical)
       #expect(emptyModel.entries.isEmpty)
       
-      await emptyModel.changeSortOption(to: .highlights)
+      emptyModel.changeSortOption(to: .highlights)
       #expect(emptyModel.entries.isEmpty)
     }
     
@@ -633,7 +660,7 @@ extension BaseSuite {
       let frenchInitialOrder = frenchModel.entries.map(\.sourceWord)
       
       // Change Spanish model sort
-      await model.changeSortOption(to: .alphabetical)
+      model.changeSortOption(to: .alphabetical)
       
       // French model should be unaffected
       #expect(frenchModel.entries.map(\.sourceWord) == frenchInitialOrder)

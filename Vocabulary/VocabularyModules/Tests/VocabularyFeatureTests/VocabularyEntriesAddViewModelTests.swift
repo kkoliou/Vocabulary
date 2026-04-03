@@ -107,7 +107,7 @@ extension BaseSuite {
       // Verify entries were stored in database
       let entries = try await database.read { db in
         try VocabularyEntry
-          .where { $0.vocabularyID == UUID(-1) }
+          .where { $0.vocabularyID.eq(UUID(-1)) }
           .fetchAll(db)
       }
       
@@ -167,7 +167,7 @@ extension BaseSuite {
       
       let entries = try await database.read { db in
         try VocabularyEntry
-          .where { $0.vocabularyID == UUID(-1) }
+          .where { $0.vocabularyID.eq(UUID(-1)) }
           .fetchAll(db)
       }
       #expect(entries.count == 2) // Entries with empty fiels are skipped
@@ -188,7 +188,7 @@ extension BaseSuite {
       
       let entries = try await database.read { db in
         try VocabularyEntry
-          .where { $0.vocabularyID == UUID(-1) }
+          .where { $0.vocabularyID.eq(UUID(-1)) }
           .fetchAll(db)
       }
       
@@ -211,7 +211,7 @@ extension BaseSuite {
       
       let entries = try await database.read { db in
         try VocabularyEntry
-          .where { $0.vocabularyID == UUID(-1) }
+          .where { $0.vocabularyID.eq(UUID(-1)) }
           .order(by: \.sourceWord)
           .fetchAll(db)
       }
@@ -237,7 +237,7 @@ extension BaseSuite {
       
       let entries = try await database.read { db in
         try VocabularyEntry
-          .where { $0.vocabularyID == UUID(-1) }
+          .where { $0.vocabularyID.eq(UUID(-1)) }
           .fetchAll(db)
       }
       
@@ -259,7 +259,7 @@ extension BaseSuite {
       
       let entries = try await database.read { db in
         try VocabularyEntry
-          .where { $0.vocabularyID == UUID(-1) }
+          .where { $0.vocabularyID.eq(UUID(-1)) }
           .fetchAll(db)
       }
       
@@ -287,7 +287,7 @@ extension BaseSuite {
       
       let entries = try await database.read { db in
         try VocabularyEntry
-          .where { $0.vocabularyID == UUID(-2) }
+          .where { $0.vocabularyID.eq(UUID(-2)) }
           .fetchAll(db)
       }
       
@@ -310,7 +310,7 @@ extension BaseSuite {
       
       let entries = try await database.read { db in
         try VocabularyEntry
-          .where { $0.vocabularyID == UUID(-1) }
+          .where { $0.vocabularyID.eq(UUID(-1)) }
           .fetchAll(db)
       }
       
@@ -354,7 +354,7 @@ extension BaseSuite {
       
       let entries = try await database.read { db in
         try VocabularyEntry
-          .where { $0.vocabularyID == UUID(-1) }
+          .where { $0.vocabularyID.eq(UUID(-1)) }
           .fetchAll(db)
       }
       
