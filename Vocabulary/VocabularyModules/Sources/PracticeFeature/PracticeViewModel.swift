@@ -82,7 +82,7 @@ class PracticeViewModel {
         case .all, .quick:
           return try base
             .fetchAll(db)
-        case .highlights:
+        case .highlights, .quickHighlights:
           return try base
             .where { $0.isHighlighted.eq(true) }
             .fetchAll(db)
@@ -91,7 +91,12 @@ class PracticeViewModel {
       
       let shuffledEntries: [VocabularyEntry] = {
         let shuffled = entries.shuffled()
-        return scope == .quick ? Array(shuffled.prefix(quickPracticeEntriesCount)) : shuffled
+        switch scope {
+        case .quick, .quickHighlights:
+          return Array(shuffled.prefix(quickPracticeEntriesCount))
+        default:
+          return shuffled
+        }
       }()
       
       let practiceId = UUID()
@@ -285,4 +290,5 @@ public enum PracticeScope: Sendable, Equatable {
   case all
   case highlights
   case quick
+  case quickHighlights
 }

@@ -196,8 +196,15 @@ public struct VocabularyView: View {
       Button(Strings.localized("All vocabulary"), systemImage: "book.pages") {
         viewModel.startPractice(scope: .all)
       }
-      Button(Strings.localized("Quick practice"), systemImage: "bolt") {
-        viewModel.startPractice(scope: .quick)
+      Menu {
+        Button(Strings.localized("Highlights"), systemImage: "bookmark") {
+          viewModel.startPractice(scope: .quickHighlights)
+        }
+        Button(Strings.localized("All vocabulary"), systemImage: "book.pages") {
+          viewModel.startPractice(scope: .quick)
+        }
+      } label: {
+        Label(Strings.localized("Quick practice"), systemImage: "bolt")
       }
     } label: {
       Label(Strings.localized("Practice"), systemImage: "brain.head.profile")
