@@ -1123,23 +1123,6 @@
         }
       }
     },
-    "Tip: You can use your AI agent to help generate a properly formatted CSV file." : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "el" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Συμβουλή: Χρησιμοποίησε AI για να σου φτιάξει ένα αρχείο CSV."
-          }
-        },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Tip: You can use AI to help generate a properly formatted CSV file."
-          }
-        }
-      }
-    },
     "Translation" : {
       "extractionState" : "manual",
       "localizations" : {

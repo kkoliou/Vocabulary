@@ -97,11 +97,6 @@ struct VocabularyEntriesAddView: View {
           .foregroundColor(.secondary)
         
         csvColumnsDescription
-        
-        Text(Strings.localized("Tip: You can use your AI agent to help generate a properly formatted CSV file."))
-          .font(AppTypography.subheadline)
-          .foregroundColor(.secondary)
-          .padding(.top, 4)
       }
     }
   }
