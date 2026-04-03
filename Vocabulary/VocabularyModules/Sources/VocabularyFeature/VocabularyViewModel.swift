@@ -106,8 +106,11 @@ public class VocabularyViewModel {
     try await loadPendingPractices()
   }
   
-  func changeSortOption(to option: SortOption) async {
+  func changeSortOption(to option: SortOption) {
     $sortOption.withLock { $0 = option }
+  }
+  
+  func reloadSorting() {
     reloadTask?.cancel()
     reloadTask = Task {
       try? await Task.sleep(for: .milliseconds(100))

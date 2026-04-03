@@ -156,17 +156,21 @@ public struct VocabularyView: View {
   @ViewBuilder
   private var sortingActionView: some View {
     Menu {
-      ForEach([SortOption.defaultSort, .highlights, .alphabetical], id: \.self) { option in
-        Button {
-          Task {
-            await viewModel.changeSortOption(to: option)
-          }
-        } label: {
-          HStack {
-            Label(option.title, systemImage: option.icon)
-              .font(AppTypography.body)
-          }
+      Picker(
+        Strings.localized("Sort By"),
+        selection: .init(
+          get: { viewModel.sortOption },
+          set: { newValue, _ in viewModel.changeSortOption(to: newValue) })
+      ) {
+        ForEach([SortOption.defaultSort, .highlights, .alphabetical], id: \.self) { option in
+          Label(option.title, systemImage: option.icon)
+            .font(AppTypography.body)
+            .tag(option)
         }
+      }
+      .pickerStyle(.inline)
+      .onChange(of: viewModel.sortOption) { _, _ in
+        viewModel.reloadSorting()
       }
     } label: {
       Label(Strings.localized("Sort"), systemImage: "arrow.up.arrow.down")
