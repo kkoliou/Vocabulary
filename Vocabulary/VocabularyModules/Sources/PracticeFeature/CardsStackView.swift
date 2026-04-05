@@ -10,16 +10,17 @@ import SQLiteData
 import VocabularyDB
 
 struct CardsStackView: View {
-  let items: [String]
+  let practiceRows: [PracticeRow]
+  @State private var revealedCards: Set<Int> = []
   
   var body: some View {
     GeometryReader {
       let size = $0.size
       ScrollView(.horizontal) {
-        LazyHStack(spacing: 0) {
-          ForEach(Array(items.enumerated()), id: \.offset) { index, item in
-            card
-              .padding(.horizontal,80)
+        HStack(spacing: 0) {
+          ForEach(Array(practiceRows.enumerated()), id: \.offset) { index, practiceRow in
+            card(for: index, practiceRow: practiceRow)
+              .padding(.horizontal, 80)
               .frame(width: size.width)
               .visualEffect { content, geometry in
                 content
@@ -39,13 +40,18 @@ struct CardsStackView: View {
     .frame(height: 410)
   }
   
-  private var card: some View {
-    RoundedRectangle(cornerRadius: 16)
-      .fill([Color.blue, .black, .green, .brown, .red].randomElement()!)
+  private func card(for index: Int, practiceRow: PracticeRow) -> some View {
+    VocabularyCardView(
+      practiceData: practiceRow,
+      isTranslationRevealed: revealedCards.contains(index),
+      onRevealTranslation: {
+        revealedCards.insert(index)
+      }
+    )
   }
   
   private func zIndex(_ index: Int) -> CGFloat {
-    return CGFloat(items.count - index)
+    return CGFloat(practiceRows.count - index)
   }
   
   nonisolated private func clampedMinX(for geometry: GeometryProxy) -> CGFloat {
@@ -76,8 +82,4 @@ struct CardsStackView: View {
     return .init(degrees: progress * rotation)
   }
 
-}
-
-#Preview {
-  CardsStackView(items: ["aek", "aek", "aek", "aek", "aek", "aek", "aek", "aek", "aek", "aek"])
 }
