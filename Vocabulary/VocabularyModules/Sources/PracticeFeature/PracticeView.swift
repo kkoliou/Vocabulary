@@ -57,7 +57,8 @@ public struct PracticeView: View {
               withAnimation(.spring(response: 0.4, dampingFraction: 0.8)) {
                 viewModel.revealTranslation()
               }
-            }
+            },
+            isForStack: false
           )
           NavigationControlsView(
             canGoPrevious: viewModel.canGoPrevious,

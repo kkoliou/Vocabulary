@@ -20,7 +20,6 @@ struct CardsStackView: View {
         HStack(spacing: 0) {
           ForEach(Array(practiceRows.enumerated()), id: \.offset) { index, practiceRow in
             card(for: index, practiceRow: practiceRow)
-              .padding(.horizontal, 80)
               .frame(width: size.width)
               .visualEffect { content, geometry in
                 content
@@ -37,7 +36,6 @@ struct CardsStackView: View {
       .scrollTargetBehavior(.paging)
       .scrollIndicators(.hidden)
     }
-    .frame(height: 410)
   }
   
   private func card(for index: Int, practiceRow: PracticeRow) -> some View {
@@ -46,7 +44,8 @@ struct CardsStackView: View {
       isTranslationRevealed: revealedCards.contains(index),
       onRevealTranslation: {
         revealedCards.insert(index)
-      }
+      },
+      isForStack: true
     )
   }
   
