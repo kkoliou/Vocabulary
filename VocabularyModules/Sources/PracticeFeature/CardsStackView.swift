@@ -11,7 +11,12 @@ import VocabularyDB
 
 struct CardsStackView: View {
   let practiceRows: [PracticeRow]
-  @State private var revealedCards: Set<Int> = []
+  let currentIndex: Int
+  @Binding var isTranslationRevealed: Bool
+  let onRevealTranslation: () -> Void
+  let onIndexChanged: (Int) -> Void
+  
+  @State private var scrollPosition: Int?
   
   var body: some View {
     GeometryReader {
@@ -29,21 +34,32 @@ struct CardsStackView: View {
                   .offset(x: excessMinX(for: geometry))
               }
               .zIndex(zIndex(index))
+              .id(index)
           }
         }
-        .padding(.vertical, 15)
+        .scrollTargetLayout()
       }
       .scrollTargetBehavior(.paging)
       .scrollIndicators(.hidden)
+      .scrollPosition(id: $scrollPosition)
+      .task {
+        scrollPosition = currentIndex
+      }
+      .onChange(of: scrollPosition) { _, newPosition in
+        if let newPosition = newPosition, newPosition != currentIndex {
+          onIndexChanged(newPosition)
+        }
+      }
     }
   }
   
   private func card(for index: Int, practiceRow: PracticeRow) -> some View {
     VocabularyCardView(
       practiceData: practiceRow,
-      isTranslationRevealed: revealedCards.contains(index),
+      isTranslationRevealed: index == currentIndex ? isTranslationRevealed : false,
       onRevealTranslation: {
-        revealedCards.insert(index)
+        guard index == currentIndex else { return }
+        onRevealTranslation()
       },
       isForStack: true
     )
@@ -80,5 +96,4 @@ struct CardsStackView: View {
     let progress = progress(for: geometry)
     return .init(degrees: progress * rotation)
   }
-
 }

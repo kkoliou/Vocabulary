@@ -254,6 +254,25 @@ class PracticeViewModel {
     isTranslationRevealed = true
   }
   
+  func setCurrentIndex(_ index: Int) async {
+    guard !rows.isEmpty else { return }
+    guard index >= 0, index < rows.count else { return }
+    guard index != currentIndex else { return }
+    currentIndex = index
+    isTranslationRevealed = isAutoRevealEnabled
+    await savePractice()
+  }
+  
+  func didSwipe(to index: Int) async {
+    if index == currentIndex + 1 {
+      await nextEntry()
+    } else if index == currentIndex - 1 {
+      await previousEntry()
+    } else {
+      await setCurrentIndex(index)
+    }
+  }
+  
   func nextEntry() async {
     guard canGoNext else { return }
     currentIndex += 1

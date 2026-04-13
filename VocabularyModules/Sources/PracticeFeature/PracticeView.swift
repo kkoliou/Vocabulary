@@ -14,9 +14,14 @@ public struct PracticeView: View {
   
   @Environment(\.dismiss) private var dismiss
   @State var viewModel: PracticeViewModel
-  @State var useCardsStackMode: Bool = true
+  let useCardsStackMode: Bool // TODO: move it to view model and add its switch functionality
   
-  public init(vocabulary: Vocabulary, practice: Practice? = nil, scope: PracticeScope = .all) {
+  public init(
+    vocabulary: Vocabulary,
+    practice: Practice? = nil,
+    scope: PracticeScope = .all,
+    useCardsStackMode: Bool = true
+  ) {
     _viewModel = State(
       wrappedValue: PracticeViewModel(
         vocabulary: vocabulary,
@@ -24,31 +29,44 @@ public struct PracticeView: View {
         scope: scope
       )
     )
+    self.useCardsStackMode = useCardsStackMode
   }
   
   public var body: some View {
     VStack(spacing: 0) {
       if viewModel.isInitialLoading {
         ProgressView()
-      } else if useCardsStackMode {
-        // Cards Stack View Mode
-        if viewModel.rows.isEmpty {
-          ContentUnavailableView(
-            Strings.localized("No entries"),
-            systemImage: "book.closed",
-            description: Text(Strings.localized("Add some vocabulary entries to practice"))
+      } else if viewModel.rows.isEmpty {
+        ContentUnavailableView(
+          Strings.localized("No entries"),
+          systemImage: "book.closed",
+          description: Text(Strings.localized("Add some vocabulary entries to practice"))
+        )
+      } else if let entry = viewModel.currentEntry {
+        ProgressBarView(
+          progressText: viewModel.progressText,
+          vocabularyName: viewModel.vocabulary.name,
+          progress: viewModel.progress
+        )
+        
+        if useCardsStackMode {
+          CardsStackView(
+            practiceRows: viewModel.rows,
+            currentIndex: viewModel.currentIndex,
+            isTranslationRevealed: $viewModel.isTranslationRevealed,
+            onRevealTranslation: {
+              Utilities.triggerLightHaptic()
+              withAnimation(.spring(response: 0.4, dampingFraction: 0.8)) {
+                viewModel.revealTranslation()
+              }
+            },
+            onIndexChanged: { newIndex in
+              Task {
+                await viewModel.didSwipe(to: newIndex)
+              }
+            }
           )
         } else {
-          CardsStackView(practiceRows: viewModel.rows)
-        }
-      } else {
-        // Single Card View Mode (Original)
-        if let entry = viewModel.currentEntry {
-          ProgressBarView(
-            progressText: viewModel.progressText,
-            vocabularyName: viewModel.vocabulary.name,
-            progress: viewModel.progress
-          )
           VocabularyCardView(
             practiceData: entry,
             isTranslationRevealed: viewModel.isTranslationRevealed,
@@ -76,24 +94,13 @@ public struct PracticeView: View {
               }
             }
           )
-        } else {
-          ContentUnavailableView(
-            Strings.localized("No entries"),
-            systemImage: "book.closed",
-            description: Text(Strings.localized("Add some vocabulary entries to practice"))
-          )
         }
       }
     }
     .navigationTitle(Strings.localized("Practice"))
     .navigationBarTitleDisplayMode(.inline)
     .toolbar {
-      ToolbarItemGroup(placement: .primaryAction) {
-        Button {
-          useCardsStackMode.toggle()
-        } label: {
-          Image(systemName: useCardsStackMode ? "square.stack.fill" : "square.stack")
-        }
+      ToolbarItem(placement: .primaryAction) {
         Button {
           viewModel.settingsButtonTapped()
         } label: {
