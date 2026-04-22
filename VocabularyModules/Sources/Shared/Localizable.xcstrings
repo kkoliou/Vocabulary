@@ -205,6 +205,23 @@
         }
       }
     },
+    "Buttons" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "el" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Κουμπιά"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Buttons"
+          }
+        }
+      }
+    },
     "Cancel" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -256,6 +273,23 @@
         }
       }
     },
+    "Cards" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "el" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Κάρτες"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cards"
+          }
+        }
+      }
+    },
     "chance to hide original" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -303,6 +337,23 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Choose a CSV File"
+          }
+        }
+      }
+    },
+    "Choose how entries are shown while you practice." : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "el" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Διάλεξε πώς εμφανίζονται οι λέξεις κατά την εξάσκηση."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Choose how entries are shown while you practice."
           }
         }
       }

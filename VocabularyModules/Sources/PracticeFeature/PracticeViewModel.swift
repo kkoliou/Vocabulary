@@ -8,6 +8,7 @@
 import VocabularyDB
 import SQLiteData
 import Shared
+import Sharing
 import Observation
 import Foundation
 
@@ -15,6 +16,7 @@ import Foundation
 class PracticeViewModel {
   
   @ObservationIgnored @Dependency(\.defaultDatabase) var database
+  @ObservationIgnored @Shared var practiceDisplayMode: PracticeDisplayMode
   var rows = [PracticeRow]()
   let vocabulary: Vocabulary
   let scope: PracticeScope
@@ -36,6 +38,10 @@ class PracticeViewModel {
     self.vocabulary = vocabulary
     self.practice = practice
     self.scope = scope
+    _practiceDisplayMode = Shared(
+      wrappedValue: .cards,
+      .appStorage(PracticeDisplayMode.appStorageKey)
+    )
     if let practice = practice {
       self.hiddenWordProbability = practice.hiddenWordProbability
     }
@@ -252,6 +258,25 @@ class PracticeViewModel {
   
   func revealTranslation() {
     isTranslationRevealed = true
+  }
+  
+  func setCurrentIndex(_ index: Int) async {
+    guard !rows.isEmpty else { return }
+    guard index >= 0, index < rows.count else { return }
+    guard index != currentIndex else { return }
+    currentIndex = index
+    isTranslationRevealed = isAutoRevealEnabled
+    await savePractice()
+  }
+  
+  func didSwipe(to index: Int) async {
+    if index == currentIndex + 1 {
+      await nextEntry()
+    } else if index == currentIndex - 1 {
+      await previousEntry()
+    } else {
+      await setCurrentIndex(index)
+    }
   }
   
   func nextEntry() async {

@@ -15,6 +15,8 @@ struct VocabularyCardView: View {
   let practiceData: PracticeRow
   let isTranslationRevealed: Bool
   let onRevealTranslation: () -> Void
+  let isForStack: Bool
+  private let cornerRadius: CGFloat = 24
   
   var body: some View {
     GeometryReader { geometry in
@@ -22,10 +24,20 @@ struct VocabularyCardView: View {
         Spacer()
         
         ZStack {
-          RoundedRectangle(cornerRadius: 24)
+          RoundedRectangle(cornerRadius: cornerRadius)
             .fill(Color(.secondarySystemGroupedBackground))
-            .shadow(color: .black.opacity(0.15), radius: 20, x: 0, y: 10)
-            .shadow(color: .black.opacity(0.05), radius: 1, x: 0, y: 1)
+            .if(isForStack) {
+              $0
+                .overlay {
+                  RoundedRectangle(cornerRadius: cornerRadius)
+                    .strokeBorder(Color(.separator), lineWidth: 1)
+                }
+            }
+            .if(!isForStack) {
+              $0
+                .shadow(color: .black.opacity(0.15), radius: 20, x: 0, y: 10)
+                .shadow(color: .black.opacity(0.05), radius: 1, x: 0, y: 1)
+            }
           
           VStack(spacing: 0) {
             Spacer()

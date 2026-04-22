@@ -7,6 +7,12 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		7D6168652F8D1C7C00C9073A /* PracticeFeature in Frameworks */ = {isa = PBXBuildFile; productRef = 7D6168642F8D1C7C00C9073A /* PracticeFeature */; };
+		7D6168672F8D1C7C00C9073A /* Shared in Frameworks */ = {isa = PBXBuildFile; productRef = 7D6168662F8D1C7C00C9073A /* Shared */; };
+		7D6168692F8D1C7C00C9073A /* VocabulariesFeature in Frameworks */ = {isa = PBXBuildFile; productRef = 7D6168682F8D1C7C00C9073A /* VocabulariesFeature */; };
+		7D61686B2F8D1C7C00C9073A /* VocabularyCsvParser in Frameworks */ = {isa = PBXBuildFile; productRef = 7D61686A2F8D1C7C00C9073A /* VocabularyCsvParser */; };
+		7D61686D2F8D1C7C00C9073A /* VocabularyDB in Frameworks */ = {isa = PBXBuildFile; productRef = 7D61686C2F8D1C7C00C9073A /* VocabularyDB */; };
+		7D61686F2F8D1C7C00C9073A /* VocabularyFeature in Frameworks */ = {isa = PBXBuildFile; productRef = 7D61686E2F8D1C7C00C9073A /* VocabularyFeature */; };
 		7DB4BAB82F6898B0007AE733 /* VocabulariesFeature in Frameworks */ = {isa = PBXBuildFile; productRef = 7DB4BAB72F6898B0007AE733 /* VocabulariesFeature */; };
 /* End PBXBuildFile section */
 
@@ -69,7 +75,13 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				7D61686D2F8D1C7C00C9073A /* VocabularyDB in Frameworks */,
+				7D6168652F8D1C7C00C9073A /* PracticeFeature in Frameworks */,
+				7D61686F2F8D1C7C00C9073A /* VocabularyFeature in Frameworks */,
 				7DB4BAB82F6898B0007AE733 /* VocabulariesFeature in Frameworks */,
+				7D6168672F8D1C7C00C9073A /* Shared in Frameworks */,
+				7D6168692F8D1C7C00C9073A /* VocabulariesFeature in Frameworks */,
+				7D61686B2F8D1C7C00C9073A /* VocabularyCsvParser in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -139,6 +151,12 @@
 			name = Vocabulary;
 			packageProductDependencies = (
 				7DB4BAB72F6898B0007AE733 /* VocabulariesFeature */,
+				7D6168642F8D1C7C00C9073A /* PracticeFeature */,
+				7D6168662F8D1C7C00C9073A /* Shared */,
+				7D6168682F8D1C7C00C9073A /* VocabulariesFeature */,
+				7D61686A2F8D1C7C00C9073A /* VocabularyCsvParser */,
+				7D61686C2F8D1C7C00C9073A /* VocabularyDB */,
+				7D61686E2F8D1C7C00C9073A /* VocabularyFeature */,
 			);
 			productName = Vocabulary;
 			productReference = 7D7F319E2F2024D6007F2307 /* Vocabulary.app */;
@@ -224,6 +242,7 @@
 			mainGroup = 7D7F31952F2024D6007F2307;
 			minimizedProjectReferenceProxies = 1;
 			packageReferences = (
+				7D6168632F8D1C7C00C9073A /* XCLocalSwiftPackageReference "VocabularyModules" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 7D7F319F2F2024D6007F2307 /* Products */;
@@ -666,7 +685,38 @@
 		};
 /* End XCConfigurationList section */
 
+/* Begin XCLocalSwiftPackageReference section */
+		7D6168632F8D1C7C00C9073A /* XCLocalSwiftPackageReference "VocabularyModules" */ = {
+			isa = XCLocalSwiftPackageReference;
+			relativePath = VocabularyModules;
+		};
+/* End XCLocalSwiftPackageReference section */
+
 /* Begin XCSwiftPackageProductDependency section */
+		7D6168642F8D1C7C00C9073A /* PracticeFeature */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = PracticeFeature;
+		};
+		7D6168662F8D1C7C00C9073A /* Shared */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = Shared;
+		};
+		7D6168682F8D1C7C00C9073A /* VocabulariesFeature */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = VocabulariesFeature;
+		};
+		7D61686A2F8D1C7C00C9073A /* VocabularyCsvParser */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = VocabularyCsvParser;
+		};
+		7D61686C2F8D1C7C00C9073A /* VocabularyDB */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = VocabularyDB;
+		};
+		7D61686E2F8D1C7C00C9073A /* VocabularyFeature */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = VocabularyFeature;
+		};
 		7DB4BAB72F6898B0007AE733 /* VocabulariesFeature */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = VocabulariesFeature;
