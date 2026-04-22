@@ -10,6 +10,7 @@ import Foundation
 import SQLiteData
 import VocabularyDB
 import Shared
+import Sharing
 import VocabularyCsvParser
 
 @Observable @MainActor
@@ -18,11 +19,18 @@ public class VocabulariesViewModel {
   @ObservationIgnored @Dependency(\.defaultDatabase) var database
   @ObservationIgnored @FetchAll(Vocabulary.none) var vocabularies
   @ObservationIgnored var firstInitExecuted = false
+  @ObservationIgnored @Shared var practiceDisplayMode: PracticeDisplayMode
   var addVocabIsPresented = false
+  var settingsIsPresented = false
   var isLoading = false
   var isAddSampleVocabsLoading = false
   
-  public init() {}
+  public init() {
+    _practiceDisplayMode = Shared(
+      wrappedValue: .cards,
+      .appStorage(PracticeDisplayMode.appStorageKey)
+    )
+  }
   
   func doInit() async {
     setLoadingIfNeeded(true)
@@ -45,6 +53,10 @@ public class VocabulariesViewModel {
   
   func addVocabularyTapped() {
     addVocabIsPresented = true
+  }
+  
+  func changePracticeDisplayMode(to mode: PracticeDisplayMode) {
+    $practiceDisplayMode.withLock { $0 = mode }
   }
   
   func deleteVocabularies(at offsets: IndexSet) async {
@@ -102,5 +114,9 @@ public class VocabulariesViewModel {
     }
     
     isAddSampleVocabsLoading = false
+  }
+  
+  func settingsTapped() {
+    settingsIsPresented = true
   }
 }

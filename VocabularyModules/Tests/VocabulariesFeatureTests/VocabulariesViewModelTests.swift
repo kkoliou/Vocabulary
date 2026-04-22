@@ -40,6 +40,26 @@ extension BaseSuite {
       await model.doInit()
     }
 
+    @Test func practiceDisplayMode_defaultsToCards() async throws {
+      UserDefaults.standard.removeObject(forKey: PracticeDisplayMode.appStorageKey)
+      let freshModel = VocabulariesViewModel()
+      #expect(freshModel.practiceDisplayMode == .cards)
+    }
+
+    @Test func practiceDisplayMode_persistsAcrossModelInstances() async throws {
+      UserDefaults.standard.removeObject(forKey: PracticeDisplayMode.appStorageKey)
+      defer { UserDefaults.standard.removeObject(forKey: PracticeDisplayMode.appStorageKey) }
+
+      let first = VocabulariesViewModel()
+      #expect(first.practiceDisplayMode == .cards)
+
+      first.changePracticeDisplayMode(to: .buttons)
+      #expect(first.practiceDisplayMode == .buttons)
+
+      let second = VocabulariesViewModel()
+      #expect(second.practiceDisplayMode == .buttons)
+    }
+
     @Test func vocabulariesAreOrderedByCreatedAt() async throws {
       #expect(model.vocabularies.count == 4)
       #expect(model.vocabularies[0].name == "Spanish")

@@ -8,6 +8,7 @@
 import VocabularyDB
 import SQLiteData
 import Shared
+import Sharing
 import Observation
 import Foundation
 
@@ -15,6 +16,7 @@ import Foundation
 class PracticeViewModel {
   
   @ObservationIgnored @Dependency(\.defaultDatabase) var database
+  @ObservationIgnored @Shared var practiceDisplayMode: PracticeDisplayMode
   var rows = [PracticeRow]()
   let vocabulary: Vocabulary
   let scope: PracticeScope
@@ -36,6 +38,10 @@ class PracticeViewModel {
     self.vocabulary = vocabulary
     self.practice = practice
     self.scope = scope
+    _practiceDisplayMode = Shared(
+      wrappedValue: .cards,
+      .appStorage(PracticeDisplayMode.appStorageKey)
+    )
     if let practice = practice {
       self.hiddenWordProbability = practice.hiddenWordProbability
     }

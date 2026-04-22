@@ -39,6 +39,16 @@ public struct VocabulariesView: View {
         ToolbarItem(placement: .primaryAction) {
           Button(
             action: {
+              viewModel.settingsTapped()
+            },
+            label: {
+              Image(systemName: "gearshape")
+            }
+          )
+        }
+        ToolbarItem(placement: .primaryAction) {
+          Button(
+            action: {
               viewModel.addVocabularyTapped()
             },
             label: {
@@ -54,6 +64,17 @@ public struct VocabulariesView: View {
     .vSheet(isPresented: $viewModel.addVocabIsPresented) {
       VocabularyCreatorView()
         .largePresentationDetents()
+    }
+    .vSheet(
+      isPresented: $viewModel.settingsIsPresented
+    ) {
+      GlobalSettingsView(
+        displayMode: Binding(
+          get: { viewModel.practiceDisplayMode },
+          set: { viewModel.changePracticeDisplayMode(to: $0) }
+        )
+      )
+      .smallPresentationDetents()
     }
   }
   

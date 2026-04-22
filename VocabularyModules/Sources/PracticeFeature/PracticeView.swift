@@ -14,13 +14,11 @@ public struct PracticeView: View {
   
   @Environment(\.dismiss) private var dismiss
   @State var viewModel: PracticeViewModel
-  let useCardsStackMode: Bool // TODO: move it to view model and add its switch functionality
   
   public init(
     vocabulary: Vocabulary,
     practice: Practice? = nil,
-    scope: PracticeScope = .all,
-    useCardsStackMode: Bool = true
+    scope: PracticeScope = .all
   ) {
     _viewModel = State(
       wrappedValue: PracticeViewModel(
@@ -29,7 +27,6 @@ public struct PracticeView: View {
         scope: scope
       )
     )
-    self.useCardsStackMode = useCardsStackMode
   }
   
   public var body: some View {
@@ -49,7 +46,7 @@ public struct PracticeView: View {
           progress: viewModel.progress
         )
         
-        if useCardsStackMode {
+        if viewModel.practiceDisplayMode.useCardsStackMode {
           CardsStackView(
             practiceRows: viewModel.rows,
             currentIndex: viewModel.currentIndex,
