@@ -74,7 +74,7 @@ public struct VocabulariesView: View {
           set: { viewModel.changePracticeDisplayMode(to: $0) }
         )
       )
-      .smallPresentationDetents()
+      .mediumPresentationDetents()
     }
   }
   

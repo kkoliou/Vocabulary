@@ -8,10 +8,10 @@
 import SwiftUI
 
 public struct VSheet<SheetContent: View>: ViewModifier {
-  
+
   @Binding var isPresented: Bool
   let sheetContent: () -> SheetContent
-  
+
   public init(
     isPresented: Binding<Bool>,
     @ViewBuilder sheetContent: @escaping () -> SheetContent
@@ -19,7 +19,7 @@ public struct VSheet<SheetContent: View>: ViewModifier {
     self._isPresented = isPresented
     self.sheetContent = sheetContent
   }
-  
+
   public func body(content: Content) -> some View {
     content
       .sheet(isPresented: $isPresented) {
@@ -47,11 +47,15 @@ public extension View {
   func defaultPresentationDetents() -> some View {
     self.presentationDetents([.fraction(0.7)])
   }
-  
+
   func largePresentationDetents() -> some View {
     self.presentationDetents([.large])
   }
-  
+
+  func mediumPresentationDetents() -> some View {
+    self.presentationDetents([.medium])
+  }
+
   func smallPresentationDetents() -> some View {
     self.presentationDetents([.fraction(0.4)])
   }
