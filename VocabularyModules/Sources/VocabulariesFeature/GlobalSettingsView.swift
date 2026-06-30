@@ -34,7 +34,7 @@ struct GlobalSettingsView: View {
         } header: {
           Text(Strings.localized("Choose how entries are shown while you practice."))
         }
-        
+
         Section {
           TransitionStylePreviewView(mode: displayMode)
             .listRowInsets(EdgeInsets())
