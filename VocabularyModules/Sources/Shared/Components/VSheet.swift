@@ -52,6 +52,10 @@ public extension View {
     self.presentationDetents([.large])
   }
   
+  func mediumPresentationDetents() -> some View {
+    self.presentationDetents([.medium])
+  }
+  
   func smallPresentationDetents() -> some View {
     self.presentationDetents([.fraction(0.4)])
   }
