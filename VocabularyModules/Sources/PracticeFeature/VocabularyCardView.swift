@@ -66,6 +66,7 @@ struct VocabularyCardView: View {
         Spacer()
       }
     }
+    .drawingGroup()
   }
 }
 
