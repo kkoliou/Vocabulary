@@ -15,85 +15,134 @@ struct CardsStackView: View {
   @Binding var isTranslationRevealed: Bool
   let onRevealTranslation: () -> Void
   let onIndexChanged: (Int) -> Void
-  
-  @State private var scrollPosition: Int?
-  
+
+  @State private var localIndex = 0
+  @State private var dragProgress: CGFloat = 0
+
+  private let neighborLimit = 3
+  private let deckScale: CGFloat = 0.92
+
   var body: some View {
-    GeometryReader {
-      let size = $0.size
-      ScrollView(.horizontal) {
-        HStack(spacing: 0) {
-          ForEach(Array(practiceRows.enumerated()), id: \.offset) { index, practiceRow in
-            card(for: index, practiceRow: practiceRow)
-              .frame(width: size.width)
-              .visualEffect { content, geometry in
-                content
-                  .scaleEffect(scale(for: geometry), anchor: .trailing)
-                  .rotationEffect(rotation(for: geometry))
-                  .offset(x: clampedMinX(for: geometry))
-                  .offset(x: excessMinX(for: geometry))
-              }
-              .zIndex(zIndex(index))
-              .id(index)
-          }
-        }
-        .scrollTargetLayout()
-      }
-      .scrollTargetBehavior(.paging)
-      .scrollIndicators(.hidden)
-      .scrollPosition(id: $scrollPosition)
-      .task {
-        scrollPosition = currentIndex
-      }
-      .onChange(of: scrollPosition) { _, newPosition in
-        if let newPosition = newPosition, newPosition != currentIndex {
-          onIndexChanged(newPosition)
+    GeometryReader { geometry in
+      ZStack {
+        ForEach(windowIndices, id: \.self) { index in
+          card(for: index)
+            .zIndex(zIndex(for: index))
+            .offset(x: xOffset(for: index, width: geometry.size.width))
+            .scaleEffect(scale(for: index))
+            .rotationEffect(.degrees(rotation(for: index)))
+            .shadow(color: shadow(for: index), radius: 30, y: 20)
         }
       }
+      .scaleEffect(deckScale)
+      .contentShape(Rectangle())
+      .highPriorityGesture(dragGesture(width: geometry.size.width))
+    }
+    .task {
+      localIndex = currentIndex
+    }
+    .onChange(of: currentIndex) { _, newValue in
+      guard newValue != localIndex else { return }
+      localIndex = newValue
     }
   }
-  
-  private func card(for index: Int, practiceRow: PracticeRow) -> some View {
+
+  private var maxIndex: Int {
+    practiceRows.count - 1
+  }
+
+  private var windowIndices: [Int] {
+    let lowerBound = max(0, localIndex - neighborLimit)
+    let upperBound = min(maxIndex, localIndex + neighborLimit)
+    guard lowerBound <= upperBound else { return [] }
+    return Array(lowerBound...upperBound)
+  }
+
+  private func card(for index: Int) -> some View {
     VocabularyCardView(
-      practiceData: practiceRow,
-      isTranslationRevealed: index == currentIndex ? isTranslationRevealed : false,
+      practiceData: practiceRows[index],
+      isTranslationRevealed: index == localIndex ? isTranslationRevealed : false,
       onRevealTranslation: {
-        guard index == currentIndex else { return }
+        guard index == localIndex else { return }
         onRevealTranslation()
       },
       isForStack: true
     )
   }
-  
-  private func zIndex(_ index: Int) -> CGFloat {
-    return CGFloat(practiceRows.count - index)
+
+  private func dragGesture(width: CGFloat) -> some Gesture {
+    DragGesture(minimumDistance: 5)
+      .onChanged { value in
+        guard width > 0 else { return }
+        var progress = -(value.translation.width / width)
+        if progress > 0, localIndex >= maxIndex {
+          progress = 0
+        }
+        if progress < 0, localIndex <= 0 {
+          progress = 0
+        }
+        dragProgress = progress
+      }
+      .onEnded { _ in
+        snapToNearestIndex()
+      }
   }
-  
-  nonisolated private func clampedMinX(for geometry: GeometryProxy) -> CGFloat {
-    let minX = geometry.frame(in: .scrollView(axis: .horizontal)).minX
-    return minX < 0 ? 0 : -minX
+
+  private func snapToNearestIndex() {
+    let threshold: CGFloat = 0.3
+    let direction = dragProgress < 0 ? -1 : 1
+    let newIndex = localIndex + direction
+    guard abs(dragProgress) >= threshold, newIndex >= 0, newIndex <= maxIndex else {
+      withAnimation(.bouncy) {
+        dragProgress = 0
+      }
+      return
+    }
+    withAnimation(.smooth(duration: 0.25)) {
+      localIndex = newIndex
+      dragProgress = 0
+    }
+    onIndexChanged(newIndex)
   }
-  
-  nonisolated private func progress(for geometry: GeometryProxy, limit: CGFloat = 3) -> CGFloat {
-    let maxX = geometry.frame(in: .scrollView(axis: .horizontal)).maxX
-    let width = geometry.bounds(of: .scrollView(axis: .horizontal))?.width ?? 0
-    let progress = (maxX / width) - 1.0
-    let cappedProgress = min(progress, limit)
-    return cappedProgress
+
+  // MARK: - Geometry
+
+  private var progressIndex: CGFloat {
+    CGFloat(localIndex) + dragProgress
   }
-  
-  nonisolated private func scale(for geometry: GeometryProxy, scale: CGFloat = 0.1) -> CGFloat {
-    let progress = progress(for: geometry)
-    return 1 - (progress * scale)
+
+  private func currentPosition(for index: Int) -> CGFloat {
+    progressIndex - CGFloat(index)
   }
-  
-  nonisolated private func excessMinX(for geometry: GeometryProxy, offset: CGFloat = 10) -> CGFloat {
-    let progress = progress(for: geometry)
-    return progress * offset
+
+  private func zIndex(for index: Int) -> Double {
+    Double(-abs(currentPosition(for: index)))
   }
-  
-  nonisolated private func rotation(for geometry: GeometryProxy, rotation: CGFloat = 2) -> Angle {
-    let progress = progress(for: geometry)
-    return .init(degrees: progress * rotation)
+
+  private func xOffset(for index: Int, width: CGFloat) -> CGFloat {
+    let padding = width / 10
+    let x = (CGFloat(index) - progressIndex) * padding
+    if index == localIndex, progressIndex > 0, progressIndex < CGFloat(maxIndex) {
+      return x * swingOutMultiplier
+    }
+    return x
+  }
+
+  private var swingOutMultiplier: CGFloat {
+    abs(sin(.pi * progressIndex) * 20)
+  }
+
+  private func scale(for index: Int) -> CGFloat {
+    1 - (0.1 * abs(currentPosition(for: index)))
+  }
+
+  private func rotation(for index: Int) -> Double {
+    Double(-currentPosition(for: index) * 2)
+  }
+
+  private func shadow(for index: Int) -> Color {
+    let progress = 1 - abs(progressIndex - CGFloat(index))
+    let opacity = 0.3 * progress
+    return .black.opacity(max(0, opacity))
   }
 }
