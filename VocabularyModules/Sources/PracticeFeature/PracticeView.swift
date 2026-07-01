@@ -94,6 +94,7 @@ public struct PracticeView: View {
         }
       }
     }
+    .background(Color(uiColor: .systemGroupedBackground))
     .navigationTitle(Strings.localized("Practice"))
     .navigationBarTitleDisplayMode(.inline)
     .toolbar {

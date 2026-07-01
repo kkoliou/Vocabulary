@@ -25,6 +25,7 @@ public struct VSheet<SheetContent: View>: ViewModifier {
       .sheet(isPresented: $isPresented) {
         sheetContent()
           .presentationDragIndicator(.visible)
+          .background(Color(uiColor: .systemGroupedBackground))
       }
   }
 }
