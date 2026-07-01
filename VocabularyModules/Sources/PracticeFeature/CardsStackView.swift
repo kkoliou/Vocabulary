@@ -83,21 +83,38 @@ struct CardsStackView: View {
         }
         dragProgress = progress
       }
-      .onEnded { _ in
-        snapToNearestIndex()
+      .onEnded { value in
+        snapToNearestIndex(velocity: value.velocity.width)
       }
   }
 
-  private func snapToNearestIndex() {
-    let threshold: CGFloat = 0.3
-    let direction = dragProgress < 0 ? -1 : 1
-    let newIndex = localIndex + direction
-    guard abs(dragProgress) >= threshold, newIndex >= 0, newIndex <= maxIndex else {
+  private func snapToNearestIndex(velocity: CGFloat = 0) {
+    let distanceThreshold: CGFloat = 0.3
+    let velocityThreshold: CGFloat = 500
+
+    let distanceDirection = dragProgress < 0 ? -1 : 1
+    let velocityDirection = velocity < 0 ? 1 : -1
+
+    let triggeredByDistance = abs(dragProgress) >= distanceThreshold
+    let triggeredByVelocity = abs(velocity) >= velocityThreshold
+
+    guard triggeredByDistance || triggeredByVelocity else {
       withAnimation(.bouncy) {
         dragProgress = 0
       }
       return
     }
+
+    let effectiveDirection = triggeredByDistance ? distanceDirection : velocityDirection
+    let newIndex = localIndex + effectiveDirection
+
+    guard newIndex >= 0, newIndex <= maxIndex else {
+      withAnimation(.bouncy) {
+        dragProgress = 0
+      }
+      return
+    }
+
     withAnimation(.smooth(duration: 0.25)) {
       localIndex = newIndex
       dragProgress = 0
