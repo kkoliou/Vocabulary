@@ -16,7 +16,7 @@ struct PracticeSettingsView: View {
   @State private var isAutoRevealEnabled: Bool
   let onApply: (Double, Bool) async -> Void
   @State private var isLoading = false
-  
+
   init(
     probability: Double,
     isAutoRevealEnabled: Bool = false,
@@ -31,14 +31,11 @@ struct PracticeSettingsView: View {
     NavigationStack {
       Form {
         Section {
-          VStack(alignment: .leading, spacing: 8) {
-            Slider(value: $probability, in: 0...1, step: 0.1)
-              .disabled(isLoading)
+          Stepper(value: $probability, in: 0...1, step: 0.1) {
             Text(probabilityLabel)
               .font(AppTypography.subheadline)
-              .foregroundStyle(.secondary)
           }
-          .padding(.vertical, 8)
+          .disabled(isLoading)
         } header: {
           Text(Strings.localized("Hidden Word Randomness"))
         } footer: {
