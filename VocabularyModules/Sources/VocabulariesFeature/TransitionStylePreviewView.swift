@@ -32,11 +32,11 @@ private struct StackedCardsPreview: View {
       cardShape
         .scaleEffect(0.86)
         .offset(x: 18)
-        .opacity(0.5)
+        .opacity(0.65)
       cardShape
         .scaleEffect(0.93)
         .offset(x: 9)
-        .opacity(0.75)
+        .opacity(0.85)
       cardShape
         .offset(x: isSwiped ? -90 : 0)
         .rotationEffect(.degrees(isSwiped ? -14 : 0))
@@ -69,8 +69,12 @@ private struct SingleCardPreview: View {
 
       RoundedRectangle(cornerRadius: 16)
         .fill(Color(.secondarySystemGroupedBackground))
+        .overlay(
+          RoundedRectangle(cornerRadius: 16)
+            .strokeBorder(Color(.separator), lineWidth: 1)
+        )
         .frame(width: 90, height: 120)
-        .shadow(color: .black.opacity(0.15), radius: 10, y: 6)
+        .shadow(color: .black.opacity(0.08), radius: 6, y: 3)
 
       arrowButton(systemImage: "chevron.right", isPulsing: isPulsing)
     }

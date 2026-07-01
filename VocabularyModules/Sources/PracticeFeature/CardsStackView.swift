@@ -31,7 +31,7 @@ struct CardsStackView: View {
             .offset(x: xOffset(for: index, width: geometry.size.width))
             .scaleEffect(scale(for: index))
             .rotationEffect(.degrees(rotation(for: index)))
-            .shadow(color: shadow(for: index), radius: 30, y: 20)
+            .shadow(color: shadow(for: index), radius: 10, y: 6)
         }
       }
       .scaleEffect(deckScale)
@@ -159,7 +159,7 @@ struct CardsStackView: View {
 
   private func shadow(for index: Int) -> Color {
     let progress = 1 - abs(progressIndex - CGFloat(index))
-    let opacity = 0.3 * progress
+    let opacity = 0.1 * progress
     return .black.opacity(max(0, opacity))
   }
 }

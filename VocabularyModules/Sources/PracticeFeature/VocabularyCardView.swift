@@ -26,17 +26,14 @@ struct VocabularyCardView: View {
         ZStack {
           RoundedRectangle(cornerRadius: cornerRadius)
             .fill(Color(.secondarySystemGroupedBackground))
-            .if(isForStack) {
-              $0
-                .overlay {
-                  RoundedRectangle(cornerRadius: cornerRadius)
-                    .strokeBorder(Color(.separator), lineWidth: 1)
-                }
+            .overlay {
+              RoundedRectangle(cornerRadius: cornerRadius)
+                .strokeBorder(Color(.separator), lineWidth: 1)
             }
             .if(!isForStack) {
               $0
-                .shadow(color: .black.opacity(0.15), radius: 20, x: 0, y: 10)
-                .shadow(color: .black.opacity(0.05), radius: 1, x: 0, y: 1)
+                .shadow(color: .black.opacity(0.08), radius: 12, x: 0, y: 6)
+                .shadow(color: .black.opacity(0.03), radius: 1, x: 0, y: 1)
             }
           
           VStack(spacing: 0) {
