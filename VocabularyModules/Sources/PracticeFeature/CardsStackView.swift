@@ -18,6 +18,7 @@ struct CardsStackView: View {
 
   @State private var localIndex = 0
   @State private var dragProgress: CGFloat = 0
+  @GestureState private var isDragActive = false
 
   private let neighborLimit = 3
   private let deckScale: CGFloat = 0.92
@@ -44,6 +45,12 @@ struct CardsStackView: View {
     .onChange(of: currentIndex) { _, newValue in
       guard newValue != localIndex else { return }
       localIndex = newValue
+    }
+    .onChange(of: isDragActive) { _, active in
+      guard !active, dragProgress != 0 else { return }
+      withAnimation(.bouncy) {
+        dragProgress = 0
+      }
     }
   }
 
@@ -72,6 +79,9 @@ struct CardsStackView: View {
 
   private func dragGesture(width: CGFloat) -> some Gesture {
     DragGesture(minimumDistance: 5)
+      .updating($isDragActive) { _, state, _ in
+        state = true
+      }
       .onChanged { value in
         guard width > 0 else { return }
         var progress = -(value.translation.width / width)
