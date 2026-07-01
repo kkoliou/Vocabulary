@@ -57,6 +57,7 @@ private struct StackedCardsPreview: View {
           .strokeBorder(Color(.separator), lineWidth: 1)
       )
       .frame(width: 90, height: 120)
+      .shadow(color: .black.opacity(0.08), radius: 6, y: 3)
   }
 }
 
