@@ -664,6 +664,17 @@
         }
       }
     },
+    "Language" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "el" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Γλώσσα"
+          }
+        }
+      }
+    },
     "Load English-Greek vocabularies to get started" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -694,6 +705,17 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Load vocabularies"
+          }
+        }
+      }
+    },
+    "Name" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "el" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Όνομα"
           }
         }
       }
@@ -847,6 +869,17 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Practice"
+          }
+        }
+      }
+    },
+    "Practice Style" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "el" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Στυλ Εξάσκησης"
           }
         }
       }

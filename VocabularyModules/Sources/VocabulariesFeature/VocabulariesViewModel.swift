@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import UIKit
 import Foundation
 import SQLiteData
 import VocabularyDB
@@ -13,15 +14,20 @@ import Shared
 import Sharing
 import VocabularyCsvParser
 
+enum VocabulariesRoute: Hashable {
+  case settings
+  case practiceDisplay
+}
+
 @Observable @MainActor
 public class VocabulariesViewModel {
-  
+
   @ObservationIgnored @Dependency(\.defaultDatabase) var database
   @ObservationIgnored @FetchAll(Vocabulary.none) var vocabularies
   @ObservationIgnored var firstInitExecuted = false
   @ObservationIgnored @Shared var practiceDisplayMode: PracticeDisplayMode
+  var path = NavigationPath()
   var addVocabIsPresented = false
-  var settingsIsPresented = false
   var isLoading = false
   var isAddSampleVocabsLoading = false
   
@@ -117,6 +123,15 @@ public class VocabulariesViewModel {
   }
   
   func settingsTapped() {
-    settingsIsPresented = true
+    path.append(VocabulariesRoute.settings)
+  }
+
+  func practiceDisplayRowTapped() {
+    path.append(VocabulariesRoute.practiceDisplay)
+  }
+
+  func languageRowTapped() {
+    guard let url = URL(string: UIApplication.openSettingsURLString) else { return }
+    UIApplication.shared.open(url)
   }
 }

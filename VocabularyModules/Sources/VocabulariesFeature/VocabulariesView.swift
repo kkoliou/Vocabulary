@@ -21,7 +21,7 @@ public struct VocabulariesView: View {
   }
   
   public var body: some View {
-    NavigationStack {
+    NavigationStack(path: $viewModel.path) {
       Group {
         if viewModel.isLoading {
           ProgressView()
@@ -34,6 +34,22 @@ public struct VocabulariesView: View {
       .navigationTitle(Strings.localized("Vocabularies"))
       .navigationDestination(for: Vocabulary.self) {
         VocabularyView(vocabulary: $0)
+      }
+      .navigationDestination(for: VocabulariesRoute.self) { route in
+        switch route {
+        case .settings:
+          GlobalSettingsView(
+            onSelectPracticeDisplay: { viewModel.practiceDisplayRowTapped() },
+            onSelectLanguage: { viewModel.languageRowTapped() }
+          )
+        case .practiceDisplay:
+          PracticeDisplaySettingsView(
+            displayMode: Binding(
+              get: { viewModel.practiceDisplayMode },
+              set: { viewModel.changePracticeDisplayMode(to: $0) }
+            )
+          )
+        }
       }
       .toolbar {
         ToolbarItem(placement: .primaryAction) {
@@ -64,17 +80,6 @@ public struct VocabulariesView: View {
     .vSheet(isPresented: $viewModel.addVocabIsPresented) {
       VocabularyCreatorView()
         .largePresentationDetents()
-    }
-    .vSheet(
-      isPresented: $viewModel.settingsIsPresented
-    ) {
-      GlobalSettingsView(
-        displayMode: Binding(
-          get: { viewModel.practiceDisplayMode },
-          set: { viewModel.changePracticeDisplayMode(to: $0) }
-        )
-      )
-      .mediumPresentationDetents()
     }
   }
   

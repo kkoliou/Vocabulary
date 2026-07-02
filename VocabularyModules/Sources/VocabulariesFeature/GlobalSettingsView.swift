@@ -1,5 +1,5 @@
 //
-//  PracticeAppearanceSettingsView.swift
+//  GlobalSettingsView.swift
 //  VocabulariesFeature
 //
 
@@ -7,57 +7,52 @@ import SwiftUI
 import Shared
 
 struct GlobalSettingsView: View {
-  @Environment(\.dismiss) private var dismiss
-  @Binding var displayMode: PracticeDisplayMode
+  let onSelectPracticeDisplay: () -> Void
+  let onSelectLanguage: () -> Void
 
   var body: some View {
-    NavigationStack {
-      List {
-        Section {
-          ForEach(PracticeDisplayMode.allCases) { mode in
-            Button {
-              displayMode = mode
-            } label: {
-              HStack(spacing: 12) {
-                Text(mode.title)
-                Spacer()
-                if mode == displayMode {
-                  Image(systemName: "checkmark")
-                    .font(AppTypography.body.weight(.semibold))
-                    .foregroundStyle(.tint)
-                }
-              }
-              .contentShape(Rectangle())
-            }
-            .buttonStyle(.plain)
-          }
-        } header: {
-          Text(Strings.localized("Choose how entries are shown while you practice."))
-        }
-
-        Section {
-          TransitionStylePreviewView(mode: displayMode)
-            .listRowInsets(EdgeInsets())
-            .listRowBackground(Color.clear)
-            .padding(.vertical, 12)
-        }
+    List {
+      row(title: Strings.localized("Practice Style")) {
+        onSelectPracticeDisplay()
       }
-      .navigationTitle(Strings.localized("Settings"))
-      .navigationBarTitleDisplayMode(.inline)
-      .toolbar {
-        ToolbarItem(placement: .confirmationAction) {
-          Button(
-            action: { dismiss() },
-            label: {
-              Image(systemName: "xmark")
-            }
-          )
-        }
+
+      row(title: Strings.localized("Language")) {
+        onSelectLanguage()
       }
     }
+    .navigationTitle(Strings.localized("Settings"))
+  }
+
+  private func row(
+    title: LocalizedStringResource,
+    action: @escaping () -> Void
+  ) -> some View {
+    Button(action: action) {
+      rowLabel(title: title)
+    }
+    .buttonStyle(.automatic)
+    .tint(.primary)
+  }
+
+  private func rowLabel(title: LocalizedStringResource) -> some View {
+    HStack(spacing: 12) {
+      Text(title)
+        .font(AppTypography.body.weight(.regular))
+        .foregroundStyle(.primary)
+      Spacer()
+      Image(systemName: "chevron.right")
+        .font(AppTypography.footnote.weight(.semibold))
+        .foregroundStyle(.secondary)
+    }
+    .contentShape(Rectangle())
   }
 }
 
 #Preview {
-  GlobalSettingsView(displayMode: .constant(.cards))
+  NavigationStack {
+    GlobalSettingsView(
+      onSelectPracticeDisplay: {},
+      onSelectLanguage: {}
+    )
+  }
 }
