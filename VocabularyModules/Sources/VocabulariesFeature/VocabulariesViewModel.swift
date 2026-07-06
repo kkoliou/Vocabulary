@@ -23,7 +23,7 @@ enum VocabulariesRoute: Hashable {
 public class VocabulariesViewModel {
 
   @ObservationIgnored @Dependency(\.defaultDatabase) var database
-  @ObservationIgnored @Dependency(\.appStorefront) var appStorefront
+  @ObservationIgnored @Dependency(\.appRegion) var appRegion
   @ObservationIgnored @FetchAll(Vocabulary.none) var vocabularies
   @ObservationIgnored var firstInitExecuted = false
   @ObservationIgnored @Shared var practiceDisplayMode: PracticeDisplayMode
@@ -42,7 +42,7 @@ public class VocabulariesViewModel {
   
   func doInit() async {
     setLoadingIfNeeded(true)
-    canLoadPreMadeVocabularies = await appStorefront.isGreece()
+    canLoadPreMadeVocabularies = await appRegion.isGreece()
     _ = await withErrorReporting {
       try await $vocabularies
         .load(

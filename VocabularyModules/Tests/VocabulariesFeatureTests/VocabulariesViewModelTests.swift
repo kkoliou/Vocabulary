@@ -319,7 +319,7 @@ extension BaseSuite {
     
     @Test func canLoadPreMadeVocabularies_whenStorefrontIsGreece_isTrue() async throws {
       await withDependencies {
-        $0.appStorefront = AppStorefrontClient(countryCode: { "GRC" })
+        $0.appRegion = AppRegionClient(countryCode: { "GRC" })
       } operation: {
         let greekModel = VocabulariesViewModel()
         await greekModel.doInit()
@@ -329,7 +329,7 @@ extension BaseSuite {
 
     @Test func canLoadPreMadeVocabularies_whenStorefrontIsNotGreece_isFalse() async throws {
       await withDependencies {
-        $0.appStorefront = AppStorefrontClient(countryCode: { "USA" })
+        $0.appRegion = AppRegionClient(countryCode: { "USA" })
       } operation: {
         let usModel = VocabulariesViewModel()
         await usModel.doInit()
@@ -339,11 +339,21 @@ extension BaseSuite {
 
     @Test func canLoadPreMadeVocabularies_whenNoStorefrontAvailable_isFalse() async throws {
       await withDependencies {
-        $0.appStorefront = AppStorefrontClient(countryCode: { nil })
+        $0.appRegion = AppRegionClient(countryCode: { nil })
       } operation: {
         let noStorefrontModel = VocabulariesViewModel()
         await noStorefrontModel.doInit()
         #expect(noStorefrontModel.canLoadPreMadeVocabularies == false)
+      }
+    }
+
+    @Test func canLoadPreMadeVocabularies_whenOnlyDeviceRegionIsGreece_isTrue() async throws {
+      await withDependencies {
+        $0.appRegion = AppRegionClient(countryCode: { "USA" }, regionCode: { "GR" })
+      } operation: {
+        let greekRegionModel = VocabulariesViewModel()
+        await greekRegionModel.doInit()
+        #expect(greekRegionModel.canLoadPreMadeVocabularies == true)
       }
     }
 
