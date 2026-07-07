@@ -22,7 +22,10 @@ var package = Package(
   targets: [
     // MARK: - Shared/Core targets
     .target(
-      name: "Shared"
+      name: "Shared",
+      dependencies: [
+        .product(name: "Dependencies", package: "swift-dependencies")
+      ]
     ),
     .testTarget(
       name: "SharedTests",

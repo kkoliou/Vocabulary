@@ -317,6 +317,46 @@ extension BaseSuite {
       #expect(remainingEntries.isEmpty)
     }
     
+    @Test func canLoadPreMadeVocabularies_whenStorefrontIsGreece_isTrue() async throws {
+      await withDependencies {
+        $0.appRegion = AppRegionClient(countryCode: { "GRC" })
+      } operation: {
+        let greekModel = VocabulariesViewModel()
+        await greekModel.doInit()
+        #expect(greekModel.canLoadPreMadeVocabularies == true)
+      }
+    }
+
+    @Test func canLoadPreMadeVocabularies_whenStorefrontIsNotGreece_isFalse() async throws {
+      await withDependencies {
+        $0.appRegion = AppRegionClient(countryCode: { "USA" })
+      } operation: {
+        let usModel = VocabulariesViewModel()
+        await usModel.doInit()
+        #expect(usModel.canLoadPreMadeVocabularies == false)
+      }
+    }
+
+    @Test func canLoadPreMadeVocabularies_whenNoStorefrontAvailable_isFalse() async throws {
+      await withDependencies {
+        $0.appRegion = AppRegionClient(countryCode: { nil })
+      } operation: {
+        let noStorefrontModel = VocabulariesViewModel()
+        await noStorefrontModel.doInit()
+        #expect(noStorefrontModel.canLoadPreMadeVocabularies == false)
+      }
+    }
+
+    @Test func canLoadPreMadeVocabularies_whenOnlyDeviceRegionIsGreece_isTrue() async throws {
+      await withDependencies {
+        $0.appRegion = AppRegionClient(countryCode: { "USA" }, regionCode: { "GR" })
+      } operation: {
+        let greekRegionModel = VocabulariesViewModel()
+        await greekRegionModel.doInit()
+        #expect(greekRegionModel.canLoadPreMadeVocabularies == true)
+      }
+    }
+
     @Test func addPreMadeVocabularies_whenNoCSVResources_doesNotChangeDatabaseAndResetsLoading() async throws {
       let initialCount = try await database.read { db in
         try Vocabulary.fetchCount(db)

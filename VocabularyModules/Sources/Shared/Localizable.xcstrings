@@ -392,6 +392,23 @@
         }
       }
     },
+    "Create a vocabulary to get started" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "el" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Δημιούργησε ένα λεξιλόγιο για να ξεκινήσεις"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Create a vocabulary to get started"
+          }
+        }
+      }
+    },
     "Create new practice?" : {
       "extractionState" : "manual",
       "localizations" : {

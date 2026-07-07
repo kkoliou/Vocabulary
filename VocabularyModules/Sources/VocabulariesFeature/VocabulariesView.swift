@@ -91,39 +91,45 @@ public struct VocabulariesView: View {
             .font(AppTypography.title3)
         },
         description: {
-          Text(Strings.localized("Load English-Greek vocabularies to get started"))
-            .font(AppTypography.subheadline)
+          Text(
+            viewModel.canLoadPreMadeVocabularies
+              ? Strings.localized("Load English-Greek vocabularies to get started")
+              : Strings.localized("Create a vocabulary to get started")
+          )
+          .font(AppTypography.subheadline)
         },
         actions: {
-          Button(
-            action: {
-              Task {
-                await viewModel.addPreMadeVocabularies()
-              }
-            },
-            label: {
-              HStack(spacing: 10) {
-                Image(systemName: "plus.circle.fill")
-                  .font(AppTypography.callout)
-                
-                Text(Strings.localized("Load vocabularies"))
-                  .font(AppTypography.callout.weight(.semibold))
-              }
-              .opacity(viewModel.isAddSampleVocabsLoading ? 0 : 1)
-              .overlay {
-                if viewModel.isAddSampleVocabsLoading {
-                  ProgressView()
+          if viewModel.canLoadPreMadeVocabularies {
+            Button(
+              action: {
+                Task {
+                  await viewModel.addPreMadeVocabularies()
                 }
+              },
+              label: {
+                HStack(spacing: 10) {
+                  Image(systemName: "plus.circle.fill")
+                    .font(AppTypography.callout)
+
+                  Text(Strings.localized("Load vocabularies"))
+                    .font(AppTypography.callout.weight(.semibold))
+                }
+                .opacity(viewModel.isAddSampleVocabsLoading ? 0 : 1)
+                .overlay {
+                  if viewModel.isAddSampleVocabsLoading {
+                    ProgressView()
+                  }
+                }
+                .animation(.easeInOut(duration: 0.25), value: viewModel.isAddSampleVocabsLoading)
+                .padding(.horizontal, 12)
+                .padding(.vertical, 12)
+                .clipShape(.capsule)
+                .shadow(color: .black.opacity(0.12), radius: 8, x: 0, y: 4)
               }
-              .animation(.easeInOut(duration: 0.25), value: viewModel.isAddSampleVocabsLoading)
-              .padding(.horizontal, 12)
-              .padding(.vertical, 12)
-              .clipShape(.capsule)
-              .shadow(color: .black.opacity(0.12), radius: 8, x: 0, y: 4)
-            }
-          )
-          .buttonStyle(.bordered)
-          .disabled(viewModel.isAddSampleVocabsLoading)
+            )
+            .buttonStyle(.bordered)
+            .disabled(viewModel.isAddSampleVocabsLoading)
+          }
         }
       )
     }
