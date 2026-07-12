@@ -10,8 +10,6 @@ public enum PracticeDisplayMode: String, CaseIterable, Identifiable, Sendable {
   case cards
   case buttons
 
-  public static let appStorageKey = "practiceDisplayMode"
-
   public var id: String { rawValue }
 
   public var title: LocalizedStringResource {

@@ -36,7 +36,7 @@ public class VocabulariesViewModel {
   public init() {
     _practiceDisplayMode = Shared(
       wrappedValue: .cards,
-      .appStorage(PracticeDisplayMode.appStorageKey)
+      .appStorage(AppStorageKeys.practiceDisplayMode.rawValue)
     )
   }
   

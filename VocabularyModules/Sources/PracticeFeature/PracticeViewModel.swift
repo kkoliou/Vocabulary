@@ -17,16 +17,21 @@ class PracticeViewModel {
   
   @ObservationIgnored @Dependency(\.defaultDatabase) var database
   @ObservationIgnored @Shared var practiceDisplayMode: PracticeDisplayMode
+  @ObservationIgnored @Shared var processCompletedCount: Int
+  @ObservationIgnored @Shared var lastVersionPromptedForReview: String
   var rows = [PracticeRow]()
   let vocabulary: Vocabulary
   let scope: PracticeScope
   var practice: Practice?
-  var currentIndex: Int = 0
+  var currentIndex: Int = 0 {
+    didSet { displayInAppRatingIfNeeded() }
+  }
   var isTranslationRevealed: Bool = false
   var isInitialLoading = false
   var hiddenWordProbability: Double = 0.5
   var isAutoRevealEnabled: Bool = false
   var isRandomnessSettingsPresented = false
+  var isInAppReviewPresented = false
   private var saveTask: Task<Void, Never>?
   private let quickPracticeEntriesCount = 20
   
@@ -40,7 +45,15 @@ class PracticeViewModel {
     self.scope = scope
     _practiceDisplayMode = Shared(
       wrappedValue: .cards,
-      .appStorage(PracticeDisplayMode.appStorageKey)
+      .appStorage(AppStorageKeys.practiceDisplayMode.rawValue)
+    )
+    _processCompletedCount = Shared(
+      wrappedValue: 0,
+      .appStorage(AppStorageKeys.practiceCompletedCount.rawValue)
+    )
+    _lastVersionPromptedForReview = Shared(
+      wrappedValue: "",
+      .appStorage(AppStorageKeys.lastVersionPromptedForReview.rawValue)
     )
     if let practice = practice {
       self.hiddenWordProbability = practice.hiddenWordProbability
@@ -295,6 +308,23 @@ class PracticeViewModel {
   
   func settingsButtonTapped() {
     isRandomnessSettingsPresented = true
+  }
+  
+  func displayInAppRatingIfNeeded(currentVersion: String? = Bundle.currentAppVersion) {
+    guard progress == 1 else { return }
+    changeProcessCompletedCount(to: processCompletedCount + 1)
+    if processCompletedCount >= InAppReviewValues.minPathExecutionsToDisplay, currentVersion != lastVersionPromptedForReview {
+      isInAppReviewPresented = true
+      changeLastVersionPromptedForReview(to: currentVersion ?? "")
+    }
+  }
+  
+  func changeLastVersionPromptedForReview(to version: String) {
+    $lastVersionPromptedForReview.withLock { $0 = version }
+  }
+  
+  func changeProcessCompletedCount(to count: Int) {
+    $processCompletedCount.withLock { $0 = count }
   }
 }
 
