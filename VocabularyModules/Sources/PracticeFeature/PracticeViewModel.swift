@@ -17,9 +17,11 @@ class PracticeViewModel {
   
   @ObservationIgnored @Dependency(\.defaultDatabase) var database
   @ObservationIgnored @Dependency(\.currentAppVersion) var currentAppVersion
+  @ObservationIgnored @Dependency(\.date.now) var date
   @ObservationIgnored @Shared var practiceDisplayMode: PracticeDisplayMode
   @ObservationIgnored @Shared var processCompletedCount: Int
   @ObservationIgnored @Shared var lastVersionPromptedForReview: String
+  @ObservationIgnored @Shared var lastDatePromptedForReview: TimeInterval
   var rows = [PracticeRow]()
   let vocabulary: Vocabulary
   let scope: PracticeScope
@@ -55,6 +57,10 @@ class PracticeViewModel {
     _lastVersionPromptedForReview = Shared(
       wrappedValue: "",
       .appStorage(AppStorageKeys.lastVersionPromptedForReview.rawValue)
+    )
+    _lastDatePromptedForReview = Shared(
+      wrappedValue: -1,
+      .appStorage(AppStorageKeys.lastDatePromptedForReview.rawValue)
     )
     if let practice = practice {
       self.hiddenWordProbability = practice.hiddenWordProbability
@@ -314,11 +320,14 @@ class PracticeViewModel {
   func displayInAppRatingIfNeeded() {
     guard progress == 1 else { return }
     changeProcessCompletedCount(to: processCompletedCount + 1)
+    guard abs(CGFloat(Date(timeIntervalSince1970: lastDatePromptedForReview).getDiffInDays(from: date))) >= InAppReviewValues.reviewWindow
+    else { return }
     if processCompletedCount >= InAppReviewValues.minPathExecutionsToDisplay, currentAppVersion != lastVersionPromptedForReview {
       isInAppReviewPresented = true
       if let currentAppVersion {
         changeLastVersionPromptedForReview(to: currentAppVersion)
       }
+      changeLastDatePromptedForReview(to: date)
     }
   }
   
@@ -328,6 +337,10 @@ class PracticeViewModel {
   
   func changeProcessCompletedCount(to count: Int) {
     $processCompletedCount.withLock { $0 = count }
+  }
+  
+  func changeLastDatePromptedForReview(to date: Date) {
+    $lastDatePromptedForReview.withLock { $0 = date.timeIntervalSince1970 }
   }
 }
 

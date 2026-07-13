@@ -70,6 +70,7 @@ extension BaseSuite {
           )
         }
       }
+      $0.date.now = Date()
     }
   )
   
@@ -77,6 +78,7 @@ extension BaseSuite {
   struct PracticeViewModelTests {
     let vocabulary: Vocabulary
     @Dependency(\.defaultDatabase) var database
+    @Dependency(\.defaultAppStorage) var store
     
     init() async throws {
       vocabulary = try await #require(
@@ -320,7 +322,7 @@ extension BaseSuite {
       await model.doInit()
       
       #expect(model.progress == 0.25) // 1 / 4
-      
+       
       await model.nextEntry()
       #expect(model.progress == 0.5) // 2 / 4
       
@@ -395,6 +397,59 @@ extension BaseSuite {
         #expect(model.isInAppReviewPresented == true)
       }
     }
+    
+    @Test func displayedInAppReviewSomeDaysAgo() async throws {
+      await withDependencies {
+        $0.currentAppVersion = "1.1"
+      } operation: {
+        @Shared(.appStorage(AppStorageKeys.practiceCompletedCount.rawValue)) var practiceCompletedCount = 0
+        @Shared(.appStorage(AppStorageKeys.lastVersionPromptedForReview.rawValue)) var lastVersionPromptedForReview = "1.0"
+        @Shared(.appStorage(AppStorageKeys.lastDatePromptedForReview.rawValue)) var lastDatePromptedForReview = addDays(-10, toDate: Date()).timeIntervalSince1970
+        let model = PracticeViewModel(vocabulary: vocabulary, practice: nil)
+        await model.doInit()
+        await model.nextEntry() // 2 / 4
+        await model.nextEntry() // 3 / 4
+        await model.nextEntry()
+        #expect(model.isInAppReviewPresented == false)
+        
+        for _ in 0..<InAppReviewValues.minPathExecutionsToDisplay - 1 {
+          #expect(model.isInAppReviewPresented == false)
+          await model.previousEntry()
+          await model.nextEntry()
+        }
+        
+        #expect(model.isInAppReviewPresented == false)
+      }
+    }
+    
+    @Test func inAppReviewWindowPassed() async throws {
+      await withDependencies {
+        $0.currentAppVersion = "1.1"
+      } operation: {
+        @Shared(.appStorage(AppStorageKeys.practiceCompletedCount.rawValue)) var practiceCompletedCount = 0
+        @Shared(.appStorage(AppStorageKeys.lastVersionPromptedForReview.rawValue)) var lastVersionPromptedForReview = "1.0"
+        @Shared(.appStorage(AppStorageKeys.lastDatePromptedForReview.rawValue)) var lastDatePromptedForReview = addDays(Int(-InAppReviewValues.reviewWindow.rounded(.up)), toDate: Date()).timeIntervalSince1970
+        let model = PracticeViewModel(vocabulary: vocabulary, practice: nil)
+        await model.doInit()
+        await model.nextEntry() // 2 / 4
+        await model.nextEntry() // 3 / 4
+        await model.nextEntry()
+        #expect(model.isInAppReviewPresented == false)
+        
+        for _ in 0..<InAppReviewValues.minPathExecutionsToDisplay - 1 {
+          #expect(model.isInAppReviewPresented == false)
+          await model.previousEntry()
+          await model.nextEntry()
+        }
+        
+        #expect(model.isInAppReviewPresented == true)
+      }
+    }
+    
+    private func addDays(_ days: Int, toDate date: Date) -> Date {
+      return date.addingTimeInterval(TimeInterval(days * 86400))
+    }
+    
     // MARK: - Translation Reveal Tests
     
     @Test func revealTranslation() async throws {
