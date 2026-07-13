@@ -41,14 +41,14 @@ extension BaseSuite {
     }
 
     @Test func practiceDisplayMode_defaultsToCards() async throws {
-      UserDefaults.standard.removeObject(forKey: PracticeDisplayMode.appStorageKey)
+      UserDefaults.standard.removeObject(forKey: AppStorageKeys.practiceDisplayMode.rawValue)
       let freshModel = VocabulariesViewModel()
       #expect(freshModel.practiceDisplayMode == .cards)
     }
 
     @Test func practiceDisplayMode_persistsAcrossModelInstances() async throws {
-      UserDefaults.standard.removeObject(forKey: PracticeDisplayMode.appStorageKey)
-      defer { UserDefaults.standard.removeObject(forKey: PracticeDisplayMode.appStorageKey) }
+      UserDefaults.standard.removeObject(forKey: AppStorageKeys.practiceDisplayMode.rawValue)
+      defer { UserDefaults.standard.removeObject(forKey: AppStorageKeys.practiceDisplayMode.rawValue) }
 
       let first = VocabulariesViewModel()
       #expect(first.practiceDisplayMode == .cards)

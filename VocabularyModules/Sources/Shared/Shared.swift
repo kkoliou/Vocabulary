@@ -6,6 +6,10 @@ import UIKit
 
 public extension Bundle {
   static var sharedModule: Bundle { Bundle.module }
+  
+  static var currentAppVersion: String? {
+    return Bundle.main.object(forInfoDictionaryKey: "CFBundleVersion") as? String
+  }
 }
 
 public struct Strings {

@@ -16,17 +16,25 @@ import Foundation
 class PracticeViewModel {
   
   @ObservationIgnored @Dependency(\.defaultDatabase) var database
+  @ObservationIgnored @Dependency(\.currentAppVersion) var currentAppVersion
+  @ObservationIgnored @Dependency(\.date.now) var date
   @ObservationIgnored @Shared var practiceDisplayMode: PracticeDisplayMode
+  @ObservationIgnored @Shared var processCompletedCount: Int
+  @ObservationIgnored @Shared var lastVersionPromptedForReview: String
+  @ObservationIgnored @Shared var lastDatePromptedForReview: TimeInterval
   var rows = [PracticeRow]()
   let vocabulary: Vocabulary
   let scope: PracticeScope
   var practice: Practice?
-  var currentIndex: Int = 0
+  var currentIndex: Int = 0 {
+    didSet { displayInAppRatingIfNeeded() }
+  }
   var isTranslationRevealed: Bool = false
   var isInitialLoading = false
   var hiddenWordProbability: Double = 0.5
   var isAutoRevealEnabled: Bool = false
   var isRandomnessSettingsPresented = false
+  var isInAppReviewPresented = false
   private var saveTask: Task<Void, Never>?
   private let quickPracticeEntriesCount = 20
   
@@ -40,7 +48,19 @@ class PracticeViewModel {
     self.scope = scope
     _practiceDisplayMode = Shared(
       wrappedValue: .cards,
-      .appStorage(PracticeDisplayMode.appStorageKey)
+      .appStorage(AppStorageKeys.practiceDisplayMode.rawValue)
+    )
+    _processCompletedCount = Shared(
+      wrappedValue: 0,
+      .appStorage(AppStorageKeys.practiceCompletedCount.rawValue)
+    )
+    _lastVersionPromptedForReview = Shared(
+      wrappedValue: "",
+      .appStorage(AppStorageKeys.lastVersionPromptedForReview.rawValue)
+    )
+    _lastDatePromptedForReview = Shared(
+      wrappedValue: -1,
+      .appStorage(AppStorageKeys.lastDatePromptedForReview.rawValue)
     )
     if let practice = practice {
       self.hiddenWordProbability = practice.hiddenWordProbability
@@ -295,6 +315,32 @@ class PracticeViewModel {
   
   func settingsButtonTapped() {
     isRandomnessSettingsPresented = true
+  }
+  
+  func displayInAppRatingIfNeeded() {
+    guard progress == 1 else { return }
+    changeProcessCompletedCount(to: processCompletedCount + 1)
+    guard abs(CGFloat(Date(timeIntervalSince1970: lastDatePromptedForReview).getDiffInDays(from: date))) >= InAppReviewValues.reviewWindow
+    else { return }
+    if processCompletedCount >= InAppReviewValues.minPathExecutionsToDisplay, currentAppVersion != lastVersionPromptedForReview {
+      isInAppReviewPresented = true
+      if let currentAppVersion {
+        changeLastVersionPromptedForReview(to: currentAppVersion)
+      }
+      changeLastDatePromptedForReview(to: date)
+    }
+  }
+  
+  func changeLastVersionPromptedForReview(to version: String) {
+    $lastVersionPromptedForReview.withLock { $0 = version }
+  }
+  
+  func changeProcessCompletedCount(to count: Int) {
+    $processCompletedCount.withLock { $0 = count }
+  }
+  
+  func changeLastDatePromptedForReview(to date: Date) {
+    $lastDatePromptedForReview.withLock { $0 = date.timeIntervalSince1970 }
   }
 }
 

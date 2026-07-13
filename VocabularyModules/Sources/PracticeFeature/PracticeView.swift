@@ -9,10 +9,12 @@ import SwiftUI
 import VocabularyDB
 import SQLiteData
 import Shared
+import StoreKit
 
 public struct PracticeView: View {
   
   @Environment(\.dismiss) private var dismiss
+  @Environment(\.requestReview) private var requestReview
   @State var viewModel: PracticeViewModel
   
   public init(
@@ -121,6 +123,14 @@ public struct PracticeView: View {
     }
     .task {
       await viewModel.doInit()
+    }
+    .onChange(of: viewModel.isInAppReviewPresented) {
+      guard $1 else { return }
+      Task {
+        // Delay for two seconds to avoid interrupting the person using the app.
+        try await Task.sleep(for: .seconds(2))
+        requestReview()
+      }
     }
   }
 }

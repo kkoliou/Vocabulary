@@ -17,7 +17,8 @@ var package = Package(
   ],
   dependencies: [
     .package(url: "https://github.com/pointfreeco/sqlite-data", from: "1.6.1"),
-    .package(url: "https://github.com/pointfreeco/swift-dependencies", from: "1.12.0")
+    .package(url: "https://github.com/pointfreeco/swift-dependencies", from: "1.12.0"),
+    .package(url: "https://github.com/pointfreeco/swift-sharing", from: "2.9.1")
   ],
   targets: [
     // MARK: - Shared/Core targets
@@ -104,7 +105,8 @@ package.targets.append(contentsOf: [
     name: "PracticeFeatureTests",
     dependencies: [
       "PracticeFeature",
-      .product(name: "DependenciesTestSupport", package: "swift-dependencies")
+      .product(name: "DependenciesTestSupport", package: "swift-dependencies"),
+      .product(name: "Sharing", package: "swift-sharing"),
     ]
   ),
 ])

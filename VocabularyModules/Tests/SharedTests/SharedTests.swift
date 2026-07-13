@@ -1,4 +1,5 @@
 import Testing
+import Foundation
 @testable import Shared
 
 @Test func isGreekStorefront_withGreekAlpha3CountryCode_returnsTrue() {
@@ -48,4 +49,9 @@ import Testing
 @Test func appRegionClientIsGreece_whenNeitherIsGreek_returnsFalse() async {
   let client = AppRegionClient(countryCode: { "USA" }, regionCode: { "US" })
   #expect(await client.isGreece() == false)
+}
+
+@Test func datesDiff() async {
+  #expect(Date().getDiffInDays(from: Date().addingTimeInterval(TimeInterval(-10 * 86400))) == 10)
+  #expect(Date().getDiffInDays(from: Date().addingTimeInterval(TimeInterval(10 * 86400))) == -10)
 }
