@@ -16,6 +16,7 @@ import Foundation
 class PracticeViewModel {
   
   @ObservationIgnored @Dependency(\.defaultDatabase) var database
+  @ObservationIgnored @Dependency(\.currentAppVersion) var currentAppVersion
   @ObservationIgnored @Shared var practiceDisplayMode: PracticeDisplayMode
   @ObservationIgnored @Shared var processCompletedCount: Int
   @ObservationIgnored @Shared var lastVersionPromptedForReview: String
@@ -310,12 +311,14 @@ class PracticeViewModel {
     isRandomnessSettingsPresented = true
   }
   
-  func displayInAppRatingIfNeeded(currentVersion: String? = Bundle.currentAppVersion) {
+  func displayInAppRatingIfNeeded() {
     guard progress == 1 else { return }
     changeProcessCompletedCount(to: processCompletedCount + 1)
-    if processCompletedCount >= InAppReviewValues.minPathExecutionsToDisplay, currentVersion != lastVersionPromptedForReview {
+    if processCompletedCount >= InAppReviewValues.minPathExecutionsToDisplay, currentAppVersion != lastVersionPromptedForReview {
       isInAppReviewPresented = true
-      changeLastVersionPromptedForReview(to: currentVersion ?? "")
+      if let currentAppVersion {
+        changeLastVersionPromptedForReview(to: currentAppVersion)
+      }
     }
   }
   

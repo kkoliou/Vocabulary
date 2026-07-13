@@ -11,6 +11,7 @@ import SQLiteData
 import Testing
 import VocabularyDB
 import Shared
+import Sharing
 
 @testable import PracticeFeature
 
@@ -310,6 +311,90 @@ extension BaseSuite {
       #expect(model.progressText == "4 / 4")
     }
     
+    // MARK: - In App Review
+    
+    @Test func firstTimeInAppReview() async throws {
+      @Shared(.appStorage(AppStorageKeys.practiceCompletedCount.rawValue)) var practiceCompletedCount = 0
+      @Shared(.appStorage(AppStorageKeys.lastVersionPromptedForReview.rawValue)) var lastVersionPromptedForReview = ""
+      let model = PracticeViewModel(vocabulary: vocabulary, practice: nil)
+      await model.doInit()
+      
+      #expect(model.progress == 0.25) // 1 / 4
+      
+      await model.nextEntry()
+      #expect(model.progress == 0.5) // 2 / 4
+      
+      await model.nextEntry()
+      #expect(model.progress == 0.75) // 3 / 4
+      
+      await model.nextEntry()
+      #expect(model.progress == 1.0) // 4 / 4
+      
+      #expect(model.isInAppReviewPresented == false)
+      
+      for _ in 0..<InAppReviewValues.minPathExecutionsToDisplay - 1 {
+        #expect(model.isInAppReviewPresented == false)
+        await model.previousEntry()
+        await model.nextEntry()
+      }
+      
+      #expect(model.isInAppReviewPresented == true)
+    }
+    
+    @Test func alreadyDisplayedInAppReview() async throws {
+      await withDependencies {
+        $0.currentAppVersion = "1.0"
+      } operation: {
+        @Shared(.appStorage(AppStorageKeys.practiceCompletedCount.rawValue)) var practiceCompletedCount = 0
+        @Shared(.appStorage(AppStorageKeys.lastVersionPromptedForReview.rawValue)) var lastVersionPromptedForReview = "1.0"
+        let model = PracticeViewModel(vocabulary: vocabulary, practice: nil)
+        await model.doInit()
+        
+        #expect(model.progress == 0.25) // 1 / 4
+        
+        await model.nextEntry()
+        #expect(model.progress == 0.5) // 2 / 4
+        
+        await model.nextEntry()
+        #expect(model.progress == 0.75) // 3 / 4
+        
+        await model.nextEntry()
+        #expect(model.progress == 1.0) // 4 / 4
+        
+        #expect(model.isInAppReviewPresented == false)
+        
+        for _ in 0..<InAppReviewValues.minPathExecutionsToDisplay - 1 {
+          #expect(model.isInAppReviewPresented == false)
+          await model.previousEntry()
+          await model.nextEntry()
+        }
+        
+        #expect(model.isInAppReviewPresented == false)
+      }
+    }
+   
+    @Test func displayedInAppReviewInThePreviousVersion() async throws {
+      await withDependencies {
+        $0.currentAppVersion = "1.1"
+      } operation: {
+        @Shared(.appStorage(AppStorageKeys.practiceCompletedCount.rawValue)) var practiceCompletedCount = 0
+        @Shared(.appStorage(AppStorageKeys.lastVersionPromptedForReview.rawValue)) var lastVersionPromptedForReview = "1.0"
+        let model = PracticeViewModel(vocabulary: vocabulary, practice: nil)
+        await model.doInit()
+        await model.nextEntry() // 2 / 4
+        await model.nextEntry() // 3 / 4
+        await model.nextEntry()
+        #expect(model.isInAppReviewPresented == false)
+        
+        for _ in 0..<InAppReviewValues.minPathExecutionsToDisplay - 1 {
+          #expect(model.isInAppReviewPresented == false)
+          await model.previousEntry()
+          await model.nextEntry()
+        }
+        
+        #expect(model.isInAppReviewPresented == true)
+      }
+    }
     // MARK: - Translation Reveal Tests
     
     @Test func revealTranslation() async throws {

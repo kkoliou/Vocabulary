@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import Dependencies
 
 public enum AppStorageKeys: String, Sendable {
   case practiceDisplayMode
