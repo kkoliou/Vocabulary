@@ -6,6 +6,12 @@ import SQLiteData
 import DependenciesTestSupport
 @testable import Vocabulary
 
+@Suite(
+  .dependencies {
+    $0.uuid = .incrementing
+    try $0.bootstrapDatabase()
+  }
+)
 struct VocabulariesViewModelSuite {
   @Suite(
     .dependencies {

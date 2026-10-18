@@ -424,7 +424,9 @@ struct PracticeViewModelSuite {
       } operation: {
         @Shared(.appStorage(AppStorageKeys.practiceCompletedCount.rawValue)) var practiceCompletedCount = 0
         @Shared(.appStorage(AppStorageKeys.lastVersionPromptedForReview.rawValue)) var lastVersionPromptedForReview = "1.0"
-        @Shared(.appStorage(AppStorageKeys.lastDatePromptedForReview.rawValue)) var lastDatePromptedForReview = addDays(Int(-InAppReviewValues.reviewWindow.rounded(.up)), toDate: Date()).timeIntervalSince1970
+        let reviewDays = Int(InAppReviewValues.reviewWindow.rounded(.up)) + 1
+        @Shared(.appStorage(AppStorageKeys.lastDatePromptedForReview.rawValue))
+        var lastDatePromptedForReview = addDays(-reviewDays, toDate: Date()).timeIntervalSince1970
         let model = PracticeViewModel(vocabulary: vocabulary, practice: nil)
         await model.doInit()
         await model.nextEntry() // 2 / 4
@@ -443,7 +445,7 @@ struct PracticeViewModelSuite {
     }
     
     private func addDays(_ days: Int, toDate date: Date) -> Date {
-      return date.addingTimeInterval(TimeInterval(days * 86400))
+      return Calendar.current.date(byAdding: .day, value: days, to: date) ?? date
     }
     
     // MARK: - Translation Reveal Tests

@@ -53,8 +53,14 @@ struct SharedTests {
   }
   
   @Test func datesDiff() async {
-    #expect(Date().getDiffInDays(from: Date().addingTimeInterval(TimeInterval(-10 * 86400))) == 10)
-    #expect(Date().getDiffInDays(from: Date().addingTimeInterval(TimeInterval(10 * 86400))) == -10)
+    let calendar = Calendar.current
+    let date = Date()
+    
+    let tenDaysAgo = calendar.date(byAdding: .day, value: -10, to: date)!
+    #expect(date.getDiffInDays(from: tenDaysAgo) == 10)
+    
+    let tenDaysAhead = calendar.date(byAdding: .day, value: 10, to: date)!
+    #expect(date.getDiffInDays(from: tenDaysAhead) == -10)
   }
   
 }
