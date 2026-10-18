@@ -1,0 +1,96 @@
+import SwiftUI
+import SQLiteData
+
+struct VocabularyEntryAddView: View {
+  
+  @Environment(\.dismiss) private var dismiss
+  @State var viewModel: VocabularyEntryAddViewModel
+  @FocusState private var focusedField: Field?
+  
+  enum Field {
+    case source, translation
+  }
+  
+  public init(vocabulary: Vocabulary, entryToEdit: VocabularyEntry? = nil) {
+    _viewModel = State(
+      wrappedValue: VocabularyEntryAddViewModel(
+        vocabulary: vocabulary,
+        entryToEdit: entryToEdit
+      )
+    )
+  }
+  
+  var body: some View {
+    NavigationStack {
+      Form {
+        Section(Strings.localized("Original")) {
+          VTextField(
+            text: $viewModel.source,
+            promptKey: "Word or phrase"
+          )
+          .focused($focusedField, equals: .source)
+          .autocorrectionDisabled()
+          .submitLabel(.next)
+          .onSubmit {
+            focusedField = .translation
+          }
+        }
+        
+        Section(Strings.localized("Translation")) {
+          VTextField(
+            text: $viewModel.translation,
+            promptKey: "Your translation"
+          )
+          .focused($focusedField, equals: .translation)
+          .autocorrectionDisabled()
+          .submitLabel(.done)
+          .onSubmit {
+            Task {
+              await viewModel.saveButtonTapped()
+            }
+          }
+        }
+      }
+      .navigationTitle(viewModel.entryToEdit != nil ? Strings.localized("Edit Entry") : Strings.localized("Add Entry"))
+      .navigationBarTitleDisplayMode(.inline)
+      .toolbar {
+        ToolbarItem(placement: .confirmationAction) {
+          Button(action: { Task { await viewModel.saveButtonTapped() } }) {
+            Image(systemName: "checkmark")
+          }
+          .disabled(viewModel.saveButtonDisabled)
+        }
+      }
+      .alert(viewModel.alertTitle ?? Strings.localized("Error"), isPresented: $viewModel.isAlertPresented) {
+        Button(Strings.localized("OK"), role: .cancel) {}
+      }
+      .onAppear {
+        focusedField = .source
+      }
+      .onChange(of: viewModel.dismiss) { _, newValue in
+        if newValue {
+          dismiss()
+        }
+      }
+      .onChange(of: viewModel.triggerSuccess) { _, newValue in
+        if newValue {
+          Utilities.triggerLightHaptic()
+        }
+      }
+    }
+  }
+}
+
+#Preview {
+  let vocab = prepareDependencies {
+    try! $0.bootstrapDatabase()
+    try! $0.defaultDatabase.seedForPreview()
+    return try! $0.defaultDatabase.read { db in
+      try Vocabulary.fetchOne(db)!
+    }
+  }
+  
+  NavigationStack {
+    VocabularyEntryAddView(vocabulary: vocab)
+  }
+}

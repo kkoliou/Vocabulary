@@ -1,10 +1,3 @@
-//
-//  VocabularyUITestsLaunchTests.swift
-//  VocabularyUITests
-//
-//  Created by Konstantinos Kolioulis on 20/1/26.
-//
-
 import XCTest
 
 final class VocabularyUITestsLaunchTests: XCTestCase {
