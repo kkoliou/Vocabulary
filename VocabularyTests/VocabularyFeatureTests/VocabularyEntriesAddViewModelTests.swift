@@ -1,21 +1,11 @@
-//
-//  VocabularyEntriesAddViewModelTests.swift
-//  VocabularyModules
-//
-//  Created by Konstantinos Kolioulis on 14/2/26.
-//
-
 import CustomDump
 import DependenciesTestSupport
 import Foundation
 import SQLiteData
 import Testing
-import VocabularyDB
-import Shared
+@testable import Vocabulary
 
-@testable import VocabularyFeature
-
-extension BaseSuite {
+extension VocabularyBaseSuite {
   @Suite(
     .dependencies {
       try $0.defaultDatabase.write { db in
@@ -505,4 +495,4 @@ final class MockImportValidator: ImportValidatorProtocol {
     try $0.bootstrapDatabase()
   }
 )
-struct BaseSuite {}
+public struct VocabularyBaseSuite {}

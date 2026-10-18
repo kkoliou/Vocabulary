@@ -1,5 +1,5 @@
 import Testing
-@testable import VocabularyCsvParser
+@testable import Vocabulary
 
 // MARK: - Basic Parsing Tests
 

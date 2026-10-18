@@ -8,7 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		7DB8FC7E3084D06A00268AAB /* SQLiteData in Frameworks */ = {isa = PBXBuildFile; productRef = 7DB8FC7D3084D06A00268AAB /* SQLiteData */; };
-		7DB8FC803084D06A00268AAB /* SQLiteDataTestSupport in Frameworks */ = {isa = PBXBuildFile; productRef = 7DB8FC7F3084D06A00268AAB /* SQLiteDataTestSupport */; };
+		7DB8FC833084D79800268AAB /* DependenciesTestSupport in Frameworks */ = {isa = PBXBuildFile; productRef = 7DB8FC823084D79800268AAB /* DependenciesTestSupport */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -78,7 +78,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				7DB8FC803084D06A00268AAB /* SQLiteDataTestSupport in Frameworks */,
+				7DB8FC833084D79800268AAB /* DependenciesTestSupport in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -164,7 +164,7 @@
 			);
 			name = VocabularyTests;
 			packageProductDependencies = (
-				7DB8FC7F3084D06A00268AAB /* SQLiteDataTestSupport */,
+				7DB8FC823084D79800268AAB /* DependenciesTestSupport */,
 			);
 			productName = VocabularyTests;
 			productReference = 7D7F31AB2F2024D7007F2307 /* VocabularyTests.xctest */;
@@ -228,6 +228,7 @@
 			minimizedProjectReferenceProxies = 1;
 			packageReferences = (
 				7DB8FC7C3084D06A00268AAB /* XCRemoteSwiftPackageReference "sqlite-data" */,
+				7DB8FC813084D79800268AAB /* XCRemoteSwiftPackageReference "swift-dependencies" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 7D7F319F2F2024D6007F2307 /* Products */;
@@ -681,6 +682,14 @@
 			traits = (
 			);
 		};
+		7DB8FC813084D79800268AAB /* XCRemoteSwiftPackageReference "swift-dependencies" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/pointfreeco/swift-dependencies";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.17.1;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -689,10 +698,10 @@
 			package = 7DB8FC7C3084D06A00268AAB /* XCRemoteSwiftPackageReference "sqlite-data" */;
 			productName = SQLiteData;
 		};
-		7DB8FC7F3084D06A00268AAB /* SQLiteDataTestSupport */ = {
+		7DB8FC823084D79800268AAB /* DependenciesTestSupport */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = 7DB8FC7C3084D06A00268AAB /* XCRemoteSwiftPackageReference "sqlite-data" */;
-			productName = SQLiteDataTestSupport;
+			package = 7DB8FC813084D79800268AAB /* XCRemoteSwiftPackageReference "swift-dependencies" */;
+			productName = DependenciesTestSupport;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

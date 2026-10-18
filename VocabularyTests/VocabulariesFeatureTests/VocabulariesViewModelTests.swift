@@ -1,22 +1,12 @@
-//
-//  VocabulariesViewModelTests.swift
-//  VocabularyModules
-//
-//  Created by Konstantinos Kolioulis on 14/2/26.
-//
-
 import CustomDump
 import Foundation
 import SQLiteData
 import Testing
 import SQLiteData
-import VocabularyDB
-import Shared
 import DependenciesTestSupport
+@testable import Vocabulary
 
-@testable import VocabulariesFeature
-
-extension BaseSuite {
+struct VocabulariesViewModelSuite {
   @Suite(
     .dependencies {
       try $0.defaultDatabase.write { db in
@@ -369,7 +359,7 @@ extension BaseSuite {
         try Vocabulary.fetchCount(db)
       }
       
-      let bundle = Bundle.module
+      let bundle = Bundle.main
       let csvFilesCount = bundle.urls(forResourcesWithExtension: "csv", subdirectory: nil)?.count ?? 0
       
       #expect(finalCount == initialCount + csvFilesCount)

@@ -1,10 +1,3 @@
-//
-//  VocabularyTests.swift
-//  VocabularyTests
-//
-//  Created by Konstantinos Kolioulis on 20/1/26.
-//
-
 import Testing
 
 struct VocabularyTests {

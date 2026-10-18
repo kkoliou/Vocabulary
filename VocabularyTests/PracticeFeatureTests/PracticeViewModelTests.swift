@@ -1,21 +1,17 @@
-//
-//  PracticeViewModelTests.swift
-//  VocabularyModules
-//
-//  Created by Konstantinos Kolioulis on 23/2/26.
-//
-
 import DependenciesTestSupport
 import Foundation
 import SQLiteData
 import Testing
-import VocabularyDB
-import Shared
 import Sharing
+@testable import Vocabulary
 
-@testable import PracticeFeature
-
-extension BaseSuite {
+@Suite(
+  .dependencies {
+    $0.uuid = .incrementing
+    try $0.bootstrapDatabase()
+  }
+)
+struct PracticeViewModelSuite {
   @Suite(
     .dependencies {
       try $0.defaultDatabase.write { db in
@@ -1012,11 +1008,3 @@ extension BaseSuite {
     }
   }
 }
-
-@Suite(
-  .dependencies {
-    $0.uuid = .incrementing
-    try $0.bootstrapDatabase()
-  }
-)
-struct BaseSuite {}

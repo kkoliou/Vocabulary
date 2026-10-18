@@ -1,21 +1,17 @@
-//
-//  VocabularyCreatorViewModelTests.swift
-//  VocabulariesFeature
-//
-//  Created by Konstantinos Kolioulis on 14/2/26.
-//
-
 import Foundation
 import SQLiteData
 import Testing
 import SQLiteData
-import VocabularyDB
-import Shared
 import DependenciesTestSupport
+@testable import Vocabulary
 
-@testable import VocabulariesFeature
-
-extension BaseSuite {
+@Suite(
+  .dependencies {
+    $0.uuid = .incrementing
+    try $0.bootstrapDatabase()
+  }
+)
+struct VocabularyCreatorViewModelSuite {
   @Suite(
     .dependencies {
       try $0.defaultDatabase.write { db in
@@ -166,10 +162,4 @@ extension BaseSuite {
   }
 }
 
-@Suite(
-  .dependencies {
-    $0.uuid = .incrementing
-    try $0.bootstrapDatabase()
-  }
-)
-struct BaseSuite {}
+

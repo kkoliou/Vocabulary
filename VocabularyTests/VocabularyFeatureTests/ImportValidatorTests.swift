@@ -1,20 +1,11 @@
-//
-//  ImportValidatorTests.swift
-//  VocabularyModules
-//
-//  Created by Konstantinos Kolioulis on 22/3/26.
-//
-
 import CustomDump
 import DependenciesTestSupport
 import Foundation
 import SQLiteData
 import Testing
-import VocabularyDB
+@testable import Vocabulary
 
-@testable import VocabularyFeature
-
-extension BaseSuite {
+extension VocabularyBaseSuite {
   @Suite(
     .dependencies {
       try $0.defaultDatabase.write { db in
